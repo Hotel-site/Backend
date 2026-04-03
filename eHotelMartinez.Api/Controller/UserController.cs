@@ -25,7 +25,7 @@ namespace eHotelMartinez.Api.Controller
             var user = _users.FirstOrDefault(u => u.Id == id);
             if (user == null)
             {
-                return NotFound(new { Mesage = $"User with ID {id} Not Found!" });
+                return NotFound(new { Message = $"User with ID {id} Not Found!" });
             }
             return Ok(user);
         }
@@ -35,6 +35,10 @@ namespace eHotelMartinez.Api.Controller
         [HttpPost]
         public IActionResult CreateUser([FromBody] User user)
         {
+            if(user.Username == null || user.Username == "")
+            {
+                return BadRequest(new { Message = "Username is empty!" });
+            }
             user.Id = _nextId++;
             user.CreatedAt = DateTime.UtcNow;
 
@@ -50,7 +54,7 @@ namespace eHotelMartinez.Api.Controller
 
             if (existUser == null)
             {
-                return NotFound(new { Mesage = $"User with ID {id} Not Found!" });
+                return NotFound(new { Message = $"User with ID {id} Not Found!" });
             }
 
             existUser.Username = updatedUser.Username;
@@ -65,7 +69,7 @@ namespace eHotelMartinez.Api.Controller
 
             if (user == null)
             {
-                return NotFound(new { Mesage = $"User with ID {id} Not Found!" });
+                return NotFound(new { Message = $"User with ID {id} Not Found!" });
             }
 
             _users.Remove(user);
