@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eHotelMartinez.Api.Controller
 {
-    [Route("api/[controller]")]
+    [Route("api/product")]
     [ApiController]
     public class ProductController : ControllerBase
     {
 
-        //In memory storage for products
         public static List<Product> _product = new();
         public static int _nextId = 1;
 
@@ -33,7 +32,6 @@ namespace eHotelMartinez.Api.Controller
 
 
         [HttpPost]
-
         public IActionResult CreateProduct([FromBody] Product product)
         {
             if (product.Name == null || product.Name == "")
@@ -63,9 +61,8 @@ namespace eHotelMartinez.Api.Controller
             existProduct.Description = updatedProduct.Description;
             return Ok(existProduct);
         }
-
         
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteProduct(int id)
         {
             var product = _product.FirstOrDefault(p => p.Id == id);

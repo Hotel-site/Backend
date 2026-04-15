@@ -1,0 +1,11 @@
+C:\Users\Je11yyy\source\repos\Backend-main\eHotelMartinez.Domain\bin\Debug\net8.0\eHotelMartinez.Domain.deps.json
+C:\Users\Je11yyy\source\repos\Backend-main\eHotelMartinez.Domain\bin\Debug\net8.0\eHotelMartinez.Domain.dll
+C:\Users\Je11yyy\source\repos\Backend-main\eHotelMartinez.Domain\bin\Debug\net8.0\eHotelMartinez.Domain.pdb
+C:\Users\Je11yyy\source\repos\Backend-main\eHotelMartinez.Domain\obj\Debug\net8.0\eHotelMartinez.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Je11yyy\source\repos\Backend-main\eHotelMartinez.Domain\obj\Debug\net8.0\eHotelMartinez.Domain.AssemblyInfoInputs.cache
+C:\Users\Je11yyy\source\repos\Backend-main\eHotelMartinez.Domain\obj\Debug\net8.0\eHotelMartinez.Domain.AssemblyInfo.cs
+C:\Users\Je11yyy\source\repos\Backend-main\eHotelMartinez.Domain\obj\Debug\net8.0\eHotelMartinez.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Je11yyy\source\repos\Backend-main\eHotelMartinez.Domain\obj\Debug\net8.0\eHotelMartinez.Domain.dll
+C:\Users\Je11yyy\source\repos\Backend-main\eHotelMartinez.Domain\obj\Debug\net8.0\refint\eHotelMartinez.Domain.dll
+C:\Users\Je11yyy\source\repos\Backend-main\eHotelMartinez.Domain\obj\Debug\net8.0\eHotelMartinez.Domain.pdb
+C:\Users\Je11yyy\source\repos\Backend-main\eHotelMartinez.Domain\obj\Debug\net8.0\ref\eHotelMartinez.Domain.dll

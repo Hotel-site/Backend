@@ -8,7 +8,6 @@ namespace eHotelMartinez.Api.Controller
     [ApiController]
     public class UserController : ControllerBase
     {
-        //In memory storage for users
         public static List<User> _users = new();
         public static int _nextId = 1;
 
@@ -29,8 +28,6 @@ namespace eHotelMartinez.Api.Controller
             }
             return Ok(user);
         }
-
-
 
         [HttpPost]
         public IActionResult CreateUser([FromBody] User user)
@@ -62,7 +59,7 @@ namespace eHotelMartinez.Api.Controller
             return Ok(existUser);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteUser(int id)
         {
             var user = _users.FirstOrDefault(u => u.Id == id);
