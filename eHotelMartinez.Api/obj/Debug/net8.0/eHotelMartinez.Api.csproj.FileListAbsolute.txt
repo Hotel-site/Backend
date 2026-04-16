@@ -33,3 +33,15 @@ C:\Users\Je11yyy\source\repos\Backend-main\eHotelMartinez.Api\obj\Debug\net8.0\r
 C:\Users\Je11yyy\source\repos\Backend-main\eHotelMartinez.Api\obj\Debug\net8.0\eHotelMartinez.Api.pdb
 C:\Users\Je11yyy\source\repos\Backend-main\eHotelMartinez.Api\obj\Debug\net8.0\eHotelMartinez.Api.genruntimeconfig.cache
 C:\Users\Je11yyy\source\repos\Backend-main\eHotelMartinez.Api\obj\Debug\net8.0\ref\eHotelMartinez.Api.dll
+C:\Users\Je11yyy\Source\Repos\Backend\eHotelMartinez.Api\obj\Debug\net8.0\eHotelMartinez.Api.csproj.AssemblyReference.cache
+C:\Users\Je11yyy\Source\Repos\Backend\eHotelMartinez.Api\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\Je11yyy\Source\Repos\Backend\eHotelMartinez.Api\obj\Debug\net8.0\eHotelMartinez.Api.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Je11yyy\Source\Repos\Backend\eHotelMartinez.Api\obj\Debug\net8.0\eHotelMartinez.Api.AssemblyInfoInputs.cache
+C:\Users\Je11yyy\Source\Repos\Backend\eHotelMartinez.Api\obj\Debug\net8.0\eHotelMartinez.Api.AssemblyInfo.cs
+C:\Users\Je11yyy\Source\Repos\Backend\eHotelMartinez.Api\obj\Debug\net8.0\eHotelMartinez.Api.csproj.CoreCompileInputs.cache
+C:\Users\Je11yyy\Source\Repos\Backend\eHotelMartinez.Api\obj\Debug\net8.0\eHotelMartinez.Api.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Je11yyy\Source\Repos\Backend\eHotelMartinez.Api\obj\Debug\net8.0\eHotelMartinez.Api.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Je11yyy\Source\Repos\Backend\eHotelMartinez.Api\obj\Debug\net8.0\eHotelMartinez.Api.sourcelink.json
+C:\Users\Je11yyy\Source\Repos\Backend\eHotelMartinez.Api\obj\Debug\net8.0\eHotelMartinez.Api.dll
+C:\Users\Je11yyy\Source\Repos\Backend\eHotelMartinez.Api\obj\Debug\net8.0\refint\eHotelMartinez.Api.dll
+C:\Users\Je11yyy\Source\Repos\Backend\eHotelMartinez.Api\obj\Debug\net8.0\eHotelMartinez.Api.pdb

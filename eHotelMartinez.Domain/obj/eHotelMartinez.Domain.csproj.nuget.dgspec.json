@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Je11yyy\\source\\repos\\Backend-main\\eHotelMartinez.Domain\\eHotelMartinez.Domain.csproj": {}
+    "C:\\Users\\Je11yyy\\Source\\Repos\\Backend\\eHotelMartinez.Domain\\eHotelMartinez.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Je11yyy\\source\\repos\\Backend-main\\eHotelMartinez.Domain\\eHotelMartinez.Domain.csproj": {
+    "C:\\Users\\Je11yyy\\Source\\Repos\\Backend\\eHotelMartinez.Domain\\eHotelMartinez.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Je11yyy\\source\\repos\\Backend-main\\eHotelMartinez.Domain\\eHotelMartinez.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\Je11yyy\\Source\\Repos\\Backend\\eHotelMartinez.Domain\\eHotelMartinez.Domain.csproj",
         "projectName": "eHotelMartinez.Domain",
-        "projectPath": "C:\\Users\\Je11yyy\\source\\repos\\Backend-main\\eHotelMartinez.Domain\\eHotelMartinez.Domain.csproj",
+        "projectPath": "C:\\Users\\Je11yyy\\Source\\Repos\\Backend\\eHotelMartinez.Domain\\eHotelMartinez.Domain.csproj",
         "packagesPath": "C:\\Users\\Je11yyy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Je11yyy\\source\\repos\\Backend-main\\eHotelMartinez.Domain\\obj\\",
+        "outputPath": "C:\\Users\\Je11yyy\\Source\\Repos\\Backend\\eHotelMartinez.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

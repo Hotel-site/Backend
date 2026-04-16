@@ -110,6 +110,16 @@
         "build": {
           "buildTransitive/net6.0/System.Text.Json.targets": {}
         }
+      },
+      "eHotelMartinez.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/eHotelMartinez.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/eHotelMartinez.Domain.dll": {}
+        }
       }
     }
   },
@@ -343,11 +353,17 @@
         "system.text.json.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "eHotelMartinez.Domain/1.0.0": {
+      "type": "project",
+      "path": "../eHotelMartinez.Domain/eHotelMartinez.Domain.csproj",
+      "msbuildProject": "../eHotelMartinez.Domain/eHotelMartinez.Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "Swashbuckle.AspNetCore >= 10.1.7"
+      "Swashbuckle.AspNetCore >= 10.1.7",
+      "eHotelMartinez.Domain >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -357,11 +373,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Je11yyy\\source\\repos\\Backend-main\\eHotelMartinez.Api\\eHotelMartinez.Api.csproj",
+      "projectUniqueName": "C:\\Users\\Je11yyy\\Source\\Repos\\Backend\\eHotelMartinez.Api\\eHotelMartinez.Api.csproj",
       "projectName": "eHotelMartinez.Api",
-      "projectPath": "C:\\Users\\Je11yyy\\source\\repos\\Backend-main\\eHotelMartinez.Api\\eHotelMartinez.Api.csproj",
+      "projectPath": "C:\\Users\\Je11yyy\\Source\\Repos\\Backend\\eHotelMartinez.Api\\eHotelMartinez.Api.csproj",
       "packagesPath": "C:\\Users\\Je11yyy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Je11yyy\\source\\repos\\Backend-main\\eHotelMartinez.Api\\obj\\",
+      "outputPath": "C:\\Users\\Je11yyy\\Source\\Repos\\Backend\\eHotelMartinez.Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -382,7 +398,11 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Je11yyy\\Source\\Repos\\Backend\\eHotelMartinez.Domain\\eHotelMartinez.Domain.csproj": {
+              "projectPath": "C:\\Users\\Je11yyy\\Source\\Repos\\Backend\\eHotelMartinez.Domain\\eHotelMartinez.Domain.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
