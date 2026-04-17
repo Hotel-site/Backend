@@ -1,5 +1,4 @@
-﻿using eHotelMartinez.Domain.Entities.Room;
-using eHotelMartinez.Domain.Enums;
+﻿using eHotelMartinez.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,25 +7,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eHotelMartinez.Domain.Entities.Product
+namespace eHotelMartinez.Domain.Entities.Room
 {
-    public class ProductData
+    public class RoomData
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id  { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(50)]
         public string Name { get; set; }
 
-        [Required]
-        [StringLength(250)]
+        [Required]  
+        [StringLength(400)]
         public string Description { get; set; }
-        public List<ProductImgData> Images { get; set; }
 
         [Required]
-        public decimal Price  { get; set; }
-        public ProductStatus Status { get; set; }
+        public List<string> Amenities { get; set; }
+        public List<RoomImgData> Images { get; set; }
+
+        [Required]
+        public decimal Price { get; set; }
+        public RoomStatus Status { get; set; }
+
+
+        
+       
     }
 }
