@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace eHotelMartinez.Domain.Models.User
 {
-    public class UserDTO
+    public class UserRegDTO
     {
-        public int Id { get; set; }
-        public string Username { get; set; }
+        public string Username {  get; set; }
         public string Email { get; set; }
+        public string Password { get; set; }
+
     }
 }

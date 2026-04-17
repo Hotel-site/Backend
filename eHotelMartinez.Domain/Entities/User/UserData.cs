@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace eHotelMartinez.Domain.Entities.User
 {
-    internal class UserData
+    public class UserData
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
