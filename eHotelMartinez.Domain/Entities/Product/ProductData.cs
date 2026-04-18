@@ -23,10 +23,10 @@ namespace eHotelMartinez.Domain.Entities.Product
         [Required]
         [StringLength(250)]
         public string Description { get; set; }
-        public List<ProductImgData> Images { get; set; }
+        public List<ProductImgData> Images { get; set; } = new();
 
         [Required]
         public decimal Price  { get; set; }
-        public ProductStatus Status { get; set; }
+        public ProductStatus Status { get; set; } = ProductStatus.Unknown;
     }
 }

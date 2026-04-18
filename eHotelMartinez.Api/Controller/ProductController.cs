@@ -6,33 +6,32 @@ namespace eHotelMartinez.Api.Controller
 {
     [Route("api/product")]
     [ApiController]
-    public class ProductDTOController : ControllerBase
+    public class ProductController : ControllerBase
     {
-
         public static List<ProductDTO> _product = new();
         public static int _nextId = 1;
 
 
         [HttpGet("all")]
-        public IActionResult GetAllProductDTOs()
+        public IActionResult GetAllProducts()
         {
             return Ok(_product);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetProductDTOById(int id)
+        public IActionResult GetProductById(int id)
         {
             var product = _product.FirstOrDefault(p => p.Id == id);
             if (product == null)
             {
-                return NotFound(new { Message = $"ProductDTO with ID {id} Not Found!" });
+                return NotFound(new { Message = $"Product with ID {id} Not Found!" });
             }
             return Ok(product);
         }
 
 
         [HttpPost]
-        public IActionResult CreateProductDTO([FromBody] ProductDTO product)
+        public IActionResult CreateProduct([FromBody] ProductDTO product)
         {
             if (product.Name == null || product.Name == "")
             {
@@ -47,29 +46,29 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateProductDTO(int id, [FromBody] ProductDTO updatedProductDTO)
+        public IActionResult UpdateProduct(int id, [FromBody] ProductDTO updatedProduct)
         {
-            var existProductDTO = _product.FirstOrDefault(p => p.Id == id);
+            var existProduct = _product.FirstOrDefault(p => p.Id == id);
 
-            if (existProductDTO == null)
+            if (existProduct == null)
             {
-                return NotFound(new { Message = $"ProductDTO with ID {id} Not Found!" });
+                return NotFound(new { Message = $"Product with ID {id} Not Found!" });
             }
 
-            existProductDTO.Name = updatedProductDTO.Name;
-            existProductDTO.Price = updatedProductDTO.Price;
-            existProductDTO.Description = updatedProductDTO.Description;
-            return Ok(existProductDTO);
+            existProduct.Name = updatedProduct.Name;
+            existProduct.Price = updatedProduct.Price;
+            existProduct.Description = updatedProduct.Description;
+            return Ok(existProduct);
         }
         
         [HttpDelete("{id}")]
-        public IActionResult DeleteProductDTO(int id)
+        public IActionResult DeleteProduct(int id)
         {
             var product = _product.FirstOrDefault(p => p.Id == id);
 
             if (product == null)
             {
-                return NotFound(new { Message = $"ProductDTO with ID {id} Not Found!" });
+                return NotFound(new { Message = $"Product with ID {id} Not Found!" });
             }
 
             _product.Remove(product);

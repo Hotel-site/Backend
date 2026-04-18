@@ -13,7 +13,12 @@ namespace eHotelMartinez.Domain.Entities.Room
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int RoomId { get; set; }
+        public int Id { get; set; }
+
+        [Required]
+        public string RoomId { get; set; }
+
+        [Required]
         public string URL { get; set; }
     }
 }
