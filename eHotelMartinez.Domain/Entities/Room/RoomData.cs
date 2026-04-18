@@ -23,16 +23,11 @@ namespace eHotelMartinez.Domain.Entities.Room
         [StringLength(400)]
         public string Description { get; set; }
 
-        [Required]
-        public List<string> Amenities { get; set; }
-        public List<RoomImgData> Images { get; set; }
+        public List<string> Amenities { get; set; } = new();
+        public List<RoomImgData> Images { get; set; } = new();
 
         [Required]
         public decimal Price { get; set; }
-        public RoomStatus Status { get; set; }
-
-
-        
-       
+        public RoomStatus Status { get; set; } = RoomStatus.Available;
     }
 }
