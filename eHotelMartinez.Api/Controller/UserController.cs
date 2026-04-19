@@ -1,6 +1,7 @@
-﻿using eHotelMartinez.Api.Domain;
-using Microsoft.AspNetCore.Http;
+﻿using eHotelMartinez.Domain.Models.User;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace eHotelMartinez.Api.Controller
 {
@@ -8,8 +9,7 @@ namespace eHotelMartinez.Api.Controller
     [ApiController]
     public class UserController : ControllerBase
     {
-        //In memory storage for users
-        public static List<User> _users = new();
+        public static List<UserDTO> _users = new();
         public static int _nextId = 1;
 
 
@@ -30,25 +30,43 @@ namespace eHotelMartinez.Api.Controller
             return Ok(user);
         }
 
-
-
         [HttpPost]
-        public IActionResult CreateUser([FromBody] User user)
-        {
-            if(user.Username == null || user.Username == "")
+        public IActionResult CreateUser([FromBody] UserRegDTO RegUser)
+        {   
+            if (RegUser == null)
+            {
+                return BadRequest(new { Message = "Body is empty!" });
+            }
+            if (string.IsNullOrWhiteSpace(RegUser.Username))
             {
                 return BadRequest(new { Message = "Username is empty!" });
             }
-            user.Id = _nextId++;
-            user.CreatedAt = DateTime.UtcNow;
+            if (string.IsNullOrWhiteSpace(RegUser.Email))
+            {
+                return BadRequest(new { Message = "Email is empty!" });
+            }
+            if (string.IsNullOrWhiteSpace(RegUser.Password))
+            {
+                return BadRequest(new { Message = "Password is empty!" });
+            }
+            if (_users.Any(u => u.Email.Equals(RegUser.Email, StringComparison.OrdinalIgnoreCase)))
+            {
+                return Conflict(new { Message = " User with this Email already exist!" });
+            }
+
+            var user = new UserDTO
+            {
+                Id = _nextId++,
+                Username = RegUser.Username.Trim(),
+                Email = RegUser.Email.Trim()
+            };
 
             _users.Add(user);
-
             return Created($"/api/users/{user.Id}", user);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, [FromBody] User updatedUser)
+        public IActionResult UpdateUser(int id, [FromBody] UserDTO updatedUser)
         {
             var existUser = _users.FirstOrDefault(u => u.Id == id);
 
@@ -57,12 +75,13 @@ namespace eHotelMartinez.Api.Controller
                 return NotFound(new { Message = $"User with ID {id} Not Found!" });
             }
 
-            existUser.Username = updatedUser.Username;
-            existUser.Email = updatedUser.Email;
+
+            existUser.Username = updatedUser.Username.Trim();
+            existUser.Email = updatedUser.Email.Trim();
             return Ok(existUser);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteUser(int id)
         {
             var user = _users.FirstOrDefault(u => u.Id == id);
@@ -75,7 +94,5 @@ namespace eHotelMartinez.Api.Controller
             _users.Remove(user);
             return NoContent();
         }
-
-
     }
 }

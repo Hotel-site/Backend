@@ -1,16 +1,14 @@
-﻿using eHotelMartinez.Api.Domain;
+﻿using eHotelMartinez.Domain.Models.Product;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eHotelMartinez.Api.Controller
 {
-    [Route("api/[controller]")]
+    [Route("api/product")]
     [ApiController]
     public class ProductController : ControllerBase
     {
-
-        //In memory storage for products
-        public static List<Product> _product = new();
+        public static List<ProductDTO> _product = new();
         public static int _nextId = 1;
 
 
@@ -33,8 +31,7 @@ namespace eHotelMartinez.Api.Controller
 
 
         [HttpPost]
-
-        public IActionResult CreateProduct([FromBody] Product product)
+        public IActionResult CreateProduct([FromBody] ProductDTO product)
         {
             if (product.Name == null || product.Name == "")
             {
@@ -49,7 +46,7 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateProduct(int id, [FromBody] Product updatedProduct)
+        public IActionResult UpdateProduct(int id, [FromBody] ProductDTO updatedProduct)
         {
             var existProduct = _product.FirstOrDefault(p => p.Id == id);
 
@@ -63,9 +60,8 @@ namespace eHotelMartinez.Api.Controller
             existProduct.Description = updatedProduct.Description;
             return Ok(existProduct);
         }
-
         
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteProduct(int id)
         {
             var product = _product.FirstOrDefault(p => p.Id == id);
