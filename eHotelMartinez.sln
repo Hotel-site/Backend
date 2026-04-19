@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
@@ -23,3 +24,48 @@ Global
 		SolutionGuid = {A6D942A4-6B35-4ECB-A2AD-2A878989A12B}
 	EndGlobalSection
 EndGlobal
+=======
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eHotelMartinez.Api", "eHotelMartinez.Api\eHotelMartinez.Api.csproj", "{F8C55040-74C1-42FB-A460-4E2DB35A3662}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D7A80CBA-9F1E-4BD1-889C-3B1F4862F635} = {D7A80CBA-9F1E-4BD1-889C-3B1F4862F635}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eHotelMartinez.Domain", "eHotelMartinez.Domain\eHotelMartinez.Domain.csproj", "{D7A80CBA-9F1E-4BD1-889C-3B1F4862F635}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eHotelMartinez.DataAccess", "eHotelMartinez.DataAccess\eHotelMartinez.DataAccess.csproj", "{6C77726D-9DDD-4CE9-A349-A618BDFE659F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D7A80CBA-9F1E-4BD1-889C-3B1F4862F635} = {D7A80CBA-9F1E-4BD1-889C-3B1F4862F635}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8C55040-74C1-42FB-A460-4E2DB35A3662}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8C55040-74C1-42FB-A460-4E2DB35A3662}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8C55040-74C1-42FB-A460-4E2DB35A3662}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8C55040-74C1-42FB-A460-4E2DB35A3662}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7A80CBA-9F1E-4BD1-889C-3B1F4862F635}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7A80CBA-9F1E-4BD1-889C-3B1F4862F635}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7A80CBA-9F1E-4BD1-889C-3B1F4862F635}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7A80CBA-9F1E-4BD1-889C-3B1F4862F635}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C77726D-9DDD-4CE9-A349-A618BDFE659F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C77726D-9DDD-4CE9-A349-A618BDFE659F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C77726D-9DDD-4CE9-A349-A618BDFE659F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C77726D-9DDD-4CE9-A349-A618BDFE659F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A6D942A4-6B35-4ECB-A2AD-2A878989A12B}
+	EndGlobalSection
+EndGlobal
+>>>>>>> Stashed changes
