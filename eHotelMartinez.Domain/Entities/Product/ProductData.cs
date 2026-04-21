@@ -28,5 +28,7 @@ namespace eHotelMartinez.Domain.Entities.Product
         [Required]
         public decimal Price  { get; set; }
         public ProductStatus Status { get; set; } = ProductStatus.Unknown;
+
+        public bool IsActive { get; set; }
     }
 }

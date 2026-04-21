@@ -8,6 +8,7 @@
 	
 	<ItemGroup>
 	<ProjectReference Include="..\eHotelMartinez.Domain\eHotelMartinez.Domain.csproj" />
+	<ProjectReference Include="..\eHotelMartinez.DataAccess\eHotelMartinez.DataAccess.csproj" />
 	</ItemGroup>
 
 </Project>

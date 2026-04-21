@@ -16,8 +16,10 @@ namespace eHotelMartinez.Domain.Entities.Product
 
         [Required]
         public int ProductId { get; set; }
-        
+
         [Required]
-        public string URL { get; set; }
+        public string Url { get; set; } = null!;
+
+        public ProductData Product { get; set; } = null!;
     }
 }
