@@ -4,6 +4,7 @@ VisualStudioVersion = 17.14.36518.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eHotelMartinez.Api", "eHotelMartinez.Api\eHotelMartinez.Api.csproj", "{F8C55040-74C1-42FB-A460-4E2DB35A3662}"
 	ProjectSection(ProjectDependencies) = postProject
+		{28ACED35-E155-4D42-BE24-A9D2A9D15775} = {28ACED35-E155-4D42-BE24-A9D2A9D15775}
 		{D7A80CBA-9F1E-4BD1-889C-3B1F4862F635} = {D7A80CBA-9F1E-4BD1-889C-3B1F4862F635}
 	EndProjectSection
 EndProject
@@ -11,6 +12,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eHotelMartinez.Domain", "eH
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eHotelMartinez.DataAccess", "eHotelMartinez.DataAccess\eHotelMartinez.DataAccess.csproj", "{6C77726D-9DDD-4CE9-A349-A618BDFE659F}"
 	ProjectSection(ProjectDependencies) = postProject
+		{D7A80CBA-9F1E-4BD1-889C-3B1F4862F635} = {D7A80CBA-9F1E-4BD1-889C-3B1F4862F635}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eHotelMartinez.BusinessLogic", "eHotelMartinez.BusinessLogic\eHotelMartinez.BusinessLogic.csproj", "{28ACED35-E155-4D42-BE24-A9D2A9D15775}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6C77726D-9DDD-4CE9-A349-A618BDFE659F} = {6C77726D-9DDD-4CE9-A349-A618BDFE659F}
 		{D7A80CBA-9F1E-4BD1-889C-3B1F4862F635} = {D7A80CBA-9F1E-4BD1-889C-3B1F4862F635}
 	EndProjectSection
 EndProject
@@ -32,6 +39,10 @@ Global
 		{6C77726D-9DDD-4CE9-A349-A618BDFE659F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C77726D-9DDD-4CE9-A349-A618BDFE659F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C77726D-9DDD-4CE9-A349-A618BDFE659F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28ACED35-E155-4D42-BE24-A9D2A9D15775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28ACED35-E155-4D42-BE24-A9D2A9D15775}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28ACED35-E155-4D42-BE24-A9D2A9D15775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28ACED35-E155-4D42-BE24-A9D2A9D15775}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
