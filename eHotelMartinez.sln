@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eHotelMartinez.DataAccess",
 		{D7A80CBA-9F1E-4BD1-889C-3B1F4862F635} = {D7A80CBA-9F1E-4BD1-889C-3B1F4862F635}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eHotelMartinez.BusinessLogic", "eHotelMartinez.BusinessLogic\eHotelMartinez.BusinessLogic.csproj", "{4B5DEE88-F2E5-7ABC-EAD2-4778021E7860}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{6C77726D-9DDD-4CE9-A349-A618BDFE659F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C77726D-9DDD-4CE9-A349-A618BDFE659F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C77726D-9DDD-4CE9-A349-A618BDFE659F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B5DEE88-F2E5-7ABC-EAD2-4778021E7860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B5DEE88-F2E5-7ABC-EAD2-4778021E7860}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B5DEE88-F2E5-7ABC-EAD2-4778021E7860}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B5DEE88-F2E5-7ABC-EAD2-4778021E7860}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

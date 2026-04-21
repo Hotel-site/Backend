@@ -7,7 +7,7 @@ using eHotelMartinez.Domain.Models.User;
 using eHotelMartinez.Domain.Models.Base;
 
 
-namespace eHotelMartinez.BusinessLogic.Interfacies
+namespace eHotelMartinez.BusinessLogic.Interfaces
 {
     public interface IUserActions
     {

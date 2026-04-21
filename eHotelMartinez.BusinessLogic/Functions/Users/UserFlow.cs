@@ -1,5 +1,5 @@
 ﻿using eHotelMartinez.BusinessLogic.Core.User;
-using eHotelMartinez.BusinessLogic.Interfacies;
+using eHotelMartinez.BusinessLogic.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
