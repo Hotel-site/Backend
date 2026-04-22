@@ -1,11 +1,8 @@
 ﻿using eHotelMartinez.BusinessLogic.Core.User;
-<<<<<<< Updated upstream
-using eHotelMartinez.BusinessLogic.Interfacies;
-=======
 using eHotelMartinez.BusinessLogic.Interfaces;
 using eHotelMartinez.Domain.Models.User;
 using eHotelMartinez.Domain.Models.Base;
->>>>>>> Stashed changes
+
 using System;
 using System.Collections.Generic;
 using System.Linq;

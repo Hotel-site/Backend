@@ -191,7 +191,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 return new ResponseMsg
                 {
                     IsSuccess = false,
-                    Message = "Please, enter the email"
+                    Message = "Please, enter the Email"
                 };
             }
             if (string.IsNullOrWhiteSpace(user.Password) || user.Password.Length < 8)
@@ -204,9 +204,30 @@ namespace eHotelMartinez.BusinessLogic.Core.User
             }
             using (var db = new UserContext())
             {
-                
+                var email = user.Email.ToLower();
+                var existUser = db.Users.FirstOrDefault(u => u.Email.ToLower() == email);
+                if (existUser == null)
+                {
+                    return new ResponseMsg
+                    {
+                        IsSuccess = false,
+                        Message = "Incorrect data, please try again!"
+                    };
+                }
+                if(user.Password != existUser.Password)
+                {
+                    return new ResponseMsg
+                    {
+                        IsSuccess = false,
+                        Message = "Incorrect data, please try again!"
+                    };
+                }
+                return new ResponseMsg
+                {
+                    IsSuccess = true,
+                    Message = "Login Successfull!"
+                };
             }
-
         }
     }
 }
