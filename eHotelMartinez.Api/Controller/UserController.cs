@@ -1,4 +1,6 @@
-﻿using eHotelMartinez.Domain.Models.User;
+﻿using eHotelMartinez.BusinessLogic.Interfaces;
+using eHotelMartinez.Domain.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,90 +11,64 @@ namespace eHotelMartinez.Api.Controller
     [ApiController]
     public class UserController : ControllerBase
     {
-        public static List<UserDTO> _users = new();
-        public static int _nextId = 1;
+        private IUserActions _userActions;
 
+        public UserController()
+        {
+            var bl = new BusinessLogic.BusinessLogic();
+            _userActions = bl.GetUserActions();
+        }
 
         [HttpGet("all")]
         public IActionResult GetAllUsers()
         {
-            return Ok(_users);
+            var users = _userActions.GetAllUsersAction();
+            return Ok(users);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetUserById(int id)
         {
-            var user = _users.FirstOrDefault(u => u.Id == id);
+            var user = _userActions.GetUserByIdAction(id);
             if (user == null)
             {
-                return NotFound(new { Message = $"User with ID {id} Not Found!" });
+                return NotFound(new { Message = "User not found!" });
             }
             return Ok(user);
         }
 
         [HttpPost]
-        public IActionResult CreateUser([FromBody] UserRegDTO RegUser)
-        {   
-            if (RegUser == null)
+        public IActionResult CreateUser([FromBody] UserRegDTO user)
+        {
+            var NewUser = _userActions.ResponseUserCreateAction(user);
+            if (NewUser.IsSuccess == false)
             {
-                return BadRequest(new { Message = "Body is empty!" });
+                return BadRequest(NewUser);
             }
-            if (string.IsNullOrWhiteSpace(RegUser.Username))
-            {
-                return BadRequest(new { Message = "Username is empty!" });
-            }
-            if (string.IsNullOrWhiteSpace(RegUser.Email))
-            {
-                return BadRequest(new { Message = "Email is empty!" });
-            }
-            if (string.IsNullOrWhiteSpace(RegUser.Password))
-            {
-                return BadRequest(new { Message = "Password is empty!" });
-            }
-            if (_users.Any(u => u.Email.Equals(RegUser.Email, StringComparison.OrdinalIgnoreCase)))
-            {
-                return Conflict(new { Message = " User with this Email already exist!" });
-            }
-
-            var user = new UserDTO
-            {
-                Id = _nextId++,
-                Username = RegUser.Username.Trim(),
-                Email = RegUser.Email.Trim()
-            };
-
-            _users.Add(user);
-            return Created($"/api/users/{user.Id}", user);
+            return Ok(NewUser);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, [FromBody] UserDTO updatedUser)
+        public IActionResult UpdateUser(int id, [FromBody] UserDTO user)
         {
-            var existUser = _users.FirstOrDefault(u => u.Id == id);
-
-            if (existUser == null)
+            user.Id = id;
+            var UpdateUser = _userActions.ResponseUserUpdateAction(user);
+            if (UpdateUser.IsSuccess == false)
             {
-                return NotFound(new { Message = $"User with ID {id} Not Found!" });
+                return BadRequest(UpdateUser);
             }
-
-
-            existUser.Username = updatedUser.Username.Trim();
-            existUser.Email = updatedUser.Email.Trim();
-            return Ok(existUser);
+            return Ok(UpdateUser);
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteUser(int id)
         {
-            var user = _users.FirstOrDefault(u => u.Id == id);
-
-            if (user == null)
+            var user = _userActions.ResponseUserDeleteAction(id);
+            if (user.IsSuccess == false)
             {
-                return NotFound(new { Message = $"User with ID {id} Not Found!" });
+                return BadRequest(user);
             }
-
-            _users.Remove(user);
-            return NoContent();
+            return Ok(user);
         }
     }
 }
