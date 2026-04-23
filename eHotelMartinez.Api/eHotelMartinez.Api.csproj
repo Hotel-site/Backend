@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\eHotelMartinez.Domain\eHotelMartinez.Domain.csproj" />
+    <ProjectReference Include="..\eHotelMartinez.BusinessLogic\eHotelMartinez.BusinessLogic.csproj" />
   </ItemGroup>
 
 </Project>

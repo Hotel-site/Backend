@@ -14,5 +14,6 @@ namespace eHotelMartinez.Domain.Models.Product
         public string Description { get; set; }
         public List<ProductImgData> Images { get; set; } = new();
         public decimal Price { get; set; }
+
     }
 }
