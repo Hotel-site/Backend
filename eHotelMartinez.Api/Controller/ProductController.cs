@@ -1,6 +1,9 @@
-﻿using eHotelMartinez.Domain.Models.Product;
+﻿using eHotelMartinez.BusinessLogic.Interfaces;
+using eHotelMartinez.Domain.Models.Product;
+using eHotelMartinez.Api.Filters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using eHotelMartinez.BusinessLogic;
 
 namespace eHotelMartinez.Api.Controller
 {
@@ -8,20 +11,26 @@ namespace eHotelMartinez.Api.Controller
     [ApiController]
     public class ProductController : ControllerBase
     {
-        public static List<ProductDTO> _product = new();
-        public static int _nextId = 1;
+        private IProductActions _productActions;
 
+        public ProductController(IProductActions productActions)
+        {
+            var bl=new BusinessLogic.BusinessLogic();
+            _productActions = bl.GetProductActions();
+        }
 
         [HttpGet("all")]
         public IActionResult GetAllProducts()
         {
-            return Ok(_product);
+            var products = _productActions.GetAllProductsAction;
+            return Ok(products);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetProductById(int id)
         {
-            var product = _product.FirstOrDefault(p => p.Id == id);
+            var product = _productActions.GetProductByIdAction(id);
+
             if (product == null)
             {
                 return NotFound(new { Message = $"Product with ID {id} Not Found!" });
@@ -33,46 +42,43 @@ namespace eHotelMartinez.Api.Controller
         [HttpPost]
         public IActionResult CreateProduct([FromBody] ProductDTO product)
         {
-            if (product.Name == null || product.Name == "")
+
+            var response = _productActions.ResponseProductCreateAction(product);
+
+            if(!response.IsSuccess)
             {
-                return BadRequest(new { Message = "Name is empty!" });
+                return BadRequest(response);
             }
-            product.Id = _nextId++;
-            
 
-            _product.Add(product);
-
-            return Created($"/api/products/{product.Id}", product);
+            return Ok(response);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateProduct(int id, [FromBody] ProductDTO updatedProduct)
+        public IActionResult UpdateProduct(int id, [FromBody] UpdateProductDTO product)
         {
-            var existProduct = _product.FirstOrDefault(p => p.Id == id);
 
-            if (existProduct == null)
+            product.Id = id;
+                var response = _productActions.ResponseProductUpdateAction(product);
+            if (!response.IsSuccess)
             {
-                return NotFound(new { Message = $"Product with ID {id} Not Found!" });
+                return BadRequest(response);
             }
 
-            existProduct.Name = updatedProduct.Name;
-            existProduct.Price = updatedProduct.Price;
-            existProduct.Description = updatedProduct.Description;
-            return Ok(existProduct);
+            return Ok(response);
         }
         
         [HttpDelete("{id}")]
         public IActionResult DeleteProduct(int id)
         {
-            var product = _product.FirstOrDefault(p => p.Id == id);
 
-            if (product == null)
+            var response = _productActions.ResponseProductDeleteAction(id);
+
+            if (!response.IsSuccess)
             {
-                return NotFound(new { Message = $"Product with ID {id} Not Found!" });
+                return BadRequest(response);
             }
 
-            _product.Remove(product);
-            return NoContent();
+            return Ok(response);
         }
     }
 }
