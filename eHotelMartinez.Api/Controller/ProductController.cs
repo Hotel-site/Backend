@@ -1,6 +1,5 @@
 ﻿using eHotelMartinez.BusinessLogic.Interfaces;
 using eHotelMartinez.Domain.Models.Product;
-using eHotelMartinez.Api.Filters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using eHotelMartinez.BusinessLogic;
