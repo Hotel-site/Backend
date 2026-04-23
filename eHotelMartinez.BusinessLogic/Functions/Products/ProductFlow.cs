@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using eHotelMartinez.BusinessLogic.Core.Products;
-using eHotelMartinez.BusinessLogic.Interfacies;
+using eHotelMartinez.BusinessLogic.Interfaces;
 using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.Models.Product;
 

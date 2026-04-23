@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using eHotelMartinez.Domain.Models.Product;
 using eHotelMartinez.Domain.Models.Base;
 
-namespace eHotelMartinez.BusinessLogic.Interfacies
+namespace eHotelMartinez.BusinessLogic.Interfaces
 {
     public interface IProductActions 
     {
