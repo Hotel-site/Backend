@@ -9,7 +9,7 @@ namespace eHotelMartinez.DataAccess.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(DbSession.ConnectionString);
+            optionsBuilder.UseSqlServer(DbSession.ConnectionStrings);
         }
     }
 }

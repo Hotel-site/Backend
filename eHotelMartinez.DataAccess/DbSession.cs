@@ -8,6 +8,6 @@ namespace eHotelMartinez.DataAccess
 {
     public class DbSession
     {
-        public static string? ConnectionString { get; set; }
+        public static string ConnectionStrings { get; set; }
     }
 }
