@@ -11,10 +11,10 @@ namespace eHotelMartinez.BusinessLogic.Interfaces
 {
     public interface IProductActions 
     {
-        List<ProductDTO> ExecuteGetAllProducts();
-        ProductDTO ExecuteGetProductById(int id);
-        ResponseMsg ExecuteCreateProductAction(ProductDTO product);
-        ResponseMsg ExecuteUpdateProductAction(UpdateProductDTO product);
-        ResponseMsg ExecuteDeleteProductAction(int id);
+        List<ProductDTO> GetAllProductsAction();
+        ProductDTO GetProductByIdAction(int id);
+        ResponseMsg ResponseProductCreateAction(ProductDTO product);
+        ResponseMsg ResponseProductUpdateAction(UpdateProductDTO product);
+        ResponseMsg ResponseProductDeleteAction(int id);
     }
 }
