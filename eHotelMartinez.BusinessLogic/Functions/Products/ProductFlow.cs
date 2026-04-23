@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using eHotelMartinez.BusinessLogic.Core.Products;
 using eHotelMartinez.BusinessLogic.Interfaces;
 using eHotelMartinez.Domain.Models.Base;
@@ -13,29 +14,26 @@ namespace eHotelMartinez.BusinessLogic.Functions.Products
 {
     public class ProductFlow : ProductActions, IProductActions
     {
-        List<ProductDTO> IProductActions.ExecuteGetAllProducts()
+        public List<ProductDTO> GetAllProductsAction()
         {
             return ExecuteGetAllProducts();
         }
-
-        ProductDTO IProductActions.ExecuteGetProductById(int id)
+        public ProductDTO GetProductByIdAction(int id)
         {
             return ExecuteGetProductById(id);
         }
-
-        ResponseMsg IProductActions.ExecuteCreateProductAction(ProductDTO product)
+        public ResponseMsg ResponseProductCreateAction(ProductDTO product)
         {
             return ExecuteCreateProductAction(product);
         }
-
-        ResponseMsg IProductActions.ExecuteUpdateProductAction(UpdateProductDTO product)
+        public ResponseMsg ResponseProductUpdateAction(UpdateProductDTO product)
         {
             return ExecuteUpdateProductAction(product);
         }
-
-        ResponseMsg IProductActions.ExecuteDeleteProductAction(int id)
+        public ResponseMsg ResponseProductDeleteAction(int id)
         {
             return ExecuteDeleteProductAction(id);
         }
+
     }
 }
