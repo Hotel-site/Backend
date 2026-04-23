@@ -1,4 +1,5 @@
-﻿using System;
+﻿using eHotelMartinez.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -32,7 +33,11 @@ namespace eHotelMartinez.Domain.Entities.User
         [Required]
         [DataType(DataType.Date)]
         public DateTime RegisteredOn { get; set; }
-        public bool IsActive { get; set; }
+
+        [Required]
+        public UserRole Role { get; set; } = UserRole.User;
+
+        public bool IsActive { get; set; } = true;
 
     }
 }

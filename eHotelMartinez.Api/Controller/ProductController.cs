@@ -3,6 +3,7 @@ using eHotelMartinez.Domain.Models.Product;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using eHotelMartinez.BusinessLogic;
+using eHotelMartinez.Api.Filters;
 
 namespace eHotelMartinez.Api.Controller
 {
@@ -39,6 +40,7 @@ namespace eHotelMartinez.Api.Controller
 
 
         [HttpPost]
+        [AdminOnly]
         public IActionResult CreateProduct([FromBody] ProductDTO product)
         {
 
@@ -53,6 +55,7 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpPut("{id}")]
+        [AdminOnly]
         public IActionResult UpdateProduct(int id, [FromBody] UpdateProductDTO product)
         {
 
@@ -67,6 +70,7 @@ namespace eHotelMartinez.Api.Controller
         }
         
         [HttpDelete("{id}")]
+        [AdminOnly]
         public IActionResult DeleteProduct(int id)
         {
 
