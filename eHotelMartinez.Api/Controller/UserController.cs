@@ -1,4 +1,5 @@
-﻿using eHotelMartinez.BusinessLogic.Interfaces;
+﻿using eHotelMartinez.Api.Filters;
+using eHotelMartinez.BusinessLogic.Interfaces;
 using eHotelMartinez.Domain.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eHotelMartinez.Api.Controller
 {
+    [AdminOnly]
     [Route("api/user")]
     [ApiController]
     public class UserController : ControllerBase

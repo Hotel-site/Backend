@@ -1,14 +1,8 @@
-﻿using Azure.Core;
-using eHotelMartinez.DataAccess.Context;
+﻿using eHotelMartinez.DataAccess.Context;
 using eHotelMartinez.Domain.Entities.Product;
 using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.Models.Product;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace eHotelMartinez.BusinessLogic.Core.Products

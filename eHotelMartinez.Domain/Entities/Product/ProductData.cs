@@ -11,12 +11,13 @@ namespace eHotelMartinez.Domain.Entities.Product
         public int Id  { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [Display(Name = "ProductName")]
+        [StringLength(50, MinimumLength = 5)]
         public string Name { get; set; }
 
         [Required]
         [StringLength(250)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public List<ProductImgData> Images { get; set; } = new();
 
         [Required]

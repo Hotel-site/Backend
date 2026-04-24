@@ -89,6 +89,8 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                     };
                 }
             }
+
+
             var User = new UserData
             {
                 Username = user.Username,
