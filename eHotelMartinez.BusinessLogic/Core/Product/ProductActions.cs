@@ -21,7 +21,10 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                        Name = p.Name,
                        Description = p.Description,
                        Price = p.Price,
-                       Images = p.Images,
+                          Images = p.Images.Select(i => new ProductImgDTO
+                          {
+                            Url = i.Url
+                          }).ToList()
                    }).ToList();
             }
         }
@@ -39,12 +42,15 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                     Name = product.Name,
                     Description = product.Description,
                     Price = product.Price,
-                    Images = product.Images,
+                    Images = product.Images.Select(i => new ProductImgDTO
+                    {
+                        Url = i.Url
+                    }).ToList()
                 };
             }
         }
 
-        protected ResponseMsg ExecuteCreateProductAction(ProductDTO product)
+        protected ResponseMsg ExecuteCreateProductAction(CreateProductDTO product)
         {
 
             if (string.IsNullOrWhiteSpace(product.Name))
@@ -69,12 +75,10 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
 
             var productData = new ProductData
             {
-                Id = product.Id,
                 Name = product.Name,
                 Description = product.Description,
                 Price = product.Price,
-                Images = product.Images.ToList(),
-
+                Images = product.Images?.Select(imgDto => new ProductImgData { Url = imgDto.Url }).ToList() ?? new List<ProductImgData>(),
                 IsActive = true
             };
 

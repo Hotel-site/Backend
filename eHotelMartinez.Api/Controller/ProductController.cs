@@ -9,18 +9,16 @@ namespace eHotelMartinez.Api.Controller
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private IProductActions _productActions;
-
+        private readonly IProductActions _productActions;
         public ProductController(IProductActions productActions)
         {
-            var bl=new BusinessLogic.BusinessLogic();
-            _productActions = bl.GetProductActions();
+            _productActions = productActions ?? throw new ArgumentNullException(nameof(productActions));
         }
 
         [HttpGet("all")]
         public IActionResult GetAllProducts()
         {
-            var products = _productActions.GetAllProductsAction;
+            var products = _productActions.GetAllProductsAction();
             return Ok(products);
         }
 
@@ -38,7 +36,7 @@ namespace eHotelMartinez.Api.Controller
 
         [AdminOnly]
         [HttpPost]
-        public IActionResult CreateProduct([FromBody] ProductDTO product)
+        public IActionResult CreateProduct([FromBody] CreateProductDTO product)
         {
 
             var response = _productActions.ResponseProductCreateAction(product);

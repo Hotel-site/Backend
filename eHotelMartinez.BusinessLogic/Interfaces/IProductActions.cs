@@ -7,7 +7,7 @@ namespace eHotelMartinez.BusinessLogic.Interfaces
     {
         List<ProductDTO> GetAllProductsAction();
         ProductDTO GetProductByIdAction(int id);
-        ResponseMsg ResponseProductCreateAction(ProductDTO product);
+        ResponseMsg ResponseProductCreateAction(CreateProductDTO product);
         ResponseMsg ResponseProductUpdateAction(UpdateProductDTO product);
         ResponseMsg ResponseProductDeleteAction(int id);
     }
