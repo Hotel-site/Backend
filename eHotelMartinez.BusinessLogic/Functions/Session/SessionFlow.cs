@@ -5,7 +5,7 @@ namespace eHotelMartinez.BusinessLogic.Functions.Session
 {
     public class SessionFlow : SessionAction, ISessionAction
     {
-        public string CreateSession(int userId)
+        public string CreateOrUpdateSession(int userId)
         {
             return ExecuteCreateOrUpdateSession(userId);
         }
