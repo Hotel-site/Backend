@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using eHotelMartinez.Domain.Entities.Attraction;
+﻿using eHotelMartinez.Domain.Entities.Attraction;
+using eHotelMartinez.Domain.Entities.Category;
 using eHotelMartinez.Domain.Enums;
 using eHotelMartinez.Domain.ValueObjects;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace eHotelMartinez.Domain.Entities.Attraction
@@ -21,8 +22,7 @@ namespace eHotelMartinez.Domain.Entities.Attraction
         public string? Description { get; set; }
         [StringLength(100)]
         public string? ShortDescription { get; set; }
-
-        public AttractionCategory Categories { get; set; } = AttractionCategory.unknown;
+        public CategoryData Category { get; set; }
 
         [Required]
         [StringLength(100)]

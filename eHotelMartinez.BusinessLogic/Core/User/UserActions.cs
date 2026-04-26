@@ -140,7 +140,6 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                         Message = "Invalid Email format!"
                     };
                 }
-                var username = user.Username.ToLower();
                 var email = user.Email.ToLower();
 
                 var existUserByEmail = db.Users.FirstOrDefault(u => u.Email.ToLower() == email && u.Id != user.Id);

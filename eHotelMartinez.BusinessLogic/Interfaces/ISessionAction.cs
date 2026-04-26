@@ -4,7 +4,7 @@ namespace eHotelMartinez.BusinessLogic.Interfaces
 {
     public interface ISessionAction
     {
-        string CreateSession(int userId);
+        string CreateOrUpdateSession(int userId);
         int? GetUserIdFromSession(string sessionKey);
         void DeleteSession(string sessionKey);
     }

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using eHotelMartinez.Domain.Entities.Attraction;
+using eHotelMartinez.Domain.Entities.Category;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using eHotelMartinez.Domain.Entities.Attraction;
 
 namespace eHotelMartinez.Domain.Models.Attraction
 {
@@ -12,6 +13,8 @@ namespace eHotelMartinez.Domain.Models.Attraction
         public int Id { get; set; }
         public string Name { get; set; }
         public string? ShortDescription { get; set; }
+        public CategoryData Category { get; set; }
+
         public string Location { get; set; }
         public double Distance { get; set; }
         public decimal Price { get; set; }
