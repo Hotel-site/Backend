@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace eHotelMartinez.Domain.Entities.Product
 {
@@ -16,7 +15,6 @@ namespace eHotelMartinez.Domain.Entities.Product
         [Required]
         public string Url { get; set; } = null!;
 
-        [JsonIgnore]
-        public ProductData Product { get; set; } = null!;
+        public bool? IsActive { get; set; } = true;
     }
 }

@@ -24,6 +24,11 @@ namespace eHotelMartinez.Domain.Entities.Product
         public decimal Price  { get; set; }
         public ProductStatus Status { get; set; } = ProductStatus.Unknown;
 
-        public bool IsActive { get; set; }
+        [Required]
+        public int Stock { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public bool IsActive { get; set; } = true;
     }
 }

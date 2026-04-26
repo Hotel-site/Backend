@@ -2,6 +2,7 @@
 using eHotelMartinez.Domain.Entities.Product;
 using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.Models.Product;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 
@@ -24,7 +25,8 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                           Images = p.Images.Select(i => new ProductImgDTO
                           {
                             Url = i.Url
-                          }).ToList()
+                          }).ToList(),
+                        Stock = p.Stock
                    }).ToList();
             }
         }
@@ -33,20 +35,24 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
         {
             using (var db = new ProductContext())
             {
-                var product = db.Products.FirstOrDefault(p => p.Id == id && p.IsActive);
-                if (product == null)
+                var p = db.Products.FirstOrDefault(p => p.Id == id && p.IsActive);
+                if (p == null)
                     return null;
-                return new ProductDTO
-                {
-                    Id = product.Id,
-                    Name = product.Name,
-                    Description = product.Description,
-                    Price = product.Price,
-                    Images = product.Images.Select(i => new ProductImgDTO
-                    {
-                        Url = i.Url
-                    }).ToList()
-                };
+
+                return db.Products
+                   .Where(p => p.Id == id && p.IsActive)
+                   .Select(p => new ProductDTO
+                   {
+                       Id = p.Id,
+                       Name = p.Name,
+                       Description = p.Description,
+                       Price = p.Price,
+                       Images = p.Images.Select(i => new ProductImgDTO
+                       {
+                           Url = i.Url
+                       }).ToList(),
+                       Stock = p.Stock
+                   }).First();
             }
         }
 
@@ -79,7 +85,9 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                 Description = product.Description,
                 Price = product.Price,
                 Images = product.Images?.Select(imgDto => new ProductImgData { Url = imgDto.Url }).ToList() ?? new List<ProductImgData>(),
-                IsActive = true
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                Stock = product.Stock,
             };
 
             using (var db = new ProductContext())
@@ -99,7 +107,9 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
         {
             using (var db = new ProductContext())
             {
-                var existingProduct = db.Products.FirstOrDefault(p => p.Id == product.Id && p.IsActive);
+                var existingProduct = db.Products
+                    .Include(p => p.Images)
+                    .FirstOrDefault(p => p.Id == product.Id && p.IsActive);
 
                 if (existingProduct == null)
                     return new ResponseMsg
@@ -108,39 +118,18 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                         Message = "Product not found."
                     };
 
-                if(!string.IsNullOrWhiteSpace(product.Name)) existingProduct.Name = product.Name;
+                if (!string.IsNullOrWhiteSpace(product.Name)) existingProduct.Name = product.Name;
                 if (product.Price > 0) existingProduct.Price = product.Price;
                 if (!string.IsNullOrWhiteSpace(product.Description)) existingProduct.Description = product.Description;
-                
-                if (product.ClearImages)
+
+                foreach (var img in existingProduct.Images)
                 {
-                    existingProduct.Images.Clear();
+                    img.IsActive = false;
                 }
+                existingProduct.Images.AddRange(product.Images.Select(imgDto => new ProductImgData { Url = imgDto.Url }));
 
-                if (product.RemoveImageById != null && product.RemoveImageById.Any())
-                {
-                    var imagesToRemove = existingProduct.Images
-                        .Where(i => product.RemoveImageById.Contains(i.Id))
-                        .ToList();
-
-                    foreach (var image in imagesToRemove)
-                    {
-                        existingProduct.Images.Remove(image);
-                    }
-                }
-
-                if (product.AddImages != null && product.AddImages.Any())
-                {
-                    foreach (var url in product.AddImages)
-                    {
-                        existingProduct.Images.Add(new ProductImgData
-                        {
-                            Url = url,
-                            ProductId = existingProduct.Id
-                        });
-                    }
-                }
-
+                if (product.Stock >= 0) existingProduct.Stock = product.Stock;
+                existingProduct.IsActive = product.IsActive;
                 db.SaveChanges();
             }
 
@@ -155,7 +144,9 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
         {
             using (var db = new ProductContext())
             {
-                var existingProduct = db.Products.FirstOrDefault(p => p.Id == id);
+                var existingProduct = db.Products
+                    .Include(p => p.Images)
+                    .FirstOrDefault(p => p.Id == id);
 
                 if (existingProduct == null)
                     return new ResponseMsg
@@ -165,6 +156,12 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                     };
 
                 existingProduct.IsActive = false;
+
+                foreach (var img in existingProduct.Images)
+                {
+                    img.IsActive = false;
+                }
+
                 db.SaveChanges();
             }
 

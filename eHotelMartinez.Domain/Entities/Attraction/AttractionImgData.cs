@@ -19,8 +19,5 @@ namespace eHotelMartinez.Domain.Entities.Attraction
 
         [Required]
         public string Url { get; set; } = null!;
-
-        [Required]
-        public AttractionData Attraction { get; set; } = null!;
     }
 }

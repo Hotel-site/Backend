@@ -16,7 +16,7 @@ namespace eHotelMartinez.DataAccess.Context
         {
             modelBuilder.Entity<ProductData>()
                 .HasMany(p => p.Images)
-                .WithOne(i => i.Product)
+                .WithOne()
                 .HasForeignKey(i => i.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
 
