@@ -18,6 +18,7 @@ namespace eHotelMartinez.Domain.Entities.Product
         [Required]
         [StringLength(250)]
         public string? Description { get; set; }
+
         public List<ProductImgData> Images { get; set; } = new();
 
         [Required]
