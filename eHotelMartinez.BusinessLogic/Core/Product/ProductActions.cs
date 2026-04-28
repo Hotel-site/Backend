@@ -4,6 +4,7 @@ using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.Models.Product;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using eHotelMartinez.Domain.Enums;
 
 
 namespace eHotelMartinez.BusinessLogic.Core.Products
@@ -15,7 +16,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
             using (var db = new ProductContext())
             {
                 return db.Products
-                   .Where(p => p.IsActive)
+                   .Where(p => p.Status == ProductStatus.Active)
                    .Select(p => new ProductDTO
                    {
                        Id = p.Id,
@@ -35,12 +36,12 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
         {
             using (var db = new ProductContext())
             {
-                var p = db.Products.FirstOrDefault(p => p.Id == id && p.IsActive);
+                var p = db.Products.FirstOrDefault(p => p.Id == id && p.Status == ProductStatus.Active);
                 if (p == null)
                     return null;
 
                 return db.Products
-                   .Where(p => p.Id == id && p.IsActive)
+                   .Where(p => p.Id == id && p.Status == ProductStatus.Active)
                    .Select(p => new ProductDTO
                    {
                        Id = p.Id,
@@ -67,7 +68,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
 
             using (var db = new ProductContext())
             {
-                var existingProduct = db.Products.FirstOrDefault(p => p.Name.ToLower() == product.Name.ToLower() && p.IsActive);
+                var existingProduct = db.Products.FirstOrDefault(p => p.Name.ToLower() == product.Name.ToLower() && p.Status == ProductStatus.Active);
 
                 if (existingProduct != null)
                 {
@@ -85,7 +86,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                 Description = product.Description,
                 Price = product.Price,
                 Images = product.Images?.Select(imgDto => new ProductImgData { Url = imgDto.Url }).ToList() ?? new List<ProductImgData>(),
-                IsActive = true,
+                Status = ProductStatus.Active,
                 CreatedAt = DateTime.UtcNow,
                 Stock = product.Stock,
             };
@@ -109,7 +110,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
             {
                 var existingProduct = db.Products
                     .Include(p => p.Images)
-                    .FirstOrDefault(p => p.Id == product.Id && p.IsActive);
+                    .FirstOrDefault(p => p.Id == product.Id);
 
                 if (existingProduct == null)
                     return new ResponseMsg
@@ -129,7 +130,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                 existingProduct.Images.AddRange(product.Images.Select(imgDto => new ProductImgData { Url = imgDto.Url }));
 
                 if (product.Stock >= 0) existingProduct.Stock = product.Stock;
-                existingProduct.IsActive = product.IsActive;
+                existingProduct.Status = (ProductStatus)product.Status;
                 db.SaveChanges();
             }
 
@@ -155,7 +156,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                         Message = "Product not found."
                     };
 
-                existingProduct.IsActive = false;
+                existingProduct.Status = ProductStatus.Inactive;
 
                 foreach (var img in existingProduct.Images)
                 {

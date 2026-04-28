@@ -46,7 +46,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Session
             using (var context = new SessionContext())
             {
                 var session = context.Sessions.FirstOrDefault(s => s.SessionKey == sessionKey && s.ExpiresAt > DateTime.Now);
-                if (session != null)
+                if (session == null)
                     return null;
 
                 return session.UserId;

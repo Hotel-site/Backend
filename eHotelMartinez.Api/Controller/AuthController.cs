@@ -3,6 +3,7 @@ using eHotelMartinez.DataAccess.Context;
 using eHotelMartinez.Domain.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using eHotelMartinez.Api.Filters;
 
 namespace eHotelMartinez.Api.Controller
 {
@@ -37,9 +38,9 @@ namespace eHotelMartinez.Api.Controller
 
                 if (user == null)
                 {
-                    return BadRequest(new { IsSuccess = false, messagge = "User no found!" });
+                    return BadRequest(new { IsSuccess = false, message = "User not found!" });
                 }
-                var sessionKey = _sessionActions.CreateOrUpdateSession(user.Id);
+                var sessionKey = _sessionActions.CreateSession(user.Id);
 
                 Response.Cookies.Append("X-KEY", sessionKey, new CookieOptions
                 {
@@ -52,7 +53,7 @@ namespace eHotelMartinez.Api.Controller
             return Ok(AuthResult);
         }
 
-        [Authorize]
+        [SessionAuthFilter]
         [HttpPost("logout")]
         public IActionResult Logout()
         {
@@ -70,7 +71,7 @@ namespace eHotelMartinez.Api.Controller
                 SameSite = SameSiteMode.Strict,
                 Expires = DateTimeOffset.Now.AddDays(-1)
             });
-            return Ok(new { IsSuccess = false, message = "Logged out Successfully" });
+            return Ok(new { IsSuccess = true, message = "Logged out Successfully" });
         }
 
         [AllowAnonymous]
