@@ -28,7 +28,5 @@ namespace eHotelMartinez.Domain.Entities.Product
         public int Stock { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        public bool IsActive { get; set; } = true;
     }
 }

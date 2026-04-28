@@ -8,7 +8,7 @@ using eHotelMartinez.Domain.Entities.User;
 
 namespace eHotelMartinez.Api.Filters
 {
-    public class SessionAuthFilter : IAuthorizationFilter
+    public class SessionAuthFilter : Attribute, IAuthorizationFilter
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {

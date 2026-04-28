@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eHotelMartinez.Domain.Enums;
 
 namespace eHotelMartinez.Domain.Models.Product
 {
@@ -14,6 +15,6 @@ namespace eHotelMartinez.Domain.Models.Product
         public List<ProductImgDTO>? Images { get; set; } = new();
         public decimal Price { get; set; }
         public int Stock { get; set; }
-        public bool IsActive { get; set; }
+        public ProductStatus? Status { get; set; }
     }
 }
