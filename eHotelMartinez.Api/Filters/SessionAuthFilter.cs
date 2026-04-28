@@ -1,10 +1,7 @@
-﻿using System.Linq;
-using eHotelMartinez.BusinessLogic.Interfaces;
+﻿using eHotelMartinez.BusinessLogic.Interfaces;
 using eHotelMartinez.DataAccess.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Http;
-using eHotelMartinez.Domain.Entities.User;
 
 namespace eHotelMartinez.Api.Filters
 {
@@ -20,7 +17,7 @@ namespace eHotelMartinez.Api.Filters
             }
 
             var cookies = context.HttpContext.Request.Cookies["X-KEY"];
-            if(string.IsNullOrEmpty(cookies))
+            if (string.IsNullOrEmpty(cookies))
             {
                 context.Result = new UnauthorizedObjectResult(new { IsSuccess = false, message = "Unauthorized" });
                 return;
@@ -54,8 +51,8 @@ namespace eHotelMartinez.Api.Filters
                     return;
                 }
 
-            context.HttpContext.Items["UserId"] = userId.Value;
-            context.HttpContext.Items["Role"] = user.Role;
+                context.HttpContext.Items["UserId"] = userId.Value;
+                context.HttpContext.Items["Role"] = user.Role;
             }
 
         }

@@ -1,6 +1,7 @@
 using eHotelMartinez.BusinessLogic.Core.Products;
 using eHotelMartinez.BusinessLogic.Functions.Products;
 using eHotelMartinez.BusinessLogic.Interfaces;
+using eHotelMartinez.Api.Filters;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,10 @@ eHotelMartinez.DataAccess.DbSession.ConnectionStrings = builder.Configuration.Ge
 
 builder.Services.AddScoped<IProductActions, ProductFlow>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers( opptions => 
+{
+    opptions.Filters.Add<SessionAuthFilter>();
+} );
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

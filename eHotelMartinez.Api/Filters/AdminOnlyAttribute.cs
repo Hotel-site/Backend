@@ -8,18 +8,20 @@ namespace eHotelMartinez.Api.Filters
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            if(!context.HttpContext.Items.TryGetValue("Role", out var roleobj) || roleobj is not UserRole role)
+            if (!context.HttpContext.Items.TryGetValue("Role", out var roleObj) || roleObj is not UserRole role)
             {
-                context.Result = new UnauthorizedObjectResult(new { IsSuccess=false, message = "Unauthorized" });
+                context.Result = new UnauthorizedObjectResult(new { IsSuccess = false, message = "Unauthorized" });
                 return;
             }
 
             if (role != UserRole.Admin)
             {
-                context.Result = new ForbidResult();
+                context.Result = new ObjectResult(new { IsSuccess = false, message = "Forbidden" })
+                {
+                    StatusCode = StatusCodes.Status403Forbidden
+                };
                 return;
             }
         }
-
     }
 }
