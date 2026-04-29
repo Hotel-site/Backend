@@ -10,6 +10,7 @@ namespace eHotelMartinez.BusinessLogic.Interfaces
         UserDTO GetUserByIdAction(int id);
         ResponseMsg ResponseUserCreateAction(UserRegDTO user);
         ResponseMsg ResponseUserUpdateAction(UserDTO user);
+        ResponseMsg ResponseUserActivateAction(UserActivateDTO user);
         ResponseMsg ResponseUserDeleteAction(int id);
         ResponseMsg ResponseUserLoginAction(UserAuthDTO userAuth);
     }

@@ -28,16 +28,15 @@ namespace eHotelMartinez.Domain.Entities.User
         [Required]
         [Display(Name = "Password")]
         [StringLength(50, MinimumLength = 8)]
-        public string Password { get; set; }
+        public string PasswordHash { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
-        public DateTime RegisteredOn { get; set; }
+        public DateTime RegisteredOn { get; set; } = DateTime.Now;
 
         [Required]
         public UserRole Role { get; set; } = UserRole.User;
 
         public bool IsActive { get; set; } = true;
-
     }
 }

@@ -29,7 +29,11 @@ namespace eHotelMartinez.BusinessLogic.Functions.Users
         public ResponseMsg ResponseUserUpdateAction(UserDTO user)
         {
             return ExecuteUserUpdateAction(user);
-        } 
+        }
+        public ResponseMsg ResponseUserActivateAction(UserActivateDTO user)
+        {
+            return ExecuteUserActivateAction(user);
+        }
         public ResponseMsg ResponseUserDeleteAction(int id)
         {
             return ExecuteUserDeleteAction(id);
