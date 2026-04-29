@@ -40,7 +40,7 @@ namespace eHotelMartinez.Api.Controller
                 {
                     return BadRequest(new { IsSuccess = false, message = "User not found!" });
                 }
-                var sessionKey = _sessionActions.CreateSession(user.Id);
+                var sessionKey = _sessionActions.CreateOrUpdateSession(user.Id);
 
                 Response.Cookies.Append("X-KEY", sessionKey, new CookieOptions
                 {

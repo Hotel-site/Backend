@@ -1,19 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using eHotelMartinez.Domain.Models.User;
+﻿using eHotelMartinez.Domain.Models.User;
 using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.Entities.User;
 using eHotelMartinez.DataAccess.Context;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace eHotelMartinez.BusinessLogic.Core.User
 {
     public class UserActions
-    {
+    {   
+        private string HashPassword(string password)
+        {
+            using (var md5 = MD5.Create())
+            {
+                var bytes = Encoding.Default.GetBytes(password + "likeLinux");
+                var encodedBytes = md5.ComputeHash(bytes);
+
+                return BitConverter.ToString(encodedBytes).Replace("-", "").ToLower();
+            }
+        }
+        private bool PasswordCheck(string password, string hash)
+        {
+            var TmpHash = HashPassword(password);
+            return TmpHash == hash;
+        }
+
         protected List<UserDTO> ExecuteGetAllUsersAction()
         {
             using (var db = new UserContext())
@@ -74,7 +85,6 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 };
             }
             var email = user.Email.ToLower();
-            var username = user.Username.ToLower();
 
             using (var db = new UserContext())
             {
@@ -90,12 +100,11 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 }
             }
 
-
             var User = new UserData
             {
                 Username = user.Username,
                 Email = user.Email,
-                Password = user.Password,
+                PasswordHash = HashPassword(user.Password),
                 RegisteredOn = DateTime.Now,
                 IsActive = true
             };
@@ -153,12 +162,37 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 }
                 existUser.Username = user.Username;
                 existUser.Email = user.Email;
+                existUser.IsActive = user.IsActive;
 
                 db.SaveChanges();
                 return new ResponseMsg
                 {
                     IsSuccess = true,
                     Message = "User data updated successfully!"
+                };
+            }
+        }
+        protected ResponseMsg ExecuteUserActivateAction(UserActivateDTO user)
+        {
+            using (var db = new UserContext())
+            {
+                var existUser = db.Users.FirstOrDefault(u => u.Id == user.Id);
+
+                if (existUser == null)
+                {
+                    return new ResponseMsg
+                    {
+                        IsSuccess = false,
+                        Message = "The User doesn't exist!"
+                    };
+                }
+                existUser.IsActive = user.IsActive;
+                db.SaveChanges();
+
+                return new ResponseMsg
+                {
+                    IsSuccess = true,
+                    Message = "User activated successfully!"
                 };
             }
         }
@@ -212,15 +246,15 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                     return new ResponseMsg
                     {
                         IsSuccess = false,
-                        Message = "Incorrect data, please try again!"
+                        Message = "Incorrect data, try again!"
                     };
                 }
-                if(user.Password != existUser.Password)
+                if (PasswordCheck(user.Password, existUser.PasswordHash) == false)
                 {
                     return new ResponseMsg
                     {
                         IsSuccess = false,
-                        Message = "Incorrect data, please try again!"
+                        Message = "Incorrect data, try again!"
                     };
                 }
                 return new ResponseMsg

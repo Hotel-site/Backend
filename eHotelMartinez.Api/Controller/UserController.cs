@@ -1,10 +1,7 @@
 ﻿using eHotelMartinez.Api.Filters;
 using eHotelMartinez.BusinessLogic.Interfaces;
 using eHotelMartinez.Domain.Models.User;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace eHotelMartinez.Api.Controller
 {
@@ -55,6 +52,18 @@ namespace eHotelMartinez.Api.Controller
         {
             user.Id = id;
             var UpdateUser = _userActions.ResponseUserUpdateAction(user);
+            if (UpdateUser.IsSuccess == false)
+            {
+                return BadRequest(UpdateUser);
+            }
+            return Ok(UpdateUser);
+        }
+
+        [HttpPut("activate/{id}")]
+        public IActionResult ActivateUser(int id, [FromBody] UserActivateDTO user)
+        {
+            user.Id = id;
+            var UpdateUser = _userActions.ResponseUserActivateAction(user);
             if (UpdateUser.IsSuccess == false)
             {
                 return BadRequest(UpdateUser);
