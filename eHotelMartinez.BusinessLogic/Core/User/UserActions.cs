@@ -36,6 +36,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                     Id = u.Id,
                     Username = u.Username,
                     Email = u.Email,
+                    IsActive = u.IsActive
                 })
                 .ToList();
             }
@@ -55,6 +56,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                     Id = user.Id,
                     Username = user.Username,
                     Email = user.Email,
+                    IsActive = user.IsActive
                 };
             }
         }
