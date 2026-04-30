@@ -1,4 +1,5 @@
-﻿using eHotelMartinez.Domain.Entities.Product;
+﻿using eHotelMartinez.Domain.Entities.Category;
+using eHotelMartinez.Domain.Entities.Product;
 using Microsoft.EntityFrameworkCore;
 
 namespace eHotelMartinez.DataAccess.Context
@@ -6,6 +7,7 @@ namespace eHotelMartinez.DataAccess.Context
     public class ProductContext : DbContext
     {
         public DbSet<ProductData> Products { get; set; }
+        public DbSet<CategoryData> Categories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -19,6 +21,12 @@ namespace eHotelMartinez.DataAccess.Context
                 .WithOne()
                 .HasForeignKey(i => i.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ProductData>()
+                .HasOne<CategoryData>()
+                .WithMany()
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }

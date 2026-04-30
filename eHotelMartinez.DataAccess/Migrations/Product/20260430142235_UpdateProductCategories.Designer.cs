@@ -12,8 +12,8 @@ using eHotelMartinez.DataAccess.Context;
 namespace eHotelMartinez.DataAccess.Migrations.Product
 {
     [DbContext(typeof(ProductContext))]
-    [Migration("20260426160630_UpdateProductContext")]
-    partial class UpdateProductContext
+    [Migration("20260430142235_UpdateProductCategories")]
+    partial class UpdateProductCategories
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,27 @@ namespace eHotelMartinez.DataAccess.Migrations.Product
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("eHotelMartinez.Domain.Entities.Category.CategoryData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("eHotelMartinez.Domain.Entities.Product.ProductData", b =>
                 {
                     b.Property<int>("Id")
@@ -33,6 +54,10 @@ namespace eHotelMartinez.DataAccess.Migrations.Product
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CategoryId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -40,9 +65,6 @@ namespace eHotelMartinez.DataAccess.Migrations.Product
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -59,6 +81,8 @@ namespace eHotelMartinez.DataAccess.Migrations.Product
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
                 });
@@ -86,6 +110,15 @@ namespace eHotelMartinez.DataAccess.Migrations.Product
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductImgData");
+                });
+
+            modelBuilder.Entity("eHotelMartinez.Domain.Entities.Product.ProductData", b =>
+                {
+                    b.HasOne("eHotelMartinez.Domain.Entities.Category.CategoryData", null)
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("eHotelMartinez.Domain.Entities.Product.ProductImgData", b =>
