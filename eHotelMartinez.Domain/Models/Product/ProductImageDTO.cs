@@ -1,6 +1,6 @@
 ﻿namespace eHotelMartinez.Domain.Models.Product
 {
-    public class ProductImgDTO
+    public class ProductImageDTO
     {
         public string Url { get; set; } = null!;
     }

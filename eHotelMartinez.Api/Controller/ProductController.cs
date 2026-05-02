@@ -2,6 +2,7 @@
 using eHotelMartinez.Domain.Models.Product;
 using Microsoft.AspNetCore.Mvc;
 using eHotelMartinez.Api.Filters;
+using eHotelMartinez.Domain.Entities.Product;
 
 namespace eHotelMartinez.Api.Controller
 {
@@ -36,7 +37,7 @@ namespace eHotelMartinez.Api.Controller
 
         [AdminOnly]
         [HttpPost]
-        public IActionResult CreateProduct([FromBody] CreateProductDTO product)
+        public IActionResult CreateProduct([FromBody] ProductData product)
         {
 
             var response = _productActions.ResponseProductCreateAction(product);

@@ -22,10 +22,11 @@ namespace eHotelMartinez.Domain.Entities.Product
         [Required]
         public int? CategoryId { get; set; }
 
-        public List<ProductImgData> Images { get; set; } = new();
-
         [Required]
         public decimal Price  { get; set; }
+
+        public List<ProductImageData> Images { get; set; } = new();
+
         public ProductStatus Status { get; set; } = ProductStatus.Unknown;
 
         [Required]

@@ -1,5 +1,6 @@
 ﻿using eHotelMartinez.BusinessLogic.Core.Products;
 using eHotelMartinez.BusinessLogic.Interfaces;
+using eHotelMartinez.Domain.Entities.Product;
 using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.Models.Product;
 
@@ -16,7 +17,7 @@ namespace eHotelMartinez.BusinessLogic.Functions.Products
         {
             return ExecuteGetProductById(id);
         }
-        public ResponseMsg ResponseProductCreateAction(CreateProductDTO product)
+        public ResponseMsg ResponseProductCreateAction(ProductData product)
         {
             return ExecuteCreateProductAction(product);
         }

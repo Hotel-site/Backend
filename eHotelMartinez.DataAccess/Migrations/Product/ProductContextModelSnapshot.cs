@@ -84,7 +84,7 @@ namespace eHotelMartinez.DataAccess.Migrations.Product
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("eHotelMartinez.Domain.Entities.Product.ProductImgData", b =>
+            modelBuilder.Entity("eHotelMartinez.Domain.Entities.Product.ProductImageData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -106,7 +106,7 @@ namespace eHotelMartinez.DataAccess.Migrations.Product
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImgData");
+                    b.ToTable("ProductImageData");
                 });
 
             modelBuilder.Entity("eHotelMartinez.Domain.Entities.Product.ProductData", b =>
@@ -118,7 +118,7 @@ namespace eHotelMartinez.DataAccess.Migrations.Product
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("eHotelMartinez.Domain.Entities.Product.ProductImgData", b =>
+            modelBuilder.Entity("eHotelMartinez.Domain.Entities.Product.ProductImageData", b =>
                 {
                     b.HasOne("eHotelMartinez.Domain.Entities.Product.ProductData", null)
                         .WithMany("Images")

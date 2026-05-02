@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace eHotelMartinez.Domain.Entities.Attraction
 {
-    public class AttractionImgData
+    public class AttractionImageData
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,5 +14,7 @@ namespace eHotelMartinez.Domain.Entities.Attraction
 
         [Required]
         public string Url { get; set; } = null!;
+
+        public bool IsActive { get; set; } = true;
     }
 }

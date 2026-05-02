@@ -5,7 +5,7 @@ using eHotelMartinez.Domain.Models.Product;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using eHotelMartinez.Domain.Enums;
-
+using eHotelMartinez.BusinessLogic.Helpers;
 
 namespace eHotelMartinez.BusinessLogic.Core.Products
 {
@@ -29,11 +29,12 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                        Description = p.Description,
                        Category = c.Name,
                        Price = p.Price,
-                       Images = p.Images.Select(i => new ProductImgDTO
+                       Images = p.Images.Select(i => new ProductImageDTO
                        {
                            Url = i.Url
                        }).ToList(),
-                       Stock = p.Stock
+                       Stock = p.Stock,
+                       Status = p.Status
                    }).ToList();
             }
         }
@@ -60,16 +61,17 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                        Description = p.Description,
                        Category = c.Name,
                        Price = p.Price,
-                       Images = p.Images.Select(i => new ProductImgDTO
+                       Images = p.Images.Select(i => new ProductImageDTO
                        {
                            Url = i.Url
                        }).ToList(),
-                       Stock = p.Stock
+                       Stock = p.Stock,
+                       Status = p.Status
                    }).First();
             }
         }
 
-        protected ResponseMsg ExecuteCreateProductAction(CreateProductDTO product)
+        protected ResponseMsg ExecuteCreateProductAction(ProductData product)
         {
 
             if (string.IsNullOrWhiteSpace(product.Name))
@@ -86,7 +88,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
 
             using (var db = new ProductContext())
             {
-                var existingProduct = db.Products.FirstOrDefault(p => p.Name.ToLower() == product.Name.ToLower() && p.Status == ProductStatus.Active);
+                var existingProduct = db.Products.Any(p => p.Name.ToLower() == product.Name.ToLower() && p.Status == ProductStatus.Active);
 
                 if (existingProduct != null)
                 {
@@ -102,11 +104,14 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
             {
                 Name = product.Name,
                 Description = product.Description,
-                Price = product.Price,
-                Images = product.Images?.Select(imgDto => new ProductImgData { Url = imgDto.Url }).ToList() ?? new List<ProductImgData>(),
                 CategoryId = product.CategoryId,
+                Price = product.Price,
+                Images = product.Images?.Select(imgDto => new ProductImageData
+                {
+                    ProductId = product.Id,
+                    Url = imgDto.Url
+                }).ToList() ?? new List<ProductImageData>(),
                 Status = ProductStatus.Active,
-                CreatedAt = DateTime.UtcNow,
                 Stock = product.Stock,
             };
 
@@ -125,18 +130,6 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
 
         protected ResponseMsg ExecuteUpdateProductAction(UpdateProductDTO product)
         {
-            if (string.IsNullOrWhiteSpace(product.Name))
-                return new ResponseMsg { IsSuccess = false, Message = "Product name is required." };
-
-            if (product.Price <= 0)
-                return new ResponseMsg { IsSuccess = false, Message = "Price must be greater than 0." };
-
-            if (product.Stock < 0)
-                return new ResponseMsg { IsSuccess = false, Message = "Stock must be greater than or equal to 0." };
-
-            if (CategoryExists(product.CategoryId) == false)
-                return new ResponseMsg { IsSuccess = false, Message = "Category does not exist." };
-
             using (var db = new ProductContext())
             {
                 var existingProduct = db.Products
@@ -150,9 +143,17 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                         Message = "Product not found."
                     };
 
-                if (!string.IsNullOrWhiteSpace(product.Name)) existingProduct.Name = product.Name;
-                if (product.Price > 0) existingProduct.Price = product.Price;
-                if (!string.IsNullOrWhiteSpace(product.Description)) existingProduct.Description = product.Description;
+                if (product.Price < 0)
+                    return new ResponseMsg { IsSuccess = false, Message = "Price must be greater or equal to 0." };
+
+                if (product.Stock < 0)
+                    return new ResponseMsg { IsSuccess = false, Message = "Stock must be greater than or equal to 0." };
+
+
+                if (!string.IsNullOrWhiteSpace(product.Name)) 
+                    existingProduct.Name = product.Name;
+                if (!string.IsNullOrWhiteSpace(product.Description)) 
+                    existingProduct.Description = product.Description;
 
                 if (product.CategoryId > 0 && product.CategoryId != existingProduct.CategoryId)
                 {
@@ -161,11 +162,22 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                     existingProduct.CategoryId = product.CategoryId;
                 }
 
-                foreach (var img in existingProduct.Images)
+                if (product.Price > 0) existingProduct.Price = product.Price;
+
+                foreach (var image in existingProduct.Images)
                 {
-                    img.IsActive = false;
+                    var exists = existingProduct.Images
+                        .Any(i => i.Url == image.Url && i.IsActive);
+
+                    if(!exists)
+                    {
+                        existingProduct.Images.Add(new ProductImageData
+                        {
+                            ProductId = existingProduct.Id,
+                            Url = image.Url,
+                        });
+                    }
                 }
-                existingProduct.Images.AddRange(product.Images.Select(imgDto => new ProductImgData { Url = imgDto.Url }));
 
                 if (product.Stock >= 0) existingProduct.Stock = product.Stock;
                 existingProduct.Status = (ProductStatus)product.Status;
@@ -212,7 +224,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
             };
         }
 
-        private static bool CategoryExists(int categoryId)
+        private static bool CategoryExists(int? categoryId)
         {
             using (var db = new ProductContext())
             {

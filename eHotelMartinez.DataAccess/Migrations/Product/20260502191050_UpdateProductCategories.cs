@@ -11,6 +11,9 @@ namespace eHotelMartinez.DataAccess.Migrations.Product
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ProductImgData");
+
             migrationBuilder.DropColumn(
                 name: "IsActive",
                 table: "Products");
@@ -36,12 +39,6 @@ namespace eHotelMartinez.DataAccess.Migrations.Product
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.AddColumn<bool>(
-                name: "IsActive",
-                table: "ProductImgData",
-                type: "bit",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
@@ -56,10 +53,36 @@ namespace eHotelMartinez.DataAccess.Migrations.Product
                     table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ProductImageData",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductImageData", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductImageData_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductImageData_ProductId",
+                table: "ProductImageData",
+                column: "ProductId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Products_Categories_CategoryId",
@@ -80,6 +103,9 @@ namespace eHotelMartinez.DataAccess.Migrations.Product
             migrationBuilder.DropTable(
                 name: "Categories");
 
+            migrationBuilder.DropTable(
+                name: "ProductImageData");
+
             migrationBuilder.DropIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products");
@@ -96,16 +122,37 @@ namespace eHotelMartinez.DataAccess.Migrations.Product
                 name: "Stock",
                 table: "Products");
 
-            migrationBuilder.DropColumn(
-                name: "IsActive",
-                table: "ProductImgData");
-
             migrationBuilder.AddColumn<bool>(
                 name: "IsActive",
                 table: "Products",
                 type: "bit",
                 nullable: false,
                 defaultValue: false);
+
+            migrationBuilder.CreateTable(
+                name: "ProductImgData",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductImgData", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductImgData_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductImgData_ProductId",
+                table: "ProductImgData",
+                column: "ProductId");
         }
     }
 }

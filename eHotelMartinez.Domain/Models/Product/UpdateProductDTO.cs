@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using eHotelMartinez.Domain.Enums;
+﻿using eHotelMartinez.Domain.Enums;
 
 namespace eHotelMartinez.Domain.Models.Product
 {
@@ -13,8 +8,8 @@ namespace eHotelMartinez.Domain.Models.Product
         public string? Name { get; set; }
         public string? Description { get; set; }
         public int CategoryId { get; set; }
-        public List<ProductImgDTO>? Images { get; set; } = new();
         public decimal Price { get; set; }
+        public List<ProductImageDTO>? Images { get; set; } = new();
         public int Stock { get; set; }
         public ProductStatus? Status { get; set; }
     }

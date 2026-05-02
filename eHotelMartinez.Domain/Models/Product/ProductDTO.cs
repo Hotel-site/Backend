@@ -1,4 +1,4 @@
-using eHotelMartinez.Domain.Entities.Category;
+using eHotelMartinez.Domain.Enums;
 
 namespace eHotelMartinez.Domain.Models.Product
 {
@@ -8,8 +8,9 @@ namespace eHotelMartinez.Domain.Models.Product
         public string Name { get; set; }
         public string? Description { get; set; }
         public string Category { get; set; }
-        public List<ProductImgDTO> Images { get; set; } = new();
         public decimal Price { get; set; }
+        public List<ProductImageDTO> Images { get; set; } = new();
         public int Stock { get; set; }
+        public ProductStatus Status { get; set; }
     }
 }

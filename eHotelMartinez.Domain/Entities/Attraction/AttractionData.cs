@@ -15,11 +15,13 @@ namespace eHotelMartinez.Domain.Entities.Attraction
         [StringLength(50)]
         public string Name { get; set; } = null!;
 
-        [StringLength(200)]
-        public string? Description { get; set; }
         [StringLength(100)]
         public string? ShortDescription { get; set; }
-        public int CategoryId { get; set; }
+        
+        [StringLength(200)]
+        public string? Description { get; set; }
+        
+        public int? CategoryId { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -35,12 +37,13 @@ namespace eHotelMartinez.Domain.Entities.Attraction
 
         public int Popularity { get; set; } = 0;
 
-        public List<AttractionImgData> Images { get; set; } = new();
+        public List<AttractionImageData> Images { get; set; } = new();
 
         public IReadOnlyDictionary<DayOfWeek, IReadOnlyList<(TimeOnly Start, TimeOnly End)>> OpeningHours;
 
         public PartnerContacts? Contacts { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
