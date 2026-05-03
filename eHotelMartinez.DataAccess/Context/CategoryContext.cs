@@ -15,6 +15,7 @@ namespace eHotelMartinez.DataAccess.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CategoryData>()
+                .ToTable("Categories")
                 .HasQueryFilter(c => c.IsActive);
 
             modelBuilder.Entity<CategoryData>()

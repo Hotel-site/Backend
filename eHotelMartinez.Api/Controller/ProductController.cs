@@ -37,7 +37,7 @@ namespace eHotelMartinez.Api.Controller
 
         [AdminOnly]
         [HttpPost]
-        public IActionResult CreateProduct([FromBody] ProductData product)
+        public IActionResult CreateProduct([FromBody] CreateProductDTO product)
         {
 
             var response = _productActions.ResponseProductCreateAction(product);

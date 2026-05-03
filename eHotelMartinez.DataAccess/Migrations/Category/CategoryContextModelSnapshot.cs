@@ -42,7 +42,7 @@ namespace eHotelMartinez.DataAccess.Migrations.Category
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 #pragma warning restore 612, 618
         }

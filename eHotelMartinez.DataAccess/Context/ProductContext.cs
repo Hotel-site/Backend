@@ -7,7 +7,6 @@ namespace eHotelMartinez.DataAccess.Context
     public class ProductContext : DbContext
     {
         public DbSet<ProductData> Products { get; set; }
-        public DbSet<CategoryData> Categories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

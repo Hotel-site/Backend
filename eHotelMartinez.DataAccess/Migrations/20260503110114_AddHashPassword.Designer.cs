@@ -12,7 +12,7 @@ using eHotelMartinez.DataAccess.Context;
 namespace eHotelMartinez.DataAccess.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20260430135630_AddHashPassword")]
+    [Migration("20260503110114_AddHashPassword")]
     partial class AddHashPassword
     {
         /// <inheritdoc />

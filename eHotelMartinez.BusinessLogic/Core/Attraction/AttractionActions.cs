@@ -5,6 +5,7 @@ using eHotelMartinez.Domain.Models.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using eHotelMartinez.Domain.ValueObjects;
+using eHotelMartinez.BusinessLogic.Helpers;
 
 namespace eHotelMartinez.BusinessLogic.Core.Attraction
 {
@@ -12,91 +13,110 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
     {
         protected List<AttractionDTO> ExecuteGetAllAttractions()
         {
-            using (var db = new AttractionContext())
-            {
-                return db.Attractions
-                    .AsNoTracking()
-                    .Include(a => a.Images)
-                    .Where(p => p.IsActive == true)
-                    .Join(db.Categories,
-                    a => a.CategoryId,
-                    c => c.Id,
-                    (a, c) => new AttractionDTO
+            using var attractionDb = new AttractionContext();
+            using var categoryDb = new CategoryContext();
+
+            var categories = categoryDb.Categories
+                .Where(c => c.IsActive)
+                .ToDictionary(c => c.Id, c => c.Name);
+
+            return attractionDb.Attractions
+                .AsNoTracking()
+                .Include(a => a.Images)
+                .Where(p => p.IsActive == true)
+                .Join(categoryDb.Categories,
+                a => a.CategoryId,
+                c => c.Id,
+                (a, c) => new AttractionDTO
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    ShortDescription = a.ShortDescription,
+                    Description = a.Description,
+                    Category = c.Name,
+                    Location = a.Location,
+                    Distance = a.Distance,
+                    Price = a.Price,
+                    Rating = a.Rating,
+                    Popularity = a.Popularity,
+                    Images = a.Images.Select(i => new AttractionImageDTO
                     {
-                        Id = a.Id,
-                        Name = a.Name,
-                        ShortDescription = a.ShortDescription,
-                        Description = a.Description,
-                        Category = c.Name,
-                        Location = a.Location,
-                        Distance = a.Distance,
-                        Price = a.Price,
-                        Rating = a.Rating,
-                        Popularity = a.Popularity,
-                        Images = a.Images.Select(i => new AttractionImageDTO
-                        {
-                            Url = i.Url
-                        }).ToList(),
-                        OpeningHours = a.OpeningHours,
-                        Contacts = new PartnerContacts
-                        {
-                            Phone = a.Contacts.Phone,
-                            Email = a.Contacts.Email,
-                            BookingUrl = a.Contacts.BookingUrl
-                        }
-                    }).ToList();
-            }
+                        Url = i.Url
+                    }).ToList(),
+                    OpeningHours = a.OpeningHours.Select(oh => new OpeningHourDTO
+                    {
+                        DayOfWeek = oh.DayOfWeek,
+                        Start = oh.Start,
+                        End = oh.End
+                    }).ToList(),
+
+                    Contacts = new PartnerContacts
+                    {
+                        Phone = a.Contacts.Phone,
+                        Email = a.Contacts.Email,
+                        BookingUrl = a.Contacts.BookingUrl
+                    }
+                }).ToList();
         }
 
         protected AttractionDTO ExecuteGetAttractionById(int id)
         {
-            using (var db = new AttractionContext())
-            {
-                var a = db.Attractions.FirstOrDefault(a => a.Id == id && a.IsActive == true);
-                if (a == null)
-                    return null;
+            using var attractionDb = new AttractionContext();
+            using var categoryDb = new CategoryContext();
 
-                return db.Attractions
-                    .AsNoTracking()
-                    .Include(a => a.Images)
-                    .Where(p => p.IsActive == true)
-                    .Join(db.Categories,
-                    a => a.CategoryId,
-                    c => c.Id,
-                    (a, c) => new AttractionDTO
+            var categories = categoryDb.Categories
+                .Where(c => c.IsActive)
+                .ToDictionary(c => c.Id, c => c.Name);
+
+            var a = attractionDb.Attractions.FirstOrDefault(a => a.Id == id && a.IsActive == true);
+            if (a == null)
+                return null;
+
+            return attractionDb.Attractions
+                .AsNoTracking()
+                .Include(a => a.Images)
+                .Where(p => p.IsActive == true)
+                .Join(categoryDb.Categories,
+                a => a.CategoryId,
+                c => c.Id,
+                (a, c) => new AttractionDTO
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    ShortDescription = a.ShortDescription,
+                    Description = a.Description,
+                    Category = c.Name,
+                    Location = a.Location,
+                    Distance = a.Distance,
+                    Price = a.Price,
+                    Rating = a.Rating,
+                    Popularity = a.Popularity,
+                    Images = a.Images.Select(i => new AttractionImageDTO
                     {
-                        Id = a.Id,
-                        Name = a.Name,
-                        ShortDescription = a.ShortDescription,
-                        Description = a.Description,
-                        Category = c.Name,
-                        Location = a.Location,
-                        Distance = a.Distance,
-                        Price = a.Price,
-                        Rating = a.Rating,
-                        Popularity = a.Popularity,
-                        Images = a.Images.Select(i => new AttractionImageDTO
-                        {
-                            Url = i.Url
-                        }).ToList(),
-                        OpeningHours = a.OpeningHours,
-                        Contacts = new PartnerContacts
-                        {
-                            Phone = a.Contacts.Phone,
-                            Email = a.Contacts.Email,
-                            BookingUrl = a.Contacts.BookingUrl
-                        }
-                    }).First();
-            }
+                        Url = i.Url
+                    }).ToList(),
+                    OpeningHours = a.OpeningHours.Select(oh => new OpeningHourDTO
+                    {
+                        DayOfWeek = oh.DayOfWeek,
+                        Start = oh.Start,
+                        End = oh.End
+                    }).ToList(),
+                    Contacts = new PartnerContacts
+                    {
+                        Phone = a.Contacts.Phone,
+                        Email = a.Contacts.Email,
+                        BookingUrl = a.Contacts.BookingUrl
+                    }
+                }).First();
         }
 
-        protected ResponseMsg ExecuteCreateAttraction(AttractionData attraction)
+        protected ResponseMsg ExecuteCreateAttraction(CreateAttractionDTO attraction)
         {
 
-            if (!string.IsNullOrWhiteSpace(attraction.Name))
+            if (string.IsNullOrWhiteSpace(attraction.Name))
                 return new ResponseMsg { IsSuccess = false, Message = "Name can't be empty!" };
 
-            if (CategoryExists(attraction.CategoryId) == false)
+            if (CategoryCheck.CategoryExists(attraction.CategoryId) == false)
                 return new ResponseMsg { IsSuccess = false, Message = "Category doesn't exist!" };
 
             if (attraction.Distance < 0)
@@ -123,12 +143,18 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 Location = attraction.Location,
                 Distance = attraction.Distance,
                 Price = attraction.Price,
-                Images = attraction.Images.Select(i => new AttractionImageData
+                Images  = attraction.Images.Select(i => new AttractionImageData
                 {
-                    AttractionId = attraction.Id,
                     Url = i.Url
                 }).ToList(),
-                OpeningHours = attraction.OpeningHours,
+
+                OpeningHours = attraction.OpeningHours.Select(oh => new OpeningHourData
+                {
+                    DayOfWeek = oh.DayOfWeek,
+                    Start = oh.Start,
+                    End = oh.End
+                }).ToList(),
+
                 Contacts = new PartnerContacts
                 {
                     Phone = attraction.Contacts.Phone,
@@ -139,7 +165,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
 
             using (var db = new AttractionContext())
             {
-                db.Attractions.Add(attraction);
+                db.Attractions.Add(newAttraction);
                 db.SaveChanges();
             }
             return new ResponseMsg { IsSuccess = true, Message = "Attraction created successfully." };
@@ -162,8 +188,6 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 if (attraction.OpeningHours == null || attraction.OpeningHours.Count == 0)
                     return new ResponseMsg { IsSuccess = false, Message = "Opening hours can't be empty!" };
 
-
-
                 if (existingAttraction == null)
                     return new ResponseMsg { IsSuccess = false, Message = "Attraction not found." };
 
@@ -172,7 +196,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
 
                 if (attraction.CategoryId > 0 && attraction.CategoryId != existingAttraction.CategoryId)
                 {
-                    if (CategoryExists(attraction.CategoryId) == false)
+                    if (CategoryCheck.CategoryExists(attraction.CategoryId) == false)
                         return new ResponseMsg { IsSuccess = false, Message = "Category does not exist." };
                     existingAttraction.CategoryId = attraction.CategoryId;
                 }
@@ -186,10 +210,6 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 if (attraction.Price >= 0)
                     existingAttraction.Price = attraction.Price;
 
-                if (attraction.OpeningHours != null && attraction.OpeningHours.Count > 0)
-                    existingAttraction.OpeningHours = attraction.OpeningHours;
-
-
                 existingAttraction.ShortDescription = attraction.ShortDescription;
                 existingAttraction.Description = attraction.Description;
 
@@ -202,8 +222,23 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                     {
                         existingAttraction.Images.Add(new AttractionImageData
                         {
-                            AttractionId = existingAttraction.Id,
                             Url = image.Url,
+                        });
+                    }
+                }
+
+                foreach (var openingHour in attraction.OpeningHours)
+                {
+                    var exists = existingAttraction.OpeningHours
+                        .Any(o => o.DayOfWeek == openingHour.DayOfWeek && o.Start == openingHour.Start && o.End == openingHour.End);
+
+                    if (!exists)
+                    {
+                        existingAttraction.OpeningHours.Add(new OpeningHourData
+                        {
+                            DayOfWeek = openingHour.DayOfWeek,
+                            Start = openingHour.Start,
+                            End = openingHour.End
                         });
                     }
                 }
@@ -238,15 +273,6 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 db.SaveChanges();
             }
             return new ResponseMsg { IsSuccess = true, Message = "Attraction deleted successfully." };
-        }
-
-
-        private static bool CategoryExists(int? categoryId)
-        {
-            using (var db = new AttractionContext())
-            {
-                return db.Categories.Any(c => c.Id == categoryId && c.IsActive);
-            }
         }
     }
 }

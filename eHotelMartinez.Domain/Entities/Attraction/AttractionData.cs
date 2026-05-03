@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace eHotelMartinez.Domain.Entities.Attraction
 {
     public class AttractionData
@@ -39,7 +38,8 @@ namespace eHotelMartinez.Domain.Entities.Attraction
 
         public List<AttractionImageData> Images { get; set; } = new();
 
-        public IReadOnlyDictionary<DayOfWeek, IReadOnlyList<(TimeOnly Start, TimeOnly End)>> OpeningHours;
+        [Required]
+        public List<OpeningHourData> OpeningHours { get; set; }
 
         public PartnerContacts? Contacts { get; set; }
 

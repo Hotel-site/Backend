@@ -11,7 +11,7 @@ using eHotelMartinez.DataAccess.Context;
 namespace eHotelMartinez.DataAccess.Migrations.Category
 {
     [DbContext(typeof(CategoryContext))]
-    [Migration("20260430134901_InitialCreate")]
+    [Migration("20260503171437_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -45,7 +45,7 @@ namespace eHotelMartinez.DataAccess.Migrations.Category
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 #pragma warning restore 612, 618
         }

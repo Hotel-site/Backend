@@ -3,6 +3,7 @@ using eHotelMartinez.BusinessLogic.Functions.Products;
 using eHotelMartinez.BusinessLogic.Functions.Session;
 using eHotelMartinez.BusinessLogic.Functions.Users;
 using eHotelMartinez.BusinessLogic.Interfaces;
+using eHotelMartinez.BusinessLogic.Functions.Attraction;
 
 namespace eHotelMartinez.BusinessLogic
 {
@@ -26,6 +27,11 @@ namespace eHotelMartinez.BusinessLogic
         public IUserActions GetUserActions()
         {
             return new UserFlow();
+        }
+        
+        public IAttractionActions GetAttractionActions()
+        {
+            return new AttractionFlow();
         }
     }
 }

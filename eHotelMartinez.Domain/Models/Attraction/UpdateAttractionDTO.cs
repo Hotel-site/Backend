@@ -1,4 +1,5 @@
-﻿using eHotelMartinez.Domain.ValueObjects;
+﻿using eHotelMartinez.Domain.Entities.Attraction;
+using eHotelMartinez.Domain.ValueObjects;
 
 namespace eHotelMartinez.Domain.Models.Attraction
 {
@@ -13,7 +14,7 @@ namespace eHotelMartinez.Domain.Models.Attraction
         public double Distance { get; set; }
         public decimal Price { get; set; }
         public List<AttractionImageDTO> Images { get; set; } = new();
-        public IReadOnlyDictionary<DayOfWeek, IReadOnlyList<(TimeOnly Start, TimeOnly End)>> OpeningHours { get; set; }
+        public List<OpeningHourDTO> OpeningHours { get; set; } = new();
         public PartnerContacts Contacts { get; set; }
     }
 }
