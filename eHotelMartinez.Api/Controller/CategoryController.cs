@@ -1,5 +1,6 @@
 ﻿using eHotelMartinez.Api.Filters;
 using eHotelMartinez.BusinessLogic.Interfaces;
+using eHotelMartinez.Domain.Entities.Category;
 using eHotelMartinez.Domain.Models.Category;
 using Microsoft.AspNetCore.Mvc;
 
@@ -51,7 +52,7 @@ namespace eHotelMartinez.Api.Controller
 
             [AdminOnly]
             [HttpPut("{id}")]
-            public IActionResult CategoryUpdate(int id, [FromBody] CategoryDTO category)
+            public IActionResult CategoryUpdate(int id, [FromBody] CategoryData category)
             {
                 category.Id = id;
                 var UpdateCategory = _categoryActions.ResponseCategoryUpdateAction(category);

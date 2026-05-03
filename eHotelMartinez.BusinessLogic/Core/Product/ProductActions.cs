@@ -13,71 +13,67 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
     {
         protected List<ProductDTO> ExecuteGetAllProducts()
         {
-            using var productDb = new ProductContext();
-            using var categoryDb = new CategoryContext();
+            using var db = new CategoryContext();
 
-            var categories = categoryDb.Categories
+            var categories = db.Categories
+                .AsNoTracking()
                 .Where(c => c.IsActive)
                 .ToDictionary(c => c.Id, c => c.Name);
 
-            return productDb.Products
+            var products = db.Products
                 .AsNoTracking()
                 .Include(p => p.Images)
-               .Where(p => p.Status == ProductStatus.Active)
-               .Join(categoryDb.Categories,
-               p => p.CategoryId,
-               c => c.Id,
-               (p, c) => new ProductDTO
-               {
-                   Id = p.Id,
-                   Name = p.Name,
-                   Description = p.Description,
-                   Category = c.Name,
-                   Price = p.Price,
-                   Images = p.Images.Select(i => new ProductImageDTO
-                   {
-                       Url = i.Url
-                   }).ToList(),
-                   Stock = p.Stock,
-                   Status = p.Status
-               }).ToList();
+                .Where(p => p.Status == ProductStatus.Active)
+                .ToList();
+
+            return products.Select(p => new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Category = p.CategoryId.HasValue && categories.TryGetValue(p.CategoryId.Value, out var categoryName) ? categoryName : null,
+                Price = p.Price,
+                Images = p.Images.Select(i => new ProductImageDTO
+                {
+                    Url = i.Url
+                }).ToList(),
+                Stock = p.Stock,
+                Status = p.Status
+            }).ToList();
         }
 
 
         protected ProductDTO ExecuteGetProductById(int id)
         {
-            using var productDb = new ProductContext();
-            using var categoryDb = new CategoryContext();
+            using var db = new CategoryContext();
 
-            var categories = categoryDb.Categories
+            var categories = db.Categories
+                .AsNoTracking()
                 .Where(c => c.IsActive)
                 .ToDictionary(c => c.Id, c => c.Name);
 
-            var p = productDb.Products.FirstOrDefault(p => p.Id == id && p.Status == ProductStatus.Active);
-            if (p == null)
-                return null;
-
-            return productDb.Products
+            var p = db.Products
                 .AsNoTracking()
                 .Include(p => p.Images)
-               .Where(p => p.Status == ProductStatus.Active)
-               .Join(categoryDb.Categories,
-               p => p.CategoryId,
-               c => c.Id,
-               (p, c) => new ProductDTO
-               {
-                   Id = p.Id,
-                   Name = p.Name,
-                   Description = p.Description,
-                   Category = c.Name,
-                   Price = p.Price,
-                   Images = p.Images.Select(i => new ProductImageDTO
-                   {
-                       Url = i.Url
-                   }).ToList(),
-                   Stock = p.Stock,
-                   Status = p.Status
-               }).First();
+                .FirstOrDefault(p => p.Id == id && p.Status == ProductStatus.Active);
+
+            if(p == null)
+                return null;
+
+            return new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Category = p.CategoryId.HasValue && categories.TryGetValue(p.CategoryId.Value, out var categoryName) ? categoryName : null,
+                Price = p.Price,
+                Images = p.Images.Select(i => new ProductImageDTO
+                {
+                    Url = i.Url
+                }).ToList(),
+                Stock = p.Stock,
+                Status = p.Status
+            };
         }
 
         protected ResponseMsg ExecuteCreateProductAction(CreateProductDTO product)
@@ -95,7 +91,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
             if (CategoryCheck.CategoryExists(product.CategoryId) == false)
                 return new ResponseMsg { IsSuccess = false, Message = "Category does not exist." };
 
-            using (var db = new ProductContext())
+            using (var db = new CategoryContext())
             {
                 var existingProduct = db.Products.Any(p => p.Name.ToLower() == product.Name.ToLower() && p.Status == ProductStatus.Active);
 
@@ -123,7 +119,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                 Stock = product.Stock,
             };
 
-            using (var db = new ProductContext())
+            using (var db = new CategoryContext())
             {
                 db.Products.Add(productData);
                 db.SaveChanges();
@@ -138,7 +134,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
 
         protected ResponseMsg ExecuteUpdateProductAction(UpdateProductDTO product)
         {
-            using (var db = new ProductContext())
+            using (var db = new CategoryContext())
             {
                 var existingProduct = db.Products
                     .Include(p => p.Images)
@@ -200,7 +196,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
 
         protected ResponseMsg ExecuteDeleteProductAction(int id)
         {
-            using (var db = new ProductContext())
+            using (var db = new CategoryContext())
             {
                 var existingProduct = db.Products
                     .Include(p => p.Images)

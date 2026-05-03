@@ -3,6 +3,7 @@ using eHotelMartinez.Domain.Entities.Category;
 using eHotelMartinez.Domain.Entities.User;
 using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.Models.Category;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,11 +86,11 @@ namespace eHotelMartinez.BusinessLogic.Core.Category
                 Message = "Category created successfully!"
             };
         }
-        protected ResponseMsg ExecuteCategoryUpdateAction(CategoryDTO category)
+        protected ResponseMsg ExecuteCategoryUpdateAction(CategoryData category)
         {
             using (var db = new CategoryContext())
             {
-                var existCategory = db.Categories.FirstOrDefault(c => c.Id == category.Id);
+                var existCategory = db.Categories.IgnoreQueryFilters().FirstOrDefault(c => c.Id == category.Id);
                 if (existCategory == null)
                 {
                     return new ResponseMsg
@@ -107,11 +108,12 @@ namespace eHotelMartinez.BusinessLogic.Core.Category
                     };
                 }
                 existCategory.Name = category.Name;
+                existCategory.IsActive = category.IsActive;
                 db.SaveChanges();
                 return new ResponseMsg
                 {
                     IsSuccess = true,
-                    Message = "Category name updated successfully!"
+                    Message = "Category updated successfully!"
                 };
             }
         }

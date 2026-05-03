@@ -1,5 +1,6 @@
 ﻿using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.Models.Category;
+using eHotelMartinez.Domain.Entities.Category;
 
 namespace eHotelMartinez.BusinessLogic.Interfaces
 {
@@ -8,7 +9,7 @@ namespace eHotelMartinez.BusinessLogic.Interfaces
         List<CategoryDTO> GetAllCategoriesAction();
         CategoryDTO GetCategoryByIdAction(int id);
         ResponseMsg ResponseCategoryCreateAction(CreateCategoryDTO category);
-        ResponseMsg ResponseCategoryUpdateAction(CategoryDTO category);
+        ResponseMsg ResponseCategoryUpdateAction(CategoryData category);
         ResponseMsg ResponseCategoryDeleteAction(int id);
     }
 }

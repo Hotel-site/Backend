@@ -2,6 +2,7 @@
 using eHotelMartinez.BusinessLogic.Interfaces;
 using eHotelMartinez.Domain.Models.Category;
 using eHotelMartinez.Domain.Models.Base;
+using eHotelMartinez.Domain.Entities.Category;
 
 namespace eHotelMartinez.BusinessLogic.Functions.Categories
 {
@@ -19,7 +20,7 @@ namespace eHotelMartinez.BusinessLogic.Functions.Categories
         {
             return ExecuteCategoryCreateAction(category);
         }
-        public ResponseMsg ResponseCategoryUpdateAction(CategoryDTO category)
+        public ResponseMsg ResponseCategoryUpdateAction(CategoryData category)
         {
             return ExecuteCategoryUpdateAction(category);
         }

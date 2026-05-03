@@ -1,11 +1,12 @@
-﻿using eHotelMartinez.DataAccess.Context;
+﻿using eHotelMartinez.BusinessLogic.Helpers;
+using eHotelMartinez.DataAccess.Context;
 using eHotelMartinez.Domain.Entities.Attraction;
 using eHotelMartinez.Domain.Models.Attraction;
 using eHotelMartinez.Domain.Models.Base;
+using eHotelMartinez.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using eHotelMartinez.Domain.ValueObjects;
-using eHotelMartinez.BusinessLogic.Helpers;
+using System.Linq;
 
 namespace eHotelMartinez.BusinessLogic.Core.Attraction
 {
@@ -13,27 +14,26 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
     {
         protected List<AttractionDTO> ExecuteGetAllAttractions()
         {
-            using var attractionDb = new AttractionContext();
-            using var categoryDb = new CategoryContext();
+            using var db = new CategoryContext();
 
-            var categories = categoryDb.Categories
+            var categories = db.Categories
+                .AsNoTracking()
                 .Where(c => c.IsActive)
                 .ToDictionary(c => c.Id, c => c.Name);
 
-            return attractionDb.Attractions
+            var attractions = db.Attractions
                 .AsNoTracking()
                 .Include(a => a.Images)
                 .Where(p => p.IsActive == true)
-                .Join(categoryDb.Categories,
-                a => a.CategoryId,
-                c => c.Id,
-                (a, c) => new AttractionDTO
+                .ToList();
+
+            return attractions.Select(a => new AttractionDTO
                 {
                     Id = a.Id,
                     Name = a.Name,
                     ShortDescription = a.ShortDescription,
                     Description = a.Description,
-                    Category = c.Name,
+                    Category = a.CategoryId.HasValue && categories.TryGetValue(a.CategoryId.Value, out var categoryName) ? categoryName : null,
                     Location = a.Location,
                     Distance = a.Distance,
                     Price = a.Price,
@@ -61,53 +61,51 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
 
         protected AttractionDTO ExecuteGetAttractionById(int id)
         {
-            using var attractionDb = new AttractionContext();
-            using var categoryDb = new CategoryContext();
+            using var db = new CategoryContext();
 
-            var categories = categoryDb.Categories
-                .Where(c => c.IsActive)
-                .ToDictionary(c => c.Id, c => c.Name);
+            var categories = db.Categories
+                 .AsNoTracking()
+                 .Where(c => c.IsActive)
+                 .ToDictionary(c => c.Id, c => c.Name);
 
-            var a = attractionDb.Attractions.FirstOrDefault(a => a.Id == id && a.IsActive == true);
+            var a = db.Attractions
+                .AsNoTracking()
+                .Include(a => a.Images)
+                .FirstOrDefault(a => a.Id == id && a.IsActive == true);
+
             if (a == null)
                 return null;
 
-            return attractionDb.Attractions
-                .AsNoTracking()
-                .Include(a => a.Images)
-                .Where(p => p.IsActive == true)
-                .Join(categoryDb.Categories,
-                a => a.CategoryId,
-                c => c.Id,
-                (a, c) => new AttractionDTO
+            return new AttractionDTO
+            {
+                Id = a.Id,
+                Name = a.Name,
+                ShortDescription = a.ShortDescription,
+                Description = a.Description,
+                Category = a.CategoryId.HasValue && categories.TryGetValue(a.CategoryId.Value, out var categoryName) ? categoryName : null,
+                Location = a.Location,
+                Distance = a.Distance,
+                Price = a.Price,
+                Rating = a.Rating,
+                Popularity = a.Popularity,
+                Images = a.Images.Select(i => new AttractionImageDTO
                 {
-                    Id = a.Id,
-                    Name = a.Name,
-                    ShortDescription = a.ShortDescription,
-                    Description = a.Description,
-                    Category = c.Name,
-                    Location = a.Location,
-                    Distance = a.Distance,
-                    Price = a.Price,
-                    Rating = a.Rating,
-                    Popularity = a.Popularity,
-                    Images = a.Images.Select(i => new AttractionImageDTO
-                    {
-                        Url = i.Url
-                    }).ToList(),
-                    OpeningHours = a.OpeningHours.Select(oh => new OpeningHourDTO
-                    {
-                        DayOfWeek = oh.DayOfWeek,
-                        Start = oh.Start,
-                        End = oh.End
-                    }).ToList(),
-                    Contacts = new PartnerContacts
-                    {
-                        Phone = a.Contacts.Phone,
-                        Email = a.Contacts.Email,
-                        BookingUrl = a.Contacts.BookingUrl
-                    }
-                }).First();
+                    Url = i.Url
+                }).ToList(),
+                OpeningHours = a.OpeningHours.Select(oh => new OpeningHourDTO
+                {
+                    DayOfWeek = oh.DayOfWeek,
+                    Start = oh.Start,
+                    End = oh.End
+                }).ToList(),
+
+                Contacts = new PartnerContacts
+                {
+                    Phone = a.Contacts.Phone,
+                    Email = a.Contacts.Email,
+                    BookingUrl = a.Contacts.BookingUrl
+                }
+            };
         }
 
         protected ResponseMsg ExecuteCreateAttraction(CreateAttractionDTO attraction)
@@ -128,7 +126,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
             if (attraction.OpeningHours == null || attraction.OpeningHours.Count == 0)
                 return new ResponseMsg { IsSuccess = false, Message = "Opening hours can't be empty!" };
 
-            using (var db = new AttractionContext())
+            using (var db = new CategoryContext())
             {
                 if (db.Attractions.Any(a => a.Name == attraction.Name && a.IsActive))
                     return new ResponseMsg { IsSuccess = false, Message = "An attraction with the same name already exists!" };
@@ -163,7 +161,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 }
             };
 
-            using (var db = new AttractionContext())
+            using (var db = new CategoryContext())
             {
                 db.Attractions.Add(newAttraction);
                 db.SaveChanges();
@@ -173,7 +171,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
 
         protected ResponseMsg ExecuteUpdateAttraction(UpdateAttractionDTO attraction)
         {
-            using (var db = new AttractionContext())
+            using (var db = new CategoryContext())
             {
                 var existingAttraction = db.Attractions
                     .Include(a => a.Images)
@@ -253,7 +251,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
 
         protected ResponseMsg ExecuteDeleteAttraction(int id)
         {
-            using (var db = new AttractionContext())
+            using (var db = new CategoryContext())
             {
                 var existingAttraction = db.Attractions
                     .Include(a => a.Images)
@@ -268,6 +266,11 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 foreach (var image in existingAttraction.Images)
                 {
                     image.IsActive = false;
+                }
+
+                foreach (var openingHour in existingAttraction.OpeningHours)
+                {
+                    openingHour.IsActive = false;
                 }
 
                 db.SaveChanges();

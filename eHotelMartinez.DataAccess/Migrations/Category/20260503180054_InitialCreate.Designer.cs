@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eHotelMartinez.DataAccess.Context;
 
@@ -11,9 +12,11 @@ using eHotelMartinez.DataAccess.Context;
 namespace eHotelMartinez.DataAccess.Migrations.Category
 {
     [DbContext(typeof(CategoryContext))]
-    partial class CategoryContextModelSnapshot : ModelSnapshot
+    [Migration("20260503180054_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,36 +104,6 @@ namespace eHotelMartinez.DataAccess.Migrations.Category
                     b.ToTable("AttractionImageData");
                 });
 
-            modelBuilder.Entity("eHotelMartinez.Domain.Entities.Attraction.OpeningHourData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AttractionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DayOfWeek")
-                        .HasColumnType("int");
-
-                    b.Property<TimeOnly>("End")
-                        .HasColumnType("time");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<TimeOnly>("Start")
-                        .HasColumnType("time");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AttractionId");
-
-                    b.ToTable("OpeningHourData");
-                });
-
             modelBuilder.Entity("eHotelMartinez.Domain.Entities.Category.CategoryData", b =>
                 {
                     b.Property<int>("Id")
@@ -164,6 +137,7 @@ namespace eHotelMartinez.DataAccess.Migrations.Category
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("CategoryId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -227,6 +201,40 @@ namespace eHotelMartinez.DataAccess.Migrations.Category
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.OwnsMany("eHotelMartinez.Domain.Entities.Attraction.OpeningHourData", "OpeningHours", b1 =>
+                        {
+                            b1.Property<int>("AttractionDataId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<int>("AttractionId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("DayOfWeek")
+                                .HasColumnType("int")
+                                .HasColumnName("DayOfWeek");
+
+                            b1.Property<TimeOnly>("End")
+                                .HasColumnType("time")
+                                .HasColumnName("End");
+
+                            b1.Property<TimeOnly>("Start")
+                                .HasColumnType("time")
+                                .HasColumnName("Start");
+
+                            b1.HasKey("AttractionDataId", "Id");
+
+                            b1.ToTable("OpeningHourData");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AttractionDataId");
+                        });
+
                     b.OwnsOne("eHotelMartinez.Domain.ValueObjects.PartnerContacts", "Contacts", b1 =>
                         {
                             b1.Property<int>("AttractionDataId")
@@ -253,6 +261,8 @@ namespace eHotelMartinez.DataAccess.Migrations.Category
                         });
 
                     b.Navigation("Contacts");
+
+                    b.Navigation("OpeningHours");
                 });
 
             modelBuilder.Entity("eHotelMartinez.Domain.Entities.Attraction.AttractionImageData", b =>
@@ -264,21 +274,13 @@ namespace eHotelMartinez.DataAccess.Migrations.Category
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("eHotelMartinez.Domain.Entities.Attraction.OpeningHourData", b =>
-                {
-                    b.HasOne("eHotelMartinez.Domain.Entities.Attraction.AttractionData", null)
-                        .WithMany("OpeningHours")
-                        .HasForeignKey("AttractionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("eHotelMartinez.Domain.Entities.Product.ProductData", b =>
                 {
                     b.HasOne("eHotelMartinez.Domain.Entities.Category.CategoryData", null)
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("eHotelMartinez.Domain.Entities.Product.ProductImageData", b =>
@@ -293,8 +295,6 @@ namespace eHotelMartinez.DataAccess.Migrations.Category
             modelBuilder.Entity("eHotelMartinez.Domain.Entities.Attraction.AttractionData", b =>
                 {
                     b.Navigation("Images");
-
-                    b.Navigation("OpeningHours");
                 });
 
             modelBuilder.Entity("eHotelMartinez.Domain.Entities.Product.ProductData", b =>

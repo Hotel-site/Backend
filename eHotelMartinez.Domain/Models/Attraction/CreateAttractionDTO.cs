@@ -1,5 +1,4 @@
-﻿using eHotelMartinez.Domain.Entities.Attraction;
-using eHotelMartinez.Domain.ValueObjects;
+﻿using eHotelMartinez.Domain.ValueObjects;
 
 namespace eHotelMartinez.Domain.Models.Attraction
 {
