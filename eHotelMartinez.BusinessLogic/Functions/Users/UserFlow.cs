@@ -22,7 +22,7 @@ namespace eHotelMartinez.BusinessLogic.Functions.Users
         {
             return ExecuteGetUserByIdAction(id);
         }
-        public ResponseMsg ResponseUserCreateAction(UserRegDTO user)
+        public ResponseAction ResponseUserCreateAction(UserRegDTO user)
         {
             return ExecuteUserCreateAction(user);
         }

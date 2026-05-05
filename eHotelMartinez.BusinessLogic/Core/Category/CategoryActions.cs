@@ -45,11 +45,11 @@ namespace eHotelMartinez.BusinessLogic.Core.Category
                 };
             }
         }
-        protected ResponseMsg ExecuteCategoryCreateAction(CreateCategoryDTO category)
+        protected ResponseAction ExecuteCategoryCreateAction(CreateCategoryDTO category)
         {
             if (string.IsNullOrWhiteSpace(category.Name))
             {
-                return new ResponseMsg
+                return new ResponseAction
                 {
                     IsSuccess = false,
                     Message = "Name of Category isn't be empty!"
@@ -62,10 +62,11 @@ namespace eHotelMartinez.BusinessLogic.Core.Category
                 
                 if (existCategory != null)
                 {
-                    return new ResponseMsg
+                    return new ResponseAction
                     {
                         IsSuccess = false,
-                        Message = "Category is already exist!"
+                        Message = "Category is already exist!",
+                        Id = existCategory.Id
                     };
                 }
             }
@@ -80,10 +81,11 @@ namespace eHotelMartinez.BusinessLogic.Core.Category
                 db.Categories.Add(Category);
                 db.SaveChanges();   
             }
-            return new ResponseMsg
+            return new ResponseAction
             {
                 IsSuccess = true,
-                Message = "Category created successfully!"
+                Message = "Category created successfully!",
+                Id = Category.Id
             };
         }
         protected ResponseMsg ExecuteCategoryUpdateAction(CategoryData category)
@@ -131,6 +133,27 @@ namespace eHotelMartinez.BusinessLogic.Core.Category
                         Message = "The Category doesn't exist!"
                     };
                 }
+
+                var withProducts = db.Products.FirstOrDefault(p => p.CategoryId == id);
+                if (withProducts != null)
+                {
+                    return new ResponseMsg
+                    {
+                        IsSuccess = false,
+                        Message = "This Category can't be deleted"
+                    };
+                }
+
+                var withAttractions = db.Attractions.FirstOrDefault(p => p.CategoryId == id);
+                if (withAttractions != null)
+                {
+                    return new ResponseMsg
+                    {
+                        IsSuccess = false,
+                        Message = "This Category can't be deleted"
+                    };
+                }
+
                 existCategory.IsActive = false;
                 db.SaveChanges();
 

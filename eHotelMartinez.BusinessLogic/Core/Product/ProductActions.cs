@@ -76,31 +76,32 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
             };
         }
 
-        protected ResponseMsg ExecuteCreateProductAction(CreateProductDTO product)
+        protected ResponseAction ExecuteCreateProductAction(CreateProductDTO product)
         {
 
             if (string.IsNullOrWhiteSpace(product.Name))
-                return new ResponseMsg { IsSuccess = false, Message = "Product name is required." };
+                return new ResponseAction { IsSuccess = false, Message = "Product name is required." };
 
             if (product.Price <= 0)
-                return new ResponseMsg { IsSuccess = false, Message = "Price must be greater than 0." };
+                return new ResponseAction { IsSuccess = false, Message = "Price must be greater than 0." };
 
             if (product.Stock < 0)
-                return new ResponseMsg { IsSuccess = false, Message = "Stock must be greater than or equal to 0." };
+                return new ResponseAction { IsSuccess = false, Message = "Stock must be greater than or equal to 0." };
 
             if (CategoryCheck.CategoryExists(product.CategoryId) == false)
-                return new ResponseMsg { IsSuccess = false, Message = "Category does not exist." };
+                return new ResponseAction { IsSuccess = false, Message = "Category does not exist." };
 
             using (var db = new CategoryContext())
             {
-                var existingProduct = db.Products.Any(p => p.Name.ToLower() == product.Name.ToLower() && p.Status == ProductStatus.Active);
+                var existingProduct = db.Products.FirstOrDefault(p => p.Name.ToLower() == product.Name.ToLower() && p.Status == ProductStatus.Active);
 
-                if (existingProduct)
+                if (existingProduct != null)
                 {
-                    return new ResponseMsg
+                    return new ResponseAction
                     {
                         IsSuccess = false,
-                        Message = "A product with the same name already exists."
+                        Message = "A product with the same name already exists.",
+                        Id = existingProduct.Id
                     };
                 }
             }
@@ -125,10 +126,11 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                 db.SaveChanges();
             }
 
-            return new ResponseMsg
+            return new ResponseAction
             {
                 IsSuccess = true,
-                Message = "Product created successfully."
+                Message = "Product created successfully.",
+                Id = productData.Id
             };
         }
 

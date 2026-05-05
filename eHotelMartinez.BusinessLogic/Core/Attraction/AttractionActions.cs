@@ -108,28 +108,37 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
             };
         }
 
-        protected ResponseMsg ExecuteCreateAttraction(CreateAttractionDTO attraction)
+        protected ResponseAction ExecuteCreateAttraction(CreateAttractionDTO attraction)
         {
 
             if (string.IsNullOrWhiteSpace(attraction.Name))
-                return new ResponseMsg { IsSuccess = false, Message = "Name can't be empty!" };
+                return new ResponseAction { IsSuccess = false, Message = "Name can't be empty!" };
 
             if (CategoryCheck.CategoryExists(attraction.CategoryId) == false)
-                return new ResponseMsg { IsSuccess = false, Message = "Category doesn't exist!" };
+                return new ResponseAction { IsSuccess = false, Message = "Category doesn't exist!" };
 
             if (attraction.Distance < 0)
-                return new ResponseMsg { IsSuccess = false, Message = "Distance can't be negative!" };
+                return new ResponseAction { IsSuccess = false, Message = "Distance can't be negative!" };
 
             if (attraction.Price < 0)
-                return new ResponseMsg { IsSuccess = false, Message = "Price can't be negative!" };
+                return new ResponseAction { IsSuccess = false, Message = "Price can't be negative!" };
 
             if (attraction.OpeningHours == null || attraction.OpeningHours.Count == 0)
-                return new ResponseMsg { IsSuccess = false, Message = "Opening hours can't be empty!" };
+                return new ResponseAction { IsSuccess = false, Message = "Opening hours can't be empty!" };
 
             using (var db = new CategoryContext())
             {
-                if (db.Attractions.Any(a => a.Name == attraction.Name && a.IsActive))
-                    return new ResponseMsg { IsSuccess = false, Message = "An attraction with the same name already exists!" };
+                var existAttraction = db.Attractions.FirstOrDefault(a => a.Name == attraction.Name && a.IsActive);
+                if (existAttraction != null)
+                {
+                    return new ResponseAction
+                    {
+                        IsSuccess = false,
+                        Message = "An attraction with the same name already exists!",
+                        Id = existAttraction.Id
+                    };
+                }
+                 
             }
 
             var newAttraction = new AttractionData
@@ -166,7 +175,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 db.Attractions.Add(newAttraction);
                 db.SaveChanges();
             }
-            return new ResponseMsg { IsSuccess = true, Message = "Attraction created successfully." };
+            return new ResponseAction { IsSuccess = true, Message = "Attraction created successfully.", Id = newAttraction.Id};
         }
 
         protected ResponseMsg ExecuteUpdateAttraction(UpdateAttractionDTO attraction)

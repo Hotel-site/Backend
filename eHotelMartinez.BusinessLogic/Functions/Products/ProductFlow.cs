@@ -16,7 +16,7 @@ namespace eHotelMartinez.BusinessLogic.Functions.Products
         {
             return ExecuteGetProductById(id);
         }
-        public ResponseMsg ResponseProductCreateAction(CreateProductDTO product)
+        public ResponseAction ResponseProductCreateAction(CreateProductDTO product)
         {
             return ExecuteCreateProductAction(product);
         }

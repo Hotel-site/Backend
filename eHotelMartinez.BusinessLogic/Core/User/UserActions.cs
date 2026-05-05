@@ -60,11 +60,11 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 };
             }
         }
-        protected ResponseMsg ExecuteUserCreateAction(UserRegDTO user)
+        protected ResponseAction ExecuteUserCreateAction(UserRegDTO user)
         {
             if (string.IsNullOrWhiteSpace(user.Username))
             {
-                return new ResponseMsg
+                return new ResponseAction
                 {
                     IsSuccess = false,
                     Message = "Username isn't be empty!"
@@ -72,7 +72,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
             }
             if (string.IsNullOrWhiteSpace(user.Email) || !user.Email.Contains("@"))
             {
-                return new ResponseMsg
+                return new ResponseAction
                 {
                     IsSuccess = false,
                     Message = "Invalid Email format!"
@@ -80,7 +80,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
             }
             if (string.IsNullOrWhiteSpace(user.Password) || user.Password.Length < 8)
             {
-                return new ResponseMsg
+                return new ResponseAction
                 {
                     IsSuccess = false,
                     Message = "The password must be at least 8 characters long!"
@@ -94,10 +94,11 @@ namespace eHotelMartinez.BusinessLogic.Core.User
 
                 if (existUserByEmail != null)
                 {
-                    return new ResponseMsg
+                    return new ResponseAction
                     {
                         IsSuccess = false,
-                        Message = "User with this Email is already exist!"
+                        Message = "User with this Email is already exist!",
+                        Id = existUserByEmail.Id
                     };
                 }
             }
@@ -115,10 +116,11 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 db.Users.Add(User);
                 db.SaveChanges();
             }
-            return new ResponseMsg
+            return new ResponseAction
             {
                 IsSuccess = true,
-                Message = "User created successfully!"
+                Message = "User created successfully!",
+                Id = User.Id
             };
         }
         protected ResponseMsg ExecuteUserUpdateAction(UserDTO user)

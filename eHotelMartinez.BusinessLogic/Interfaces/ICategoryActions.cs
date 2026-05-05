@@ -8,7 +8,7 @@ namespace eHotelMartinez.BusinessLogic.Interfaces
     {
         List<CategoryDTO> GetAllCategoriesAction();
         CategoryDTO GetCategoryByIdAction(int id);
-        ResponseMsg ResponseCategoryCreateAction(CreateCategoryDTO category);
+        ResponseAction ResponseCategoryCreateAction(CreateCategoryDTO category);
         ResponseMsg ResponseCategoryUpdateAction(CategoryData category);
         ResponseMsg ResponseCategoryDeleteAction(int id);
     }

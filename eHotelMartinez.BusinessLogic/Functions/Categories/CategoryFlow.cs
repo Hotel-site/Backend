@@ -16,7 +16,7 @@ namespace eHotelMartinez.BusinessLogic.Functions.Categories
         {
             return ExecuteGetCategoryByIdAction(id);
         }
-        public ResponseMsg ResponseCategoryCreateAction(CreateCategoryDTO category)
+        public ResponseAction ResponseCategoryCreateAction(CreateCategoryDTO category)
         {
             return ExecuteCategoryCreateAction(category);
         }

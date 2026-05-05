@@ -16,7 +16,7 @@ namespace eHotelMartinez.BusinessLogic.Functions.Attraction
         {
             return ExecuteGetAttractionById(id);
         }
-        public ResponseMsg CreateAttraction(CreateAttractionDTO attraction)
+        public ResponseAction CreateAttraction(CreateAttractionDTO attraction)
         {
             return ExecuteCreateAttraction(attraction);
         }

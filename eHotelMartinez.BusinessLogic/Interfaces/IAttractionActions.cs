@@ -8,7 +8,7 @@ namespace eHotelMartinez.BusinessLogic.Interfaces
     {
         List<AttractionDTO> GetAllAttractions();
         AttractionDTO GetAttractionById(int id);
-        ResponseMsg CreateAttraction(CreateAttractionDTO attraction);
+        ResponseAction CreateAttraction(CreateAttractionDTO attraction);
         ResponseMsg UpdateAttraction(UpdateAttractionDTO attraction);
         ResponseMsg DeleteAttraction(int id);
     }
