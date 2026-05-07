@@ -1,6 +1,7 @@
 ﻿using eHotelMartinez.BusinessLogic.Helpers;
 using eHotelMartinez.DataAccess.Context;
 using eHotelMartinez.Domain.Entities.Attraction;
+using eHotelMartinez.Domain.Entities.Room;
 using eHotelMartinez.Domain.Models.Attraction;
 using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.ValueObjects;
@@ -220,18 +221,19 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 existingAttraction.ShortDescription = attraction.ShortDescription;
                 existingAttraction.Description = attraction.Description;
 
-                foreach (var image in attraction.Images)
-                {
-                    var exists = existingAttraction.Images
-                        .Any(i => i.Url == image.Url && i.IsActive);
+                var existingUrls = existingAttraction.Images
+                .Where(i => i.IsActive)
+                .Select(i => i.Url)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-                    if (!exists)
-                    {
-                        existingAttraction.Images.Add(new AttractionImageData
-                        {
-                            Url = image.Url,
-                        });
-                    }
+                foreach (var dtoImage in attraction.Images ?? new())
+                {
+                    var url = dtoImage.Url?.Trim();
+                    if (string.IsNullOrWhiteSpace(url))
+                        continue;
+
+                    if (existingUrls.Add(url))
+                        existingAttraction.Images.Add(new AttractionImageData { Url = url, IsActive = true });
                 }
 
                 foreach (var openingHour in attraction.OpeningHours)

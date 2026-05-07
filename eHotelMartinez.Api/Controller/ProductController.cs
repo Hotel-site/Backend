@@ -1,8 +1,7 @@
 ﻿using eHotelMartinez.BusinessLogic.Interfaces;
 using eHotelMartinez.Domain.Models.Product;
-using Microsoft.AspNetCore.Mvc;
 using eHotelMartinez.Api.Filters;
-using eHotelMartinez.Domain.Entities.Product;
+using Microsoft.AspNetCore.Mvc;
 
 namespace eHotelMartinez.Api.Controller
 {
@@ -10,10 +9,11 @@ namespace eHotelMartinez.Api.Controller
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IProductActions _productActions;
-        public ProductController(IProductActions productActions)
+        private IProductActions _productActions;
+        public ProductController()
         {
-            _productActions = productActions ?? throw new ArgumentNullException(nameof(productActions));
+            var bl = new BusinessLogic.BusinessLogic();
+            _productActions = bl.GetProductActions();
         }
 
         [HttpGet("all")]
@@ -30,7 +30,10 @@ namespace eHotelMartinez.Api.Controller
 
             if (product == null)
             {
-                return NotFound(new { Message = $"Product with ID {id} Not Found!" });
+                return NotFound(new
+                {
+                    Message = $"Product with ID {id} Not Found!"
+                });
             }
             return Ok(product);
         }
@@ -56,7 +59,8 @@ namespace eHotelMartinez.Api.Controller
         {
 
             product.Id = id;
-                var response = _productActions.ResponseProductUpdateAction(product);
+            var response = _productActions.ResponseProductUpdateAction(product);
+
             if (!response.IsSuccess)
             {
                 return BadRequest(response);

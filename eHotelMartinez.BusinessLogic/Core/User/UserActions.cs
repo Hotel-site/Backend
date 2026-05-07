@@ -67,7 +67,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 return new ResponseAction
                 {
                     IsSuccess = false,
-                    Message = "Username isn't be empty!"
+                    Message = "Username can't be empty!"
                 };
             }
             if (string.IsNullOrWhiteSpace(user.Email) || !user.Email.Contains("@"))
@@ -142,7 +142,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                     return new ResponseMsg
                     {
                         IsSuccess = false,
-                        Message = "Username isn't be empty!"
+                        Message = "Username can't be empty!"
                     };
                 }
                 if (string.IsNullOrWhiteSpace(user.Email) || !user.Email.Contains("@"))

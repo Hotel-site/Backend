@@ -1,11 +1,4 @@
-﻿using eHotelMartinez.Domain.Entities.Product;
-using eHotelMartinez.Domain.Entities.Room;
-using eHotelMartinez.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using eHotelMartinez.Domain.Enums;
 
 namespace eHotelMartinez.Domain.Models.Room
 {
@@ -13,9 +6,10 @@ namespace eHotelMartinez.Domain.Models.Room
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public List<string> Amenities { get; set; } = new();
-        public List<RoomImgData> Images { get; set; } = new();
+        public List<RoomImageDTO> Images { get; set; } = new();
         public decimal Price { get; set; }
+        public RoomStatus Status { get; set; }
     }
 }

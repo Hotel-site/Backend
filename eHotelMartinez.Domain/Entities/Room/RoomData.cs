@@ -1,11 +1,6 @@
 ﻿using eHotelMartinez.Domain.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eHotelMartinez.Domain.Entities.Room
 {
@@ -24,7 +19,7 @@ namespace eHotelMartinez.Domain.Entities.Room
         public string Description { get; set; }
 
         public List<string> Amenities { get; set; } = new();
-        public List<RoomImgData> Images { get; set; } = new();
+        public List<RoomImageData> Images { get; set; } = new();
 
         [Required]
         public decimal Price { get; set; }
