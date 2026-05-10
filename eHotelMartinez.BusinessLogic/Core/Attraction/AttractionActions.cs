@@ -136,6 +136,15 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
             if (attraction.Location.Longitude < -180 || attraction.Location.Longitude > 180)
                 return new ResponseAction { IsSuccess = false, Message = "Invalid longitude!" };
 
+            if (!PartnerContacts.TryCreate(attraction.Contacts?.Phone, attraction.Contacts?.Email, attraction.Contacts?.BookingUrl, out var contacts, out var contactValidation))
+            {
+                return new ResponseAction
+                {
+                    IsSuccess = false,
+                    Message = contactValidation.Message
+                };
+            }
+
             using (var db = new CategoryContext())
             {
                 var existAttraction = db.Attractions.FirstOrDefault(a => a.Name == attraction.Name && a.IsActive);
@@ -148,7 +157,6 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                         Id = existAttraction.Id
                     };
                 }
-
             }
 
             var newAttraction = new AttractionData
@@ -165,7 +173,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 },
                 Distance = attraction.Distance,
                 Price = attraction.Price,
-                Images  = attraction.Images.Select(i => new AttractionImageData
+                Images = attraction.Images.Select(i => new AttractionImageData
                 {
                     Url = i.Url
                 }).ToList(),
@@ -177,12 +185,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                     End = oh.End
                 }).ToList(),
 
-                Contacts = new PartnerContacts
-                {
-                    Phone = attraction.Contacts.Phone,
-                    Email = attraction.Contacts.Email,
-                    BookingUrl = attraction.Contacts.BookingUrl
-                }
+                Contacts = contacts
             };
 
             using (var db = new CategoryContext())
@@ -230,6 +233,15 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 if (attraction.Location.Longitude < -180 || attraction.Location.Longitude > 180)
                     return new ResponseMsg { IsSuccess = false, Message = "Invalid longitude!" };
 
+                if (!PartnerContacts.TryCreate(attraction.Contacts?.Phone, attraction.Contacts?.Email, attraction.Contacts?.BookingUrl, out var contacts, out var contactValidation))
+                {
+                    return new ResponseMsg
+                    {
+                        IsSuccess = false,
+                        Message = contactValidation.Message
+                    };
+                }
+
                 if (attraction.Distance >= 0)
                     existingAttraction.Distance = attraction.Distance;
 
@@ -254,12 +266,21 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                         existingAttraction.Images.Add(new AttractionImageData { Url = url, IsActive = true });
                 }
 
+                foreach (var openingHour in existingAttraction.OpeningHours)
+                    openingHour.IsActive = false;
+
                 foreach (var openingHour in attraction.OpeningHours)
                 {
                     var exists = existingAttraction.OpeningHours
-                        .Any(o => o.DayOfWeek == openingHour.DayOfWeek && o.Start == openingHour.Start && o.End == openingHour.End);
+                        .Any(o => o.DayOfWeek == openingHour.DayOfWeek && o.Start == openingHour.Start && o.End == openingHour.End && o.AttractionId == existingAttraction.Id);
+
+                    if (exists)
+                        existingAttraction.OpeningHours
+                            .First(o => o.DayOfWeek == openingHour.DayOfWeek && o.Start == openingHour.Start && o.End == openingHour.End && o.AttractionId == existingAttraction.Id)
+                            .IsActive = true;
 
                     if (!exists)
+
                     {
                         existingAttraction.OpeningHours.Add(new OpeningHourData
                         {
@@ -271,9 +292,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 }
                 existingAttraction.CategoryId = attraction.CategoryId;
 
-                existingAttraction.Contacts.Phone = attraction.Contacts.Phone;
-                existingAttraction.Contacts.Email = attraction.Contacts.Email;
-                existingAttraction.Contacts.BookingUrl = attraction.Contacts.BookingUrl;
+                existingAttraction.Contacts = contacts;
 
                 existingAttraction.Location.Address = attraction.Location.Address;
                 existingAttraction.Location.Latitude = attraction.Location.Latitude;
