@@ -42,6 +42,21 @@ namespace eHotelMartinez.DataAccess.Context
                 });
 
             modelBuilder.Entity<AttractionData>()
+                .OwnsOne(a => a.Location, Location =>
+                {
+                    Location.Property(l => l.Address)
+                    .HasColumnName("Address");
+
+                    Location.Property(l => l.Latitude)
+                    .HasColumnName("Latitude")
+                    .HasColumnType("decimal(10,7)");
+
+                    Location.Property(l => l.Longitude)
+                    .HasColumnName("Longitude")
+                    .HasColumnType("decimal(10,7)");
+                });
+
+            modelBuilder.Entity<AttractionData>()
                 .HasMany(a => a.OpeningHours)
                 .WithOne()
                 .HasForeignKey(oh => oh.AttractionId)

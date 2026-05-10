@@ -22,9 +22,7 @@ namespace eHotelMartinez.Domain.Entities.Attraction
         
         public int? CategoryId { get; set; }
 
-        [Required]
-        [StringLength(100)]
-        public string? Location { get; set; }
+        public Location Location { get; set; }
 
         [Required]
         public double Distance { get; set; }

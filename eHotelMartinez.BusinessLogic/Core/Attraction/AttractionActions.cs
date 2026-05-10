@@ -1,13 +1,11 @@
 ﻿using eHotelMartinez.BusinessLogic.Helpers;
 using eHotelMartinez.DataAccess.Context;
 using eHotelMartinez.Domain.Entities.Attraction;
-using eHotelMartinez.Domain.Entities.Room;
 using eHotelMartinez.Domain.Models.Attraction;
 using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using System.Linq;
 
 namespace eHotelMartinez.BusinessLogic.Core.Attraction
 {
@@ -25,6 +23,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
             var attractions = db.Attractions
                 .AsNoTracking()
                 .Include(a => a.Images)
+                .Include(a => a.OpeningHours)
                 .Where(p => p.IsActive == true)
                 .ToList();
 
@@ -35,7 +34,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                     ShortDescription = a.ShortDescription,
                     Description = a.Description,
                     Category = a.CategoryId.HasValue && categories.TryGetValue(a.CategoryId.Value, out var categoryName) ? categoryName : null,
-                    Location = a.Location,
+                    Address = a.Location.Address,
                     Distance = a.Distance,
                     Price = a.Price,
                     Rating = a.Rating,
@@ -72,6 +71,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
             var a = db.Attractions
                 .AsNoTracking()
                 .Include(a => a.Images)
+                .Include(a => a.OpeningHours)
                 .FirstOrDefault(a => a.Id == id && a.IsActive == true);
 
             if (a == null)
@@ -84,7 +84,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 ShortDescription = a.ShortDescription,
                 Description = a.Description,
                 Category = a.CategoryId.HasValue && categories.TryGetValue(a.CategoryId.Value, out var categoryName) ? categoryName : null,
-                Location = a.Location,
+                Address = a.Location.Address,
                 Distance = a.Distance,
                 Price = a.Price,
                 Rating = a.Rating,
@@ -127,6 +127,15 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
             if (attraction.OpeningHours == null || attraction.OpeningHours.Count == 0)
                 return new ResponseAction { IsSuccess = false, Message = "Opening hours can't be empty!" };
 
+            if (attraction.Location == null)
+                return new ResponseAction { IsSuccess = false, Message = "Location can't be empty!" };
+
+            if (attraction.Location.Latitude < -90 || attraction.Location.Latitude > 90)
+                return new ResponseAction { IsSuccess = false, Message = "Invalid latitude!" };
+
+            if (attraction.Location.Longitude < -180 || attraction.Location.Longitude > 180)
+                return new ResponseAction { IsSuccess = false, Message = "Invalid longitude!" };
+
             using (var db = new CategoryContext())
             {
                 var existAttraction = db.Attractions.FirstOrDefault(a => a.Name == attraction.Name && a.IsActive);
@@ -139,7 +148,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                         Id = existAttraction.Id
                     };
                 }
-                 
+
             }
 
             var newAttraction = new AttractionData
@@ -148,7 +157,12 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 ShortDescription = attraction.ShortDescription,
                 Description = attraction.Description,
                 CategoryId = attraction.CategoryId,
-                Location = attraction.Location,
+                Location = new Location
+                {
+                    Address = attraction.Location.Address,
+                    Latitude = attraction.Location.Latitude,
+                    Longitude = attraction.Location.Longitude
+                },
                 Distance = attraction.Distance,
                 Price = attraction.Price,
                 Images  = attraction.Images.Select(i => new AttractionImageData
@@ -179,12 +193,14 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
             return new ResponseAction { IsSuccess = true, Message = "Attraction created successfully.", Id = newAttraction.Id};
         }
 
+
         protected ResponseMsg ExecuteUpdateAttraction(UpdateAttractionDTO attraction)
         {
             using (var db = new CategoryContext())
             {
                 var existingAttraction = db.Attractions
                     .Include(a => a.Images)
+                    .Include(a => a.OpeningHours)
                     .FirstOrDefault(a => a.Id == attraction.Id);
 
                 if (attraction.Distance < 0)
@@ -202,15 +218,17 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 if (!string.IsNullOrWhiteSpace(attraction.Name))
                     existingAttraction.Name = attraction.Name;
 
-                if (attraction.CategoryId > 0 && attraction.CategoryId != existingAttraction.CategoryId)
-                {
-                    if (CategoryCheck.CategoryExists(attraction.CategoryId) == false)
-                        return new ResponseMsg { IsSuccess = false, Message = "Category does not exist." };
-                    existingAttraction.CategoryId = attraction.CategoryId;
-                }
+                if (CategoryCheck.CategoryExists(attraction.CategoryId) == false)
+                    return new ResponseMsg { IsSuccess = false, Message = "Category does not exist." };
 
-                if (!string.IsNullOrWhiteSpace(attraction.Location))
-                    existingAttraction.Location = attraction.Location;
+                if (attraction.Location == null)
+                    return new ResponseMsg { IsSuccess = false, Message = "Location can't be empty!" };
+
+                if (attraction.Location.Latitude < -90 || attraction.Location.Latitude > 90)
+                    return new ResponseMsg { IsSuccess = false, Message = "Invalid latitude!" };
+
+                if (attraction.Location.Longitude < -180 || attraction.Location.Longitude > 180)
+                    return new ResponseMsg { IsSuccess = false, Message = "Invalid longitude!" };
 
                 if (attraction.Distance >= 0)
                     existingAttraction.Distance = attraction.Distance;
@@ -251,10 +269,18 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                         });
                     }
                 }
+                existingAttraction.CategoryId = attraction.CategoryId;
 
                 existingAttraction.Contacts.Phone = attraction.Contacts.Phone;
                 existingAttraction.Contacts.Email = attraction.Contacts.Email;
                 existingAttraction.Contacts.BookingUrl = attraction.Contacts.BookingUrl;
+
+                existingAttraction.Location.Address = attraction.Location.Address;
+                existingAttraction.Location.Latitude = attraction.Location.Latitude;
+                existingAttraction.Location.Longitude = attraction.Location.Longitude;
+
+                existingAttraction.IsActive = attraction.IsActive;
+
                 db.SaveChanges();
             }
             return new ResponseMsg { IsSuccess = true, Message = "Attraction updated successfully." };
@@ -266,6 +292,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
             {
                 var existingAttraction = db.Attractions
                     .Include(a => a.Images)
+                    .Include(a => a.OpeningHours)
                     .FirstOrDefault(a => a.Id == id);
 
                 if (existingAttraction == null)

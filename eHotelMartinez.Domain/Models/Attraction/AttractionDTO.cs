@@ -10,7 +10,7 @@ namespace eHotelMartinez.Domain.Models.Attraction
         public string? ShortDescription { get; set; }
         public string? Description { get; set; }
         public string Category { get; set; }
-        public string Location { get; set; }
+        public string Address { get; set; }
         public double Distance { get; set; }
         public decimal Price { get; set; }
         public double Rating { get; set; }
