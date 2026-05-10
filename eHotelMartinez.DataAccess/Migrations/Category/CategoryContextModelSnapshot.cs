@@ -182,6 +182,9 @@ namespace eHotelMartinez.DataAccess.Migrations.Category
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<bool>("RequireBooking")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 

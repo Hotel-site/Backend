@@ -31,6 +31,9 @@ namespace eHotelMartinez.Domain.Entities.Product
         [Required]
         public int Stock { get; set; }
 
+        [Required]
+        public bool RequireBooking { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

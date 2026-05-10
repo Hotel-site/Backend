@@ -12,7 +12,7 @@ using eHotelMartinez.DataAccess.Context;
 namespace eHotelMartinez.DataAccess.Migrations.Category
 {
     [DbContext(typeof(CategoryContext))]
-    [Migration("20260503192726_UpdateProducts")]
+    [Migration("20260510131355_UpdateProducts")]
     partial class UpdateProducts
     {
         /// <inheritdoc />
@@ -184,6 +184,9 @@ namespace eHotelMartinez.DataAccess.Migrations.Category
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("RequireBooking")
+                        .HasColumnType("bit");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");

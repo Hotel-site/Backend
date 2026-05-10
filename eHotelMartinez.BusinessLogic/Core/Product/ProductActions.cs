@@ -39,6 +39,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                     Url = i.Url
                 }).ToList(),
                 Stock = p.Stock,
+                RequireBooking = p.RequireBooking,
                 Status = p.Status
             }).ToList();
         }
@@ -73,6 +74,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                     Url = i.Url
                 }).ToList(),
                 Stock = p.Stock,
+                RequireBooking = p.RequireBooking,
                 Status = p.Status
             };
         }
@@ -118,6 +120,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                     Url = imageData.Url
                 }).ToList() ?? new List<ProductImageData>(),
                 Status = ProductStatus.Active,
+                RequireBooking = product.RequireBooking,
                 Stock = product.Stock,
             };
 
@@ -199,11 +202,14 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                         existingProduct.Images.Add(new ProductImageData { Url = url, IsActive = true });
                 }
 
+                if (product.RequireBooking != null) existingProduct.RequireBooking = product.RequireBooking;
+
                 if (product.Stock >= 0) existingProduct.Stock = product.Stock;
 
                 if (product.Stock == 0) existingProduct.Status = ProductStatus.OutOfStock;
                 else
                     existingProduct.Status = (ProductStatus)product.Status;
+
                 db.SaveChanges();
             }
 

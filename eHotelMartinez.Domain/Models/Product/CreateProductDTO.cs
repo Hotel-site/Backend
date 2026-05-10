@@ -9,6 +9,7 @@ namespace eHotelMartinez.Domain.Models.Product
         public decimal Price { get; set; }
         public List<ProductImageDTO>? Images { get; set; } = new();
         public int Stock { get; set; }
+        public bool RequireBooking { get; set; }
         public bool IsActive { get; set; } = true;
 
     }

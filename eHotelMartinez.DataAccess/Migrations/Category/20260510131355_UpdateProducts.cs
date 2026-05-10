@@ -31,6 +31,13 @@ namespace eHotelMartinez.DataAccess.Migrations.Category
                 oldType: "int");
 
             migrationBuilder.AddColumn<bool>(
+                name: "RequireBooking",
+                table: "Products",
+                type: "bit",
+                nullable: false,
+                defaultValue: false);
+
+            migrationBuilder.AddColumn<bool>(
                 name: "IsActive",
                 table: "OpeningHourData",
                 type: "bit",
@@ -70,6 +77,10 @@ namespace eHotelMartinez.DataAccess.Migrations.Category
             migrationBuilder.DropIndex(
                 name: "IX_OpeningHourData_AttractionId",
                 table: "OpeningHourData");
+
+            migrationBuilder.DropColumn(
+                name: "RequireBooking",
+                table: "Products");
 
             migrationBuilder.DropColumn(
                 name: "IsActive",
