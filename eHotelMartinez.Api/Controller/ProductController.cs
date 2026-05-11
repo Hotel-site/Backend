@@ -17,16 +17,16 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpGet("all")]
-        public IActionResult GetAllProducts()
+        public async Task<IActionResult> GetAllProducts()
         {
-            var products = _productActions.GetAllProductsAction();
+            var products = await _productActions.GetAllProductsAction();
             return Ok(products);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetProductById(int id)
+        public async Task<IActionResult> GetProductById(int id)
         {
-            var product = _productActions.GetProductByIdAction(id);
+            var product = await _productActions.GetProductByIdAction(id);
 
             if (product == null)
             {
@@ -40,10 +40,10 @@ namespace eHotelMartinez.Api.Controller
 
         [AdminOnly]
         [HttpPost]
-        public IActionResult CreateProduct([FromBody] CreateProductDTO product)
+        public async Task<IActionResult> CreateProduct([FromBody] CreateProductDTO product)
         {
 
-            var response = _productActions.ResponseProductCreateAction(product);
+            var response = await _productActions.ResponseProductCreateAction(product);
 
             if(!response.IsSuccess)
             {
@@ -55,12 +55,11 @@ namespace eHotelMartinez.Api.Controller
 
         [AdminOnly]
         [HttpPut("{id}")]
-        public IActionResult UpdateProduct(int id, [FromBody] UpdateProductDTO product)
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductDTO product)
         {
 
             product.Id = id;
-            var response = _productActions.ResponseProductUpdateAction(product);
-
+            var response = await _productActions.ResponseProductUpdateAction(product);
             if (!response.IsSuccess)
             {
                 return BadRequest(response);
@@ -71,10 +70,10 @@ namespace eHotelMartinez.Api.Controller
         
         [AdminOnly]
         [HttpDelete("{id}")]
-        public IActionResult DeleteProduct(int id)
+        public async Task<IActionResult> DeleteProduct(int id)
         {
 
-            var response = _productActions.ResponseProductDeleteAction(id);
+            var response = await _productActions.ResponseProductDeleteAction(id);
 
             if (!response.IsSuccess)
             {

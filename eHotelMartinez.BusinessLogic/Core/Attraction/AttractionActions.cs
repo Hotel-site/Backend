@@ -11,21 +11,21 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
 {
     public class AttractionActions
     {
-        protected List<AttractionDTO> ExecuteGetAllAttractions()
+        protected async Task<List<AttractionDTO>> ExecuteGetAllAttractions()
         {
             using var db = new CategoryContext();
 
-            var categories = db.Categories
+            var categories = await db.Categories
                 .AsNoTracking()
                 .Where(c => c.IsActive)
-                .ToDictionary(c => c.Id, c => c.Name);
+                .ToDictionaryAsync(c => c.Id, c => c.Name);
 
-            var attractions = db.Attractions
+            var attractions = await db.Attractions
                 .AsNoTracking()
                 .Include(a => a.Images)
                 .Include(a => a.OpeningHours)
                 .Where(p => p.IsActive == true)
-                .ToList();
+                .ToListAsync();
 
             return attractions.Select(a => new AttractionDTO
                 {
@@ -59,21 +59,20 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 }).ToList();
         }
 
-        protected AttractionDTO ExecuteGetAttractionById(int id)
+        protected async Task<AttractionDTO> ExecuteGetAttractionById(int id)
         {
             using var db = new CategoryContext();
 
-            var categories = db.Categories
+            var categories = await db.Categories
                  .AsNoTracking()
                  .Where(c => c.IsActive)
-                 .ToDictionary(c => c.Id, c => c.Name);
+                 .ToDictionaryAsync(c => c.Id, c => c.Name);
 
-            var a = db.Attractions
+            var a = await db.Attractions
                 .AsNoTracking()
                 .Include(a => a.Images)
                 .Include(a => a.OpeningHours)
-                .FirstOrDefault(a => a.Id == id && a.IsActive == true);
-
+                .FirstOrDefaultAsync(a => a.Id == id && a.IsActive == true);
             if (a == null)
                 return null;
 
@@ -109,13 +108,13 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
             };
         }
 
-        protected ResponseAction ExecuteCreateAttraction(CreateAttractionDTO attraction)
+        protected async Task<ResponseAction> ExecuteCreateAttraction(CreateAttractionDTO attraction)
         {
 
             if (string.IsNullOrWhiteSpace(attraction.Name))
                 return new ResponseAction { IsSuccess = false, Message = "Name can't be empty!" };
 
-            if (CategoryCheck.CategoryExists(attraction.CategoryId) == false)
+            if (!await CategoryCheck.CategoryExists(attraction.CategoryId))
                 return new ResponseAction { IsSuccess = false, Message = "Category doesn't exist!" };
 
             if (attraction.Distance < 0)
@@ -147,7 +146,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
 
             using (var db = new CategoryContext())
             {
-                var existAttraction = db.Attractions.FirstOrDefault(a => a.Name == attraction.Name && a.IsActive);
+                var existAttraction = await db.Attractions.FirstOrDefaultAsync(a => a.Name == attraction.Name && a.IsActive);
                 if (existAttraction != null)
                 {
                     return new ResponseAction
@@ -191,20 +190,20 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
             using (var db = new CategoryContext())
             {
                 db.Attractions.Add(newAttraction);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
             return new ResponseAction { IsSuccess = true, Message = "Attraction created successfully.", Id = newAttraction.Id};
         }
 
 
-        protected ResponseMsg ExecuteUpdateAttraction(UpdateAttractionDTO attraction)
+        protected async Task<ResponseMsg> ExecuteUpdateAttraction(UpdateAttractionDTO attraction)
         {
             using (var db = new CategoryContext())
             {
-                var existingAttraction = db.Attractions
+                var existingAttraction = await db.Attractions
                     .Include(a => a.Images)
                     .Include(a => a.OpeningHours)
-                    .FirstOrDefault(a => a.Id == attraction.Id);
+                    .FirstOrDefaultAsync(a => a.Id == attraction.Id);
 
                 if (attraction.Distance < 0)
                     return new ResponseMsg { IsSuccess = false, Message = "Distance can't be negative!" };
@@ -221,7 +220,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 if (!string.IsNullOrWhiteSpace(attraction.Name))
                     existingAttraction.Name = attraction.Name;
 
-                if (CategoryCheck.CategoryExists(attraction.CategoryId) == false)
+                if (!await CategoryCheck.CategoryExists(attraction.CategoryId))
                     return new ResponseMsg { IsSuccess = false, Message = "Category does not exist." };
 
                 if (attraction.Location == null)
@@ -300,19 +299,19 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
 
                 existingAttraction.IsActive = attraction.IsActive;
 
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
             return new ResponseMsg { IsSuccess = true, Message = "Attraction updated successfully." };
         }
 
-        protected ResponseMsg ExecuteDeleteAttraction(int id)
+        protected async Task<ResponseMsg> ExecuteDeleteAttraction(int id)
         {
             using (var db = new CategoryContext())
             {
-                var existingAttraction = db.Attractions
+                var existingAttraction = await db.Attractions
                     .Include(a => a.Images)
                     .Include(a => a.OpeningHours)
-                    .FirstOrDefault(a => a.Id == id);
+                    .FirstOrDefaultAsync(a => a.Id == id);
 
                 if (existingAttraction == null)
                     return new ResponseMsg { IsSuccess = false, Message = "Attraction not found." };
@@ -330,7 +329,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                     openingHour.IsActive = false;
                 }
 
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
             return new ResponseMsg { IsSuccess = true, Message = "Attraction deleted successfully." };
         }

@@ -19,16 +19,16 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpGet("all")]
-        public IActionResult GetAllAttractions()
+        public async Task<IActionResult> GetAllAttractions()
         {
-            var attractions = _attractionActions.GetAllAttractions();
+            var attractions = await _attractionActions.GetAllAttractions();
             return Ok(attractions);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetAttractionById(int id)
+        public async Task<IActionResult> GetAttractionById(int id)
         {
-            var attraction = _attractionActions.GetAttractionById(id);
+            var attraction = await _attractionActions.GetAttractionById(id);
             if (attraction == null)
             {
                 return NotFound(new { Message = $"Attraction with ID {id} Not Found!" });
@@ -38,9 +38,9 @@ namespace eHotelMartinez.Api.Controller
 
         [AdminOnly]
         [HttpPost]
-        public IActionResult CreateAttraction([FromBody] CreateAttractionDTO attraction)
+        public async Task<IActionResult> CreateAttraction([FromBody] CreateAttractionDTO attraction)
         {
-            var response = _attractionActions.CreateAttraction(attraction);
+            var response = await _attractionActions.CreateAttraction(attraction);
             if (!response.IsSuccess)
             {
                 return BadRequest(response);
@@ -50,10 +50,10 @@ namespace eHotelMartinez.Api.Controller
 
         [AdminOnly]
         [HttpPut("{id}")]
-        public IActionResult UpdateAttraction(int id, [FromBody] UpdateAttractionDTO attraction)
+        public async Task<IActionResult> UpdateAttraction(int id, [FromBody] UpdateAttractionDTO attraction)
         {
             attraction.Id = id;
-            var response = _attractionActions.UpdateAttraction(attraction);
+            var response = await _attractionActions.UpdateAttraction(attraction);
             if (!response.IsSuccess)
             {
                 return BadRequest(response);
@@ -63,9 +63,9 @@ namespace eHotelMartinez.Api.Controller
 
         [AdminOnly]
         [HttpDelete("{id}")]
-        public IActionResult DeleteAttraction(int id)
+        public async Task<IActionResult> DeleteAttraction(int id)
         {
-            var response = _attractionActions.DeleteAttraction(id);
+            var response = await _attractionActions.DeleteAttraction(id);
             if (!response.IsSuccess)
             {
                 return BadRequest(response);

@@ -1,7 +1,6 @@
 ﻿using eHotelMartinez.BusinessLogic.Helpers;
 using eHotelMartinez.DataAccess.Context;
 using eHotelMartinez.Domain.Entities.Product;
-using eHotelMartinez.Domain.Entities.Room;
 using eHotelMartinez.Domain.Enums;
 using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.Models.Product;
@@ -12,21 +11,20 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
 {
     public class ProductActions
     {
-        protected List<ProductDTO> ExecuteGetAllProducts()
+        protected async Task<List<ProductDTO>> ExecuteGetAllProducts()
         {
             using var db = new CategoryContext();
 
-            var categories = db.Categories
+            var categories = await db.Categories
                 .AsNoTracking()
                 .Where(c => c.IsActive)
-                .ToDictionary(c => c.Id, c => c.Name);
+                .ToDictionaryAsync(c => c.Id, c => c.Name);
 
-            var products = db.Products
+            var products = await db.Products
                 .AsNoTracking()
                 .Include(p => p.Images)
-                .Where(p => p.Status == ProductStatus.Active)
-                .ToList();
-
+                .Where(p => p.Status != ProductStatus.Inactive)
+                .ToListAsync();
             return products.Select(p => new ProductDTO
             {
                 Id = p.Id,
@@ -45,19 +43,19 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
         }
 
 
-        protected ProductDTO ExecuteGetProductById(int id)
+        protected async Task<ProductDTO> ExecuteGetProductById(int id)
         {
             using var db = new CategoryContext();
 
-            var categories = db.Categories
+            var categories = await db.Categories
                 .AsNoTracking()
                 .Where(c => c.IsActive)
-                .ToDictionary(c => c.Id, c => c.Name);
+                .ToDictionaryAsync(c => c.Id, c => c.Name);
 
-            var p = db.Products
+            var p = await db.Products
                 .AsNoTracking()
                 .Include(p => p.Images)
-                .FirstOrDefault(p => p.Id == id && p.Status == ProductStatus.Active);
+                .FirstOrDefaultAsync(p => p.Id == id && p.Status != ProductStatus.Inactive);
 
             if(p == null)
                 return null;
@@ -79,7 +77,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
             };
         }
 
-        protected ResponseAction ExecuteCreateProductAction(CreateProductDTO product)
+        protected async Task<ResponseAction> ExecuteCreateProductAction(CreateProductDTO product)
         {
 
             if (string.IsNullOrWhiteSpace(product.Name))
@@ -91,12 +89,12 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
             if (product.Stock < 0)
                 return new ResponseAction { IsSuccess = false, Message = "Stock must be greater than or equal to 0." };
 
-            if (CategoryCheck.CategoryExists(product.CategoryId) == false)
+            if (!await CategoryCheck.CategoryExists(product.CategoryId))
                 return new ResponseAction { IsSuccess = false, Message = "Category does not exist." };
 
             using (var db = new CategoryContext())
             {
-                var existingProduct = db.Products.FirstOrDefault(p => p.Name.ToLower() == product.Name.ToLower() && p.Status == ProductStatus.Active);
+                var existingProduct = await db.Products.FirstOrDefaultAsync(p => p.Name.ToLower() == product.Name.ToLower() && p.Status == ProductStatus.Active);
 
                 if (existingProduct != null)
                 {
@@ -127,7 +125,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
             using (var db = new CategoryContext())
             {
                 db.Products.Add(productData);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
 
             return new ResponseAction
@@ -138,26 +136,19 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
             };
         }
 
-        protected ResponseMsg ExecuteUpdateProductAction(UpdateProductDTO product)
+        protected async Task<ResponseMsg> ExecuteUpdateProductAction(UpdateProductDTO product)
         {
             using (var db = new CategoryContext())
             {
-                var existingProduct = db.Products
+                var existingProduct = await db.Products
                     .Include(p => p.Images)
-                    .FirstOrDefault(p => p.Id == product.Id);
+                    .FirstOrDefaultAsync(p => p.Id == product.Id);
 
                 if (existingProduct == null)
                     return new ResponseMsg
                     {
                         IsSuccess = false,
                         Message = "Product not found."
-                    };
-
-                if (product.Price < 0)
-                    return new ResponseMsg
-                    {
-                        IsSuccess = false,
-                        Message = "Price must be greater or equal to 0."
                     };
 
                 if (product.Stock < 0)
@@ -167,23 +158,26 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                         Message = "Stock must be greater or equal to 0."
                     };
 
-
                 if (!string.IsNullOrWhiteSpace(product.Name))
                     existingProduct.Name = product.Name;
 
                 if (!string.IsNullOrWhiteSpace(product.Description))
                     existingProduct.Description = product.Description;
 
-                if (product.CategoryId > 0 && product.CategoryId != existingProduct.CategoryId)
-                {
-                    if (CategoryCheck.CategoryExists(product.CategoryId) == false)
-                        return new ResponseMsg
-                        {
-                            IsSuccess = false,
-                            Message = "Category does not exist."
-                        };
-                    existingProduct.CategoryId = product.CategoryId;
-                }
+                if (!await CategoryCheck.CategoryExists(product.CategoryId))
+                    return new ResponseMsg
+                    {
+                        IsSuccess = false,
+                        Message = "Category does not exist."
+                    };
+                existingProduct.CategoryId = product.CategoryId;
+
+                if (product.Price <= 0)
+                    return new ResponseMsg
+                    {
+                        IsSuccess = false,
+                        Message = "Price must be greater than 0."
+                    };
 
                 if (product.Price > 0) existingProduct.Price = product.Price;
 
@@ -210,7 +204,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                 else
                     existingProduct.Status = (ProductStatus)product.Status;
 
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
 
             return new ResponseMsg
@@ -220,13 +214,13 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
             };
         }
 
-        protected ResponseMsg ExecuteDeleteProductAction(int id)
+        protected async Task<ResponseMsg> ExecuteDeleteProductAction(int id)
         {
             using (var db = new CategoryContext())
             {
-                var existingProduct = db.Products
+                var existingProduct = await db.Products
                     .Include(p => p.Images)
-                    .FirstOrDefault(p => p.Id == id);
+                    .FirstOrDefaultAsync(p => p.Id == id);
 
                 if (existingProduct == null)
                     return new ResponseMsg
@@ -243,7 +237,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                     image.IsActive = false;
                 }
 
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
 
             return new ResponseMsg

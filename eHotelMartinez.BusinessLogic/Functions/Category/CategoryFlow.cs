@@ -4,7 +4,7 @@ using eHotelMartinez.Domain.Models.Category;
 using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.Entities.Category;
 
-namespace eHotelMartinez.BusinessLogic.Functions.Categories
+namespace eHotelMartinez.BusinessLogic.Functions.Category
 {
     public class CategoryFlow : CategoryActions, ICategoryActions
     {

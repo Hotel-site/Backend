@@ -1,5 +1,5 @@
-﻿using eHotelMartinez.BusinessLogic.Functions.Categories;
-using eHotelMartinez.BusinessLogic.Functions.Products;
+﻿using eHotelMartinez.BusinessLogic.Functions.Category;
+using eHotelMartinez.BusinessLogic.Functions.Product;
 using eHotelMartinez.BusinessLogic.Functions.Session;
 using eHotelMartinez.BusinessLogic.Functions.Users;
 using eHotelMartinez.BusinessLogic.Functions.Attraction;

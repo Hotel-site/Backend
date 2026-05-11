@@ -1,6 +1,5 @@
 ﻿using eHotelMartinez.BusinessLogic.Core.Attraction;
 using eHotelMartinez.BusinessLogic.Interfaces;
-using eHotelMartinez.Domain.Entities.Attraction;
 using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.Models.Attraction;
 
@@ -8,25 +7,25 @@ namespace eHotelMartinez.BusinessLogic.Functions.Attraction
 {
     public class AttractionFlow : AttractionActions, IAttractionActions
     {
-        public List<AttractionDTO> GetAllAttractions()
+        public async Task<List<AttractionDTO>> GetAllAttractions()
         {
-            return ExecuteGetAllAttractions();
+            return await ExecuteGetAllAttractions();
         }
-        public AttractionDTO GetAttractionById(int id)
+        public async Task<AttractionDTO> GetAttractionById(int id)
         {
-            return ExecuteGetAttractionById(id);
+            return await ExecuteGetAttractionById(id);
         }
-        public ResponseAction CreateAttraction(CreateAttractionDTO attraction)
+        public async Task<ResponseAction> CreateAttraction(CreateAttractionDTO attraction)
         {
-            return ExecuteCreateAttraction(attraction);
+            return await ExecuteCreateAttraction(attraction);
         }
-        public ResponseMsg UpdateAttraction(UpdateAttractionDTO attraction)
+        public async Task<ResponseMsg> UpdateAttraction(UpdateAttractionDTO attraction)
         {
-            return ExecuteUpdateAttraction(attraction);
+            return await ExecuteUpdateAttraction(attraction);
         }
-        public ResponseMsg DeleteAttraction(int id)
+        public async Task<ResponseMsg> DeleteAttraction(int id)
         {
-            return ExecuteDeleteAttraction(id);
+            return await ExecuteDeleteAttraction(id);
         }   
 
     }

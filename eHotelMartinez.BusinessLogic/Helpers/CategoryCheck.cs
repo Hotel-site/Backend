@@ -1,14 +1,15 @@
 ﻿using eHotelMartinez.DataAccess.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace eHotelMartinez.BusinessLogic.Helpers
 {
     public class CategoryCheck
     {
-        public static bool CategoryExists(int? categoryId)
+        public static async Task<bool> CategoryExists(int? categoryId)
         {
             using (var db = new CategoryContext())
             {
-                return db.Categories.Any(c => c.Id == categoryId && c.IsActive);
+                return await db.Categories.AnyAsync(c => c.Id == categoryId && c.IsActive);
             }
         }
     }

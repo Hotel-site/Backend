@@ -1,4 +1,6 @@
 ﻿
+using eHotelMartinez.Domain.Enums;
+
 namespace eHotelMartinez.Domain.Models.Product
 {
     public class CreateProductDTO
@@ -10,7 +12,7 @@ namespace eHotelMartinez.Domain.Models.Product
         public List<ProductImageDTO>? Images { get; set; } = new();
         public int Stock { get; set; }
         public bool RequireBooking { get; set; }
-        public bool IsActive { get; set; } = true;
+        public ProductStatus ProductStatus { get; set; } = ProductStatus.Active;
 
     }
 }
