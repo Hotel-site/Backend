@@ -11,7 +11,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Session
             var sessionKey = CookieGenerator.GenerateSessionKey();
             var expiresAt = DateTime.Now.AddHours(1);
 
-            using (var context = new SessionContext())
+            using (var context = new UserContext())
             {
                 var currentSession = context.Sessions.FirstOrDefault(s => s.UserId == userId);
 
@@ -43,7 +43,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Session
             if (string.IsNullOrEmpty(sessionKey))
                 return null;
 
-            using (var context = new SessionContext())
+            using (var context = new UserContext())
             {
                 var session = context.Sessions.FirstOrDefault(s => s.SessionKey == sessionKey && s.ExpiresAt > DateTime.Now);
                 if (session == null)
@@ -59,7 +59,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Session
             if (string.IsNullOrEmpty(sessionKey))
                 return;
 
-            using (var context = new SessionContext())
+            using (var context = new UserContext())
             {
                 var session = context.Sessions.FirstOrDefault(s => s.SessionKey == sessionKey);
                 if (session != null)

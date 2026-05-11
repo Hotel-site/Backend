@@ -7,7 +7,7 @@ namespace eHotelMartinez.Domain.Models.Favorite
     {
         public int Id { get; set; }
         public string UserName { get; set; }
-        public string EntityName { get; set; }
+        public int EntityId { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public  EntityType EntityType{ get; set; }

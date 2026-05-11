@@ -1,14 +1,8 @@
 ﻿using eHotelMartinez.DataAccess.Context;
 using eHotelMartinez.Domain.Entities.Category;
-using eHotelMartinez.Domain.Entities.User;
 using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.Models.Category;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eHotelMartinez.BusinessLogic.Core.Category
 {

@@ -17,7 +17,7 @@ namespace eHotelMartinez.Domain.Entities.Favorite
         public EntityType EntityType { get; set; }
 
         [Required]
-        public int EntityId { get; set; }
+        public int EntityId { get; set; }   
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
