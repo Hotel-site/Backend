@@ -38,17 +38,17 @@ namespace eHotelMartinez.DataAccess.Context
                 .IsUnique();
 
             modelBuilder.Entity<SessionData>()
-                .HasOne<UserData>()
+                .HasOne(s => s.User)
                 .WithMany()
                 .HasForeignKey(s => s.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<FavoriteData>()
                 .HasIndex(f => new { f.UserId, f.EntityType, f.EntityId })
                 .IsUnique();
 
             modelBuilder.Entity<FavoriteData>()
-                .HasOne<UserData>()
+                .HasOne(f => f.User)
                 .WithMany()
                 .HasForeignKey(f => f.UserId)
                 .OnDelete(DeleteBehavior.Cascade);

@@ -25,6 +25,9 @@ namespace eHotelMartinez.Domain.Entities.Product
         [ForeignKey("CategoryId")]
         public CategoryData Category { get; set; } 
 
+        [ForeignKey("CategoryId")]
+        public CategoryData Category { get; set; } 
+
         [Required]
         public decimal Price  { get; set; }
 
