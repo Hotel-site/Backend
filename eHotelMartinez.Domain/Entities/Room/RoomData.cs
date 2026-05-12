@@ -1,4 +1,5 @@
-﻿using eHotelMartinez.Domain.Enums;
+﻿using eHotelMartinez.Domain.Entities.Product;
+using eHotelMartinez.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,6 +20,8 @@ namespace eHotelMartinez.Domain.Entities.Room
         public string Description { get; set; }
 
         public List<string> Amenities { get; set; } = new();
+
+        [InverseProperty("Room")]
         public List<RoomImageData> Images { get; set; } = new();
 
         [Required]

@@ -1,15 +1,11 @@
 ﻿using eHotelMartinez.Domain.Entities.User;
-using System;
-using System.Collections.Generic;
+using eHotelMartinez.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace eHotelMartinez.Domain.Entities.Session
+namespace eHotelMartinez.Domain.Entities.Order
 {
-    public class SessionData
+    public class OrderData
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -22,12 +18,15 @@ namespace eHotelMartinez.Domain.Entities.Session
         public UserData User { get; set; }
 
         [Required]
-        [StringLength(256)]
-        public string SessionKey { get; set; }
+        public OrderStatus Status { get; set; }
 
         [Required]
-        public DateTime ExpiresAt { get; set; }
+        public decimal TotalSum { get; set; }
 
+        [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [InverseProperty("Order")]
+        public  List<OrderItemData> OrderItems { get; set; } = new();
     }
 }

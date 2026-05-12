@@ -1,4 +1,5 @@
-﻿using eHotelMartinez.Domain.Enums;
+﻿using eHotelMartinez.Domain.Entities.Category;
+using eHotelMartinez.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,11 +20,15 @@ namespace eHotelMartinez.Domain.Entities.Product
         [StringLength(250)]
         public string? Description { get; set; }
 
-        public int? CategoryId { get; set; }
+        public int CategoryId { get; set; }
+
+        [ForeignKey("CategoryId")]
+        public CategoryData Category { get; set; } 
 
         [Required]
         public decimal Price  { get; set; }
 
+        [InverseProperty("Product")]
         public List<ProductImageData> Images { get; set; } = new();
 
         public ProductStatus Status { get; set; } = ProductStatus.Unknown;

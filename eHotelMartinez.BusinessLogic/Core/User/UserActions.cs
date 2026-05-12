@@ -41,7 +41,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 .ToList();
             }
         }
-        protected UserDTO ExecuteGetUserByIdAction(int id)
+        protected UserDTO? ExecuteGetUserByIdAction(int id)
         {
             using (var db = new UserContext())
             {

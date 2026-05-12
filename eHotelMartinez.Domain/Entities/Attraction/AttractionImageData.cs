@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using eHotelMartinez.Domain.Entities.Product;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace eHotelMartinez.Domain.Entities.Attraction
@@ -11,6 +12,9 @@ namespace eHotelMartinez.Domain.Entities.Attraction
 
         [Required]
         public int AttractionId { get; set; }
+
+        [ForeignKey("AttractionId")]
+        public AttractionData Attraction { get; set; }
 
         [Required]
         public string Url { get; set; } = null!;

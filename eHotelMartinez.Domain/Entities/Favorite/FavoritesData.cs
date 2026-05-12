@@ -1,6 +1,8 @@
-﻿using eHotelMartinez.Domain.Enums;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using eHotelMartinez.Domain.Entities.Category;
+using eHotelMartinez.Domain.Entities.User;
+using eHotelMartinez.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace eHotelMartinez.Domain.Entities.Favorite
 {
@@ -12,6 +14,9 @@ namespace eHotelMartinez.Domain.Entities.Favorite
 
         [Required]
         public int UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        public UserData User { get; set; }
 
         [Required]
         public EntityType EntityType { get; set; }

@@ -1,12 +1,13 @@
 ﻿using eHotelMartinez.BusinessLogic.Interfaces;
 using eHotelMartinez.Domain.Models.Room;
-using eHotelMartinez.Api.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eHotelMartinez.Api.Controller
 {
     [Route("api/room")]
     [ApiController]
+    [Authorize]
     public class RoomController : ControllerBase
     {
         private IRoomActions _roomActions;
@@ -17,6 +18,7 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpGet("all")]
+        [AllowAnonymous]
         public IActionResult GetAllRooms()
         {
             var rooms = _roomActions.GetAllRoomsAction();
@@ -24,6 +26,7 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public IActionResult GetRooms(int id)
         {
             var room = _roomActions.GetRoomByIdAction(id);
@@ -38,8 +41,8 @@ namespace eHotelMartinez.Api.Controller
             return Ok(room);
         }
 
-        [AdminOnly]
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateRoom([FromBody] CreateRoomDTO room)
         {
             var response = _roomActions.ResponseRoomCreateAction(room);
@@ -51,8 +54,8 @@ namespace eHotelMartinez.Api.Controller
             return Ok(response);
         }
 
-        [AdminOnly]
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult UpdateRoom(int id, [FromBody] RoomDTO room)
         {
             room.Id = id;
@@ -65,8 +68,8 @@ namespace eHotelMartinez.Api.Controller
             return Ok(response);
         }
 
-        [AdminOnly]
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteRoom(int id)
         {
             var response = _roomActions.ResponseRoomDeleteAction(id);

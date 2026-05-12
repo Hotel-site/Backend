@@ -7,7 +7,7 @@ namespace eHotelMartinez.BusinessLogic.Interfaces
     public interface IUserActions
     {
         List<UserDTO> GetAllUsersAction();
-        UserDTO GetUserByIdAction(int id);
+        UserDTO? GetUserByIdAction(int id);
         ResponseAction ResponseUserCreateAction(UserRegDTO user);
         ResponseMsg ResponseUserUpdateAction(UserDTO user);
         ResponseMsg ResponseUserActivateAction(UserActivateDTO user);

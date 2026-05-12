@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using eHotelMartinez.Api.Filters;
 using eHotelMartinez.BusinessLogic.Interfaces;
 using eHotelMartinez.Domain.Models.Favorite;
-using eHotelMartinez.Api.Filters;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace eHotelMartinez.Api.Controller
 {
     [Route("api/favorite")]
     [ApiController]
+    [Authorize]
     public class FavoriteController : ControllerBase
     {
         private IFavoriteAction _favoriteActions;

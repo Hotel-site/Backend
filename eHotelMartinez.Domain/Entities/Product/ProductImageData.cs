@@ -12,6 +12,9 @@ namespace eHotelMartinez.Domain.Entities.Product
         [Required]
         public int ProductId { get; set; }
 
+        [ForeignKey("ProductId")]
+        public ProductData Product { get; set; }
+
         [Required]
         public string Url { get; set; } = null!;
 

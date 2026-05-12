@@ -18,7 +18,7 @@ namespace eHotelMartinez.BusinessLogic.Functions.Users
         {
             return ExecuteGetAllUsersAction();
         }
-        public UserDTO GetUserByIdAction(int id)
+        public UserDTO? GetUserByIdAction(int id)
         {
             return ExecuteGetUserByIdAction(id);
         }
