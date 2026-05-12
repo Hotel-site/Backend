@@ -20,10 +20,7 @@ namespace eHotelMartinez.Domain.Entities.Product
         [StringLength(250)]
         public string? Description { get; set; }
 
-        public int CategoryId { get; set; }
-
-        [ForeignKey("CategoryId")]
-        public CategoryData Category { get; set; } 
+        public int? CategoryId { get; set; }
 
         [ForeignKey("CategoryId")]
         public CategoryData Category { get; set; } 
