@@ -1,4 +1,5 @@
-﻿using eHotelMartinez.Domain.ValueObjects;
+﻿using eHotelMartinez.Domain.Entities.Category;
+using eHotelMartinez.Domain.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,8 +21,10 @@ namespace eHotelMartinez.Domain.Entities.Attraction
         [StringLength(200)]
         public string? Description { get; set; }
 
-        public int? CategoryId { get; set; }
+        public int CategoryId { get; set; }
 
+        [ForeignKey("CategoryId")]
+        public CategoryData Category { get; set; }
         public Location Location { get; set; }
 
         [Required]
@@ -34,9 +37,11 @@ namespace eHotelMartinez.Domain.Entities.Attraction
 
         public int Popularity { get; set; } = 0;
 
+        [InverseProperty("Attraction")]
         public List<AttractionImageData> Images { get; set; } = new();
 
         [Required]
+        [InverseProperty("Attraction")]
         public List<OpeningHourData> OpeningHours { get; set; }
 
         public PartnerContacts? Contacts { get; set; }
