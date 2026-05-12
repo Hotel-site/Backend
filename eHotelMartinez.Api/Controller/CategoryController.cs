@@ -1,7 +1,7 @@
-﻿using eHotelMartinez.Api.Filters;
-using eHotelMartinez.BusinessLogic.Interfaces;
+﻿using eHotelMartinez.BusinessLogic.Interfaces;
 using eHotelMartinez.Domain.Entities.Category;
 using eHotelMartinez.Domain.Models.Category;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eHotelMartinez.Api.Controller
@@ -10,6 +10,7 @@ namespace eHotelMartinez.Api.Controller
     {
         [Route("api/category")]
         [ApiController]
+        [Authorize]
         public class CategoryController : ControllerBase
         {
             private ICategoryActions _categoryActions;
@@ -21,6 +22,7 @@ namespace eHotelMartinez.Api.Controller
             }
 
             [HttpGet("all")]
+            [AllowAnonymous]
             public IActionResult GetAllCategories()
             {
                 var categories = _categoryActions.GetAllCategoriesAction();
@@ -28,6 +30,7 @@ namespace eHotelMartinez.Api.Controller
             }
 
             [HttpGet("{id}")]
+            [AllowAnonymous]
             public IActionResult GetCategoryById(int id)
             {
                 var category = _categoryActions.GetCategoryByIdAction(id);
@@ -38,8 +41,8 @@ namespace eHotelMartinez.Api.Controller
                 return Ok(category);
             }
 
-            [AdminOnly]
             [HttpPost]
+            [Authorize(Roles = "Admin")]
             public IActionResult CategoryCreate([FromBody] CreateCategoryDTO category)
             {
                 var NewCategory = _categoryActions.ResponseCategoryCreateAction(category);
@@ -50,8 +53,8 @@ namespace eHotelMartinez.Api.Controller
                 return Ok(NewCategory);
             }
 
-            [AdminOnly]
             [HttpPut("{id}")]
+            [Authorize(Roles = "Admin")]
             public IActionResult CategoryUpdate(int id, [FromBody] CategoryData category)
             {
                 category.Id = id;
@@ -63,8 +66,8 @@ namespace eHotelMartinez.Api.Controller
                 return Ok(UpdateCategory);
             }
 
-            [AdminOnly]
             [HttpDelete("{id}")]
+            [Authorize(Roles = "Admin")]
             public IActionResult CategoryDelete(int id)
             {
                 var categoryDel = _categoryActions.ResponseCategoryDeleteAction(id);
