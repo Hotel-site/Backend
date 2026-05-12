@@ -1,6 +1,5 @@
-﻿using eHotelMartinez.Domain.Enums;
-using System;
-using System.Collections.Generic;
+﻿using eHotelMartinez.Domain.Entities.User;
+using eHotelMartinez.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,6 +13,9 @@ namespace eHotelMartinez.Domain.Entities.Order
 
         [Required]
         public int UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        public UserData User { get; set; }
 
         [Required]
         public OrderStatus Status { get; set; }
