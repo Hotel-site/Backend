@@ -9,10 +9,11 @@ namespace eHotelMartinez.Api.Controller
 {
     [Route("api/auth")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthController : ControllerBase
     {
         private IUserActions _userActions;
-        private ISessionAction _sessionActions;
+        private ISessionActions _sessionActions;
 
         public AuthController()
         {

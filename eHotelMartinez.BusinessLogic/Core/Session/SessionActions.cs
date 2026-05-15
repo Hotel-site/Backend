@@ -4,7 +4,7 @@ using eHotelMartinez.Domain.Entities.Session;
 
 namespace eHotelMartinez.BusinessLogic.Core.Session
 {
-    public class SessionAction
+    public class SessionActions
     {
         protected string ExecuteCreateOrUpdateSession(int userId)
         {

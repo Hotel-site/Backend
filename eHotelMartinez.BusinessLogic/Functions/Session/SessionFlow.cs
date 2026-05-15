@@ -3,7 +3,7 @@ using eHotelMartinez.BusinessLogic.Core.Session;
 
 namespace eHotelMartinez.BusinessLogic.Functions.Session
 {
-    public class SessionFlow : SessionAction, ISessionAction
+    public class SessionFlow : SessionActions, ISessionActions
     {
         public string CreateOrUpdateSession(int userId)
         {
