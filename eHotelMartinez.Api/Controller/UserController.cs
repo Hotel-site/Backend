@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace eHotelMartinez.Api.Controller
 {
     [Route("api/user")]
+    [ApiController]
     [Authorize(Roles = "Admin")]
     public class UserController : ControllerBase
     {

@@ -10,7 +10,7 @@ namespace eHotelMartinez.Api.Controller
     [Authorize]
     public class FavoriteController : ControllerBase
     {
-        private IFavoriteAction _favoriteActions;
+        private IFavoriteActions _favoriteActions;
 
         public FavoriteController()
         {

@@ -25,6 +25,9 @@ namespace eHotelMartinez.DataAccess.Context
             modelBuilder.Entity<FavoriteData>()
                 .ToTable("Favorites");
 
+            modelBuilder.Entity<OrderData>()
+                .ToTable("Orders");
+
             modelBuilder.Entity<FavoriteData>()
                 .HasIndex(f => new { f.UserId, f.EntityType, f.EntityId })
                 .IsUnique();

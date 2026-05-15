@@ -7,6 +7,7 @@ namespace eHotelMartinez.Api.Controller
 {
     [Route("api/auth")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthController : ControllerBase
     {
         private IUserActions _userActions;

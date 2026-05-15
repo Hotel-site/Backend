@@ -5,7 +5,7 @@ using eHotelMartinez.Domain.Models.Favorite;
 
 namespace eHotelMartinez.BusinessLogic.Functions.Favorite
 {
-    public class FavoriteFlow : FavoriteActions, IFavoriteAction
+    public class FavoriteFlow : FavoriteActions, IFavoriteActions
     {
         public async Task<List<FavoriteDTO>> GetFavoritesByUserId(int userId)
         {
