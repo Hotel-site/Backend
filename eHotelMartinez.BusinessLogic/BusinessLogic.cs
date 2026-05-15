@@ -2,7 +2,6 @@
 using eHotelMartinez.BusinessLogic.Functions.Category;
 using eHotelMartinez.BusinessLogic.Functions.Favorite;
 using eHotelMartinez.BusinessLogic.Functions.Product;
-using eHotelMartinez.BusinessLogic.Functions.Session;
 using eHotelMartinez.BusinessLogic.Functions.Users;
 using eHotelMartinez.BusinessLogic.Functions.Room;
 using eHotelMartinez.BusinessLogic.Interfaces;
@@ -19,11 +18,6 @@ namespace eHotelMartinez.BusinessLogic
         public ICategoryActions GetCategoryActions()
         {
             return new CategoryFlow();
-        }
-
-        public ISessionAction GetSessionActions()
-        {
-            return new SessionFlow();
         }
 
         public IUserActions GetUserActions()

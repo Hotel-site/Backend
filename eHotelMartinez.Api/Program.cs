@@ -1,4 +1,3 @@
-using eHotelMartinez.Api.Filters;
 using eUShop.BusinessLogic.Structure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;

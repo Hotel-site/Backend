@@ -1,6 +1,5 @@
 ﻿using eHotelMartinez.Domain.Entities.Favorite;
 using eHotelMartinez.Domain.Entities.Order;
-using eHotelMartinez.Domain.Entities.Session;
 using eHotelMartinez.Domain.Entities.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +9,6 @@ namespace eHotelMartinez.DataAccess.Context
     {
         public DbSet<UserData> Users { get; set; }
         public DbSet<FavoriteData> Favorites { get; set; }
-        public DbSet<SessionData> Sessions { get; set; }
         public DbSet<OrderData> Orders { get; set; }
         public DbSet<OrderItemData> OrderItems { get; set; }
 
@@ -26,22 +24,6 @@ namespace eHotelMartinez.DataAccess.Context
 
             modelBuilder.Entity<FavoriteData>()
                 .ToTable("Favorites");
-
-            modelBuilder.Entity<SessionData>()
-                .ToTable("Sessions");
-
-            modelBuilder.Entity<OrderData>()
-                .ToTable("Orders");
-
-            modelBuilder.Entity<SessionData>()
-                .HasIndex(s => s.SessionKey)
-                .IsUnique();
-
-            modelBuilder.Entity<SessionData>()
-                .HasOne(s => s.User)
-                .WithMany()
-                .HasForeignKey(s => s.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<FavoriteData>()
                 .HasIndex(f => new { f.UserId, f.EntityType, f.EntityId })
