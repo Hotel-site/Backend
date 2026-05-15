@@ -1,5 +1,4 @@
 ﻿using eHotelMartinez.BusinessLogic.Interfaces;
-using eHotelMartinez.DataAccess.Context;
 using eHotelMartinez.Domain.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,51 +26,12 @@ namespace eHotelMartinez.Api.Controller
         {
             var AuthResult = _userActions.ResponseUserLoginAction(auth);
 
-            if (AuthResult.IsSuccess == false)
+            if(!AuthResult.IsSuccess)
             {
-                return BadRequest(AuthResult);
-            }
-            using (var db = new UserContext())
-            {
-                var email = auth.Email.ToLower();
-                var user = db.Users.FirstOrDefault(u => u.Email == email && u.IsActive);
-
-                if (user == null)
-                {
-                    return BadRequest(new { IsSuccess = false, message = "User not found!" });
-                }
-                var sessionKey = _sessionActions.CreateOrUpdateSession(user.Id);
-
-                Response.Cookies.Append("X-KEY", sessionKey, new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict,
-                    Expires = DateTimeOffset.Now.AddMinutes(60)
-                });
-            }
-            return Ok(AuthResult);
-        }
-
-        [SessionAuthFilter]
-        [HttpPost("logout")]
-        public IActionResult Logout()
-        {
-            var cookie = Request.Cookies["X-KEY"];
-
-            if (!string.IsNullOrWhiteSpace(cookie))
-            {
-                _sessionActions.DeleteSession(cookie);
+                return Unauthorized(AuthResult.Message);
             }
 
-            Response.Cookies.Append("X-KEY", "", new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = DateTimeOffset.Now.AddDays(-1)
-            });
-            return Ok(new { IsSuccess = true, message = "Logged out Successfully" });
+            return Ok(new { token = AuthResult.Message });
         }
 
         [AllowAnonymous]

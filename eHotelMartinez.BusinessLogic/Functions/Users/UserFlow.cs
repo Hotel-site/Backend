@@ -38,7 +38,7 @@ namespace eHotelMartinez.BusinessLogic.Functions.Users
         {
             return ExecuteUserDeleteAction(id);
         }
-        public ResponseMsg ResponseUserLoginAction(UserAuthDTO user)
+        public ResponseAction ResponseUserLoginAction(UserAuthDTO user)
         {
             return ExecuteUserloginAction(user);
         }

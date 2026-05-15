@@ -1,7 +1,8 @@
-﻿using eHotelMartinez.Domain.Models.User;
-using eHotelMartinez.Domain.Models.Base;
+﻿using eHotelMartinez.DataAccess.Context;
 using eHotelMartinez.Domain.Entities.User;
-using eHotelMartinez.DataAccess.Context;
+using eHotelMartinez.Domain.Models.Base;
+using eHotelMartinez.Domain.Models.User;
+using eUShop.BusinessLogic.Structure;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -223,11 +224,11 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 };
             }
         }
-        protected ResponseMsg ExecuteUserloginAction(UserAuthDTO user)
+        protected ResponseAction ExecuteUserloginAction(UserAuthDTO user)
         {
             if (string.IsNullOrWhiteSpace(user.Email) || !user.Email.Contains("@"))
             {
-                return new ResponseMsg
+                return new ResponseAction
                 {
                     IsSuccess = false,
                     Message = "Please, enter the Email"
@@ -235,7 +236,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
             }
             if (string.IsNullOrWhiteSpace(user.Password) || user.Password.Length < 8)
             {
-                return new ResponseMsg
+                return new ResponseAction
                 {
                     IsSuccess = false,
                     Message = "Please, enter the password"
@@ -247,26 +248,35 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 var existUser = db.Users.FirstOrDefault(u => u.Email.ToLower() == email);
                 if (existUser == null)
                 {
-                    return new ResponseMsg
+                    return new ResponseAction
                     {
                         IsSuccess = false,
-                        Message = "Incorrect data, try again!"
+                        Message = "Incorrect data, please try again!"
                     };
                 }
                 if (PasswordCheck(user.Password, existUser.PasswordHash) == false)
                 {
-                    return new ResponseMsg
+                    return new ResponseAction
                     {
                         IsSuccess = false,
                         Message = "Incorrect data, try again!"
                     };
                 }
-                return new ResponseMsg
+
+                var token = GenerateUserToken(existUser);
+
+                return new ResponseAction
                 {
                     IsSuccess = true,
-                    Message = "Login Successfull!"
+                    Message = token,
+                    Id = existUser.Id
                 };
             }
+        }
+        internal string GenerateUserToken(UserData user)
+        {
+            var token = new TokenService();
+            return token.GenerateToken(user.Id, user.Username, user.Role.ToString());
         }
     }
 }
