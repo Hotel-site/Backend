@@ -1,5 +1,4 @@
-﻿using eHotelMartinez.Api.Filters;
-using eHotelMartinez.BusinessLogic.Interfaces;
+﻿using eHotelMartinez.BusinessLogic.Interfaces;
 using eHotelMartinez.Domain.Models.Favorite;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

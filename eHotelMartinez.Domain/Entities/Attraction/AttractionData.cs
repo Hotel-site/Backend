@@ -21,7 +21,7 @@ namespace eHotelMartinez.Domain.Entities.Attraction
         [StringLength(200)]
         public string? Description { get; set; }
 
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
 
         [ForeignKey("CategoryId")]
         public CategoryData Category { get; set; }

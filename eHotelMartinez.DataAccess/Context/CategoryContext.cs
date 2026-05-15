@@ -19,8 +19,7 @@ namespace eHotelMartinez.DataAccess.Context
         {
             // Category configuration
             modelBuilder.Entity<CategoryData>()
-                .ToTable("Categories")
-                .HasQueryFilter(c => c.IsActive);
+                .ToTable("Categories");
 
             modelBuilder.Entity<CategoryData>()
                 .HasIndex(c => c.Name)
@@ -29,7 +28,7 @@ namespace eHotelMartinez.DataAccess.Context
             // Attraction configuration
             modelBuilder.Entity<AttractionData>()
                 .HasMany(a => a.Images)
-                .WithOne()
+                .WithOne(i => i.Attraction)
                 .HasForeignKey(i => i.AttractionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -58,12 +57,12 @@ namespace eHotelMartinez.DataAccess.Context
 
             modelBuilder.Entity<AttractionData>()
                 .HasMany(a => a.OpeningHours)
-                .WithOne()
+                .WithOne(oh => oh.Attraction)
                 .HasForeignKey(oh => oh.AttractionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<AttractionData>()
-                .HasOne<CategoryData>()
+                .HasOne(a => a.Category)
                 .WithMany()
                 .HasForeignKey(a => a.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
@@ -71,12 +70,12 @@ namespace eHotelMartinez.DataAccess.Context
             // Product configuration
             modelBuilder.Entity<ProductData>()
                 .HasMany(p => p.Images)
-                .WithOne()
+                .WithOne(i => i.Product)
                 .HasForeignKey(i => i.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ProductData>()
-                .HasOne<CategoryData>()
+                .HasOne(p => p.Category)
                 .WithMany()
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);

@@ -33,7 +33,7 @@ namespace eHotelMartinez.DataAccess.Context
                 .IsUnique();
 
             modelBuilder.Entity<FavoriteData>()
-                .HasOne<UserData>()
+                .HasOne(f => f.User)
                 .WithMany()
                 .HasForeignKey(f => f.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
