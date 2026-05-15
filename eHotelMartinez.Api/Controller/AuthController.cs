@@ -13,13 +13,11 @@ namespace eHotelMartinez.Api.Controller
     public class AuthController : ControllerBase
     {
         private IUserActions _userActions;
-        private ISessionActions _sessionActions;
 
         public AuthController()
         {
             var bl = new BusinessLogic.BusinessLogic();
             _userActions = bl.GetUserActions();
-            _sessionActions = bl.GetSessionActions();
         }
 
         [AllowAnonymous]
