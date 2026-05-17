@@ -2,7 +2,7 @@
 using eHotelMartinez.Domain.Entities.User;
 using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.Models.User;
-using eUShop.BusinessLogic.Structure;
+using eHotelMartinez.BusinessLogic.Structure;
 using System.Security.Cryptography;
 using System.Text;
 

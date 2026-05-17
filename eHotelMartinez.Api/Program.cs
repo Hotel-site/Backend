@@ -1,4 +1,4 @@
-using eUShop.BusinessLogic.Structure;
+using eHotelMartinez.BusinessLogic.Structure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;

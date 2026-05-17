@@ -1,4 +1,4 @@
-﻿namespace eUShop.BusinessLogic.Structure
+﻿namespace eHotelMartinez.BusinessLogic.Structure
 {
     public static class JwtSettings
     {

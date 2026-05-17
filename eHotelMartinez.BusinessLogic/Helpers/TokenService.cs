@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace eUShop.BusinessLogic.Structure
+namespace eHotelMartinez.BusinessLogic.Structure
 {
     public class TokenService
     {
