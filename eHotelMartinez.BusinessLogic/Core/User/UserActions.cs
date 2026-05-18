@@ -5,6 +5,7 @@ using eHotelMartinez.Domain.Models.User;
 using eHotelMartinez.BusinessLogic.Structure;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace eHotelMartinez.BusinessLogic.Core.User
 {
@@ -26,11 +27,11 @@ namespace eHotelMartinez.BusinessLogic.Core.User
             return TmpHash == hash;
         }
 
-        protected List<UserDTO> ExecuteGetAllUsersAction()
+        protected async Task<List<UserDTO>> ExecuteGetAllUsersAction()
         {
-            using (var db = new UserContext())
+            await using (var db = new UserContext())
             {
-                return db.Users
+                return await db.Users
                 .Where(u => u.IsActive)
                 .Select(u => new UserDTO
                 {
@@ -39,14 +40,14 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                     Email = u.Email,
                     IsActive = u.IsActive
                 })
-                .ToList();
+                .ToListAsync();
             }
         }
-        protected UserDTO? ExecuteGetUserByIdAction(int id)
+        protected async Task<UserDTO?> ExecuteGetUserByIdAction(int id)
         {
-            using (var db = new UserContext())
+            await using (var db = new UserContext())
             {
-                var user = db.Users.FirstOrDefault(u => u.Id == id && u.IsActive);
+                var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id && u.IsActive);
 
                 if (user == null)
                 {
@@ -61,7 +62,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 };
             }
         }
-        protected ResponseAction ExecuteUserCreateAction(UserRegDTO user)
+        protected async Task<ResponseAction> ExecuteUserCreateAction(UserRegDTO user)
         {
             if (string.IsNullOrWhiteSpace(user.Username))
             {
@@ -89,9 +90,9 @@ namespace eHotelMartinez.BusinessLogic.Core.User
             }
             var email = user.Email.ToLower();
 
-            using (var db = new UserContext())
+            await using (var db = new UserContext())
             {
-                var existUserByEmail = db.Users.FirstOrDefault(u => u.Email.ToLower() == email);
+                var existUserByEmail = await db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
 
                 if (existUserByEmail != null)
                 {
@@ -112,10 +113,10 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 RegisteredOn = DateTime.Now,
                 IsActive = true
             };
-            using (var db = new UserContext())
+            await using (var db = new UserContext())
             {
                 db.Users.Add(User);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
             return new ResponseAction
             {
@@ -124,11 +125,11 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 Id = User.Id
             };
         }
-        protected ResponseMsg ExecuteUserUpdateAction(UserDTO user)
+        protected async Task<ResponseMsg> ExecuteUserUpdateAction(UserDTO user)
         {
-            using (var db = new UserContext())
+            await using (var db = new UserContext())
             {
-                var existUser = db.Users.FirstOrDefault(u => u.Id == user.Id);
+                var existUser = await db.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
 
                 if (existUser == null)
                 {
@@ -156,7 +157,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 }
                 var email = user.Email.ToLower();
 
-                var existUserByEmail = db.Users.FirstOrDefault(u => u.Email.ToLower() == email && u.Id != user.Id);
+                var existUserByEmail = await db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email && u.Id != user.Id);
                 if (existUserByEmail != null)
                 {
                     return new ResponseMsg
@@ -169,7 +170,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 existUser.Email = user.Email;
                 existUser.IsActive = user.IsActive;
 
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return new ResponseMsg
                 {
                     IsSuccess = true,
@@ -177,11 +178,11 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 };
             }
         }
-        protected ResponseMsg ExecuteUserActivateAction(UserActivateDTO user)
+        protected async Task<ResponseMsg> ExecuteUserActivateAction(UserActivateDTO user)
         {
-            using (var db = new UserContext())
+            await using (var db = new UserContext())
             {
-                var existUser = db.Users.FirstOrDefault(u => u.Id == user.Id);
+                var existUser = await db.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
 
                 if (existUser == null)
                 {
@@ -192,7 +193,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                     };
                 }
                 existUser.IsActive = user.IsActive;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
 
                 return new ResponseMsg
                 {
@@ -201,11 +202,11 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 };
             }
         }
-        protected ResponseMsg ExecuteUserDeleteAction(int id)
+        protected async Task<ResponseMsg> ExecuteUserDeleteAction(int id)
         {
-            using (var db = new UserContext())
+            await using (var db = new UserContext())
             {
-                var existUser = db.Users.FirstOrDefault(u => u.Id == id);
+                var existUser = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
                 if (existUser == null)
                 {
                     return new ResponseMsg
@@ -215,7 +216,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                     };
                 }
                 existUser.IsActive = false;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
 
                 return new ResponseMsg
                 {
@@ -224,7 +225,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 };
             }
         }
-        protected ResponseAction ExecuteUserloginAction(UserAuthDTO user)
+        protected async Task<ResponseAction> ExecuteUserLoginAction(UserAuthDTO user)
         {
             if (string.IsNullOrWhiteSpace(user.Email) || !user.Email.Contains("@"))
             {
@@ -242,10 +243,10 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                     Message = "Please, enter the password"
                 };
             }
-            using (var db = new UserContext())
+            await using (var db = new UserContext())
             {
                 var email = user.Email.ToLower();
-                var existUser = db.Users.FirstOrDefault(u => u.Email.ToLower() == email);
+                var existUser = await db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
                 if (existUser == null)
                 {
                     return new ResponseAction

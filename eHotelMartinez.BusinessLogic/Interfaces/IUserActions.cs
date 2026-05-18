@@ -6,12 +6,12 @@ namespace eHotelMartinez.BusinessLogic.Interfaces
 {
     public interface IUserActions
     {
-        List<UserDTO> GetAllUsersAction();
-        UserDTO? GetUserByIdAction(int id);
-        ResponseAction ResponseUserCreateAction(UserRegDTO user);
-        ResponseMsg ResponseUserUpdateAction(UserDTO user);
-        ResponseMsg ResponseUserActivateAction(UserActivateDTO user);
-        ResponseMsg ResponseUserDeleteAction(int id);
-        ResponseAction ResponseUserLoginAction(UserAuthDTO userAuth);
+        Task<List<UserDTO>> GetAllUsersAction();
+        Task<UserDTO?> GetUserByIdAction(int id);
+        Task<ResponseAction> ResponseUserCreateAction(UserRegDTO user);
+        Task<ResponseMsg> ResponseUserUpdateAction(UserDTO user);
+        Task<ResponseMsg> ResponseUserActivateAction(UserActivateDTO user);
+        Task<ResponseMsg> ResponseUserDeleteAction(int id);
+        Task<ResponseAction> ResponseUserLoginAction(UserAuthDTO userAuth);
     }
 }

@@ -14,33 +14,33 @@ namespace eHotelMartinez.BusinessLogic.Functions.Users
 {
     public class UserFlow : UserActions, IUserActions
     {
-        public List<UserDTO> GetAllUsersAction()
+        public async Task<List<UserDTO>> GetAllUsersAction()
         {
-            return ExecuteGetAllUsersAction();
+            return await ExecuteGetAllUsersAction();
         }
-        public UserDTO? GetUserByIdAction(int id)
+        public async Task<UserDTO?> GetUserByIdAction(int id)
         {
-            return ExecuteGetUserByIdAction(id);
+            return await ExecuteGetUserByIdAction(id);
         }
-        public ResponseAction ResponseUserCreateAction(UserRegDTO user)
+        public async Task<ResponseAction> ResponseUserCreateAction(UserRegDTO user)
         {
-            return ExecuteUserCreateAction(user);
+            return await ExecuteUserCreateAction(user);
         }
-        public ResponseMsg ResponseUserUpdateAction(UserDTO user)
+        public async Task<ResponseMsg> ResponseUserUpdateAction(UserDTO user)
         {
-            return ExecuteUserUpdateAction(user);
+            return await ExecuteUserUpdateAction(user);
         }
-        public ResponseMsg ResponseUserActivateAction(UserActivateDTO user)
+        public async Task<ResponseMsg> ResponseUserActivateAction(UserActivateDTO user)
         {
-            return ExecuteUserActivateAction(user);
+            return await ExecuteUserActivateAction(user);
         }
-        public ResponseMsg ResponseUserDeleteAction(int id)
+        public async Task<ResponseMsg> ResponseUserDeleteAction(int id)
         {
-            return ExecuteUserDeleteAction(id);
+            return await ExecuteUserDeleteAction(id);
         }
-        public ResponseAction ResponseUserLoginAction(UserAuthDTO user)
+        public async Task<ResponseAction> ResponseUserLoginAction(UserAuthDTO user)
         {
-            return ExecuteUserloginAction(user);
+            return await ExecuteUserLoginAction(user);
         }
     }
 }

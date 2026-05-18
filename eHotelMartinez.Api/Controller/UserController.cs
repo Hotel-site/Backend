@@ -19,16 +19,16 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpGet("all")]
-        public IActionResult GetAllUsers()
+        public async Task<IActionResult> GetAllUsers()
         {
-            var users = _userActions.GetAllUsersAction();
+            var users = await _userActions.GetAllUsersAction();
             return Ok(users);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetUserById(int id)
+        public async Task<IActionResult> GetUserById(int id)
         {
-            var user = _userActions.GetUserByIdAction(id);
+            var user = await _userActions.GetUserByIdAction(id);
             if (user == null)
             {
                 return NotFound(new { Message = "User not found!" });
@@ -37,9 +37,9 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpPost]
-        public IActionResult CreateUser([FromBody] UserRegDTO user)
+        public async Task<IActionResult> CreateUser([FromBody] UserRegDTO user)
         {
-            var NewUser = _userActions.ResponseUserCreateAction(user);
+            var NewUser = await _userActions.ResponseUserCreateAction(user);
             if (NewUser.IsSuccess == false)
             {
                 return BadRequest(NewUser);
@@ -48,10 +48,10 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, [FromBody] UserDTO user)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDTO user)
         {
             user.Id = id;
-            var UpdateUser = _userActions.ResponseUserUpdateAction(user);
+            var UpdateUser = await _userActions.ResponseUserUpdateAction(user);
             if (UpdateUser.IsSuccess == false)
             {
                 return BadRequest(UpdateUser);
@@ -60,10 +60,10 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpPut("activate/{id}")]
-        public IActionResult ActivateUser(int id, [FromBody] UserActivateDTO user)
+        public async Task<IActionResult> ActivateUser(int id, [FromBody] UserActivateDTO user)
         {
             user.Id = id;
-            var UpdateUser = _userActions.ResponseUserActivateAction(user);
+            var UpdateUser = await _userActions.ResponseUserActivateAction(user);
             if (UpdateUser.IsSuccess == false)
             {
                 return BadRequest(UpdateUser);
@@ -72,9 +72,9 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
-            var user = _userActions.ResponseUserDeleteAction(id);
+            var user = await _userActions.ResponseUserDeleteAction(id);
             if (user.IsSuccess == false)
             {
                 return BadRequest(user);

@@ -20,29 +20,29 @@ namespace eHotelMartinez.Api.Controller
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public IActionResult Login([FromBody] UserAuthDTO auth)
+        public async Task<IActionResult> Login([FromBody] UserAuthDTO auth)
         {
-            var AuthResult = _userActions.ResponseUserLoginAction(auth);
+            var AuthResult = await _userActions.ResponseUserLoginAction(auth);
 
             if(!AuthResult.IsSuccess)
             {
-                return Unauthorized(AuthResult.Message);
+                return await Task.FromResult(Unauthorized(AuthResult.Message));
             }
 
-            return Ok(new { token = AuthResult.Message });
+            return await Task.FromResult(Ok(new { token = AuthResult.Message }));
         }
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public IActionResult Register([FromBody] UserRegDTO user)
+        public async Task<IActionResult> Register([FromBody] UserRegDTO user)
         {
-            var RegUser = _userActions.ResponseUserCreateAction(user);
+            var RegUser = await _userActions.ResponseUserCreateAction(user);
 
             if (RegUser.IsSuccess == false)
             {
-                return BadRequest(RegUser);
+                return await Task.FromResult(BadRequest(RegUser));
             }
-            return Ok(RegUser);
+            return await Task.FromResult(Ok(RegUser));
         }
     }
 }
