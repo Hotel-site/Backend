@@ -8,25 +8,25 @@ namespace eHotelMartinez.BusinessLogic.Core.Category
 {
     public class CategoryActions
     {
-        protected List<CategoryDTO> ExecuteGetAllCategoriesAction()
+        protected async Task<List<CategoryDTO>> ExecuteGetAllCategoriesAction()
         {
-            using (var db = new CategoryContext())
+            await using (var db = new CategoryContext())
             {
-                return db.Categories
+                return await db.Categories
                 .Where(c => c.IsActive)
                 .Select(c => new CategoryDTO
                 {
                     Id = c.Id,
                     Name = c.Name,
                 })
-                .ToList();
+                .ToListAsync();
             }
         }
-        protected CategoryDTO ExecuteGetCategoryByIdAction(int id)
+        protected async Task<CategoryDTO> ExecuteGetCategoryByIdAction(int id)
         {
-            using (var db = new CategoryContext())
+            await using (var db = new CategoryContext())
             {
-                var category = db.Categories.FirstOrDefault(c => c.Id == id);
+                var category = await db.Categories.FirstOrDefaultAsync(c => c.Id == id);
                 
                 if (category == null)
                 {
@@ -39,7 +39,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Category
                 };
             }
         }
-        protected ResponseAction ExecuteCategoryCreateAction(CreateCategoryDTO category)
+        protected async Task<ResponseAction> ExecuteCategoryCreateAction(CreateCategoryDTO category)
         {
             if (string.IsNullOrWhiteSpace(category.Name))
             {
@@ -50,9 +50,9 @@ namespace eHotelMartinez.BusinessLogic.Core.Category
                 };
             }
             var name = category.Name.ToLower();
-            using (var db = new CategoryContext())
+            await using (var db = new CategoryContext())
             {
-                var existCategory = db.Categories.FirstOrDefault(c => c.Name.ToLower() == name);
+                var existCategory = await db.Categories.FirstOrDefaultAsync(c => c.Name.ToLower() == name);
                 
                 if (existCategory != null)
                 {
@@ -82,11 +82,11 @@ namespace eHotelMartinez.BusinessLogic.Core.Category
                 Id = Category.Id
             };
         }
-        protected ResponseMsg ExecuteCategoryUpdateAction(CategoryData category)
+        protected async Task<ResponseMsg> ExecuteCategoryUpdateAction(CategoryData category)
         {
-            using (var db = new CategoryContext())
+            await using (var db = new CategoryContext())
             {
-                var existCategory = db.Categories.IgnoreQueryFilters().FirstOrDefault(c => c.Id == category.Id);
+                var existCategory = await db.Categories.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.Id == category.Id);
                 if (existCategory == null)
                 {
                     return new ResponseMsg
@@ -105,7 +105,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Category
                 }
                 existCategory.Name = category.Name;
                 existCategory.IsActive = category.IsActive;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return new ResponseMsg
                 {
                     IsSuccess = true,
@@ -113,11 +113,11 @@ namespace eHotelMartinez.BusinessLogic.Core.Category
                 };
             }
         }
-        protected ResponseMsg ExecuteCategoryDeleteAction(int id)
+        protected async Task<ResponseMsg> ExecuteCategoryDeleteAction(int id)
         {
-            using (var db = new CategoryContext())
+            await using (var db = new CategoryContext())
             {
-                var existCategory = db.Categories.FirstOrDefault(u => u.Id == id);
+                var existCategory = await db.Categories.FirstOrDefaultAsync(u => u.Id == id);
                 
                 if (existCategory == null)
                 {
@@ -149,7 +149,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Category
                 }
 
                 existCategory.IsActive = false;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
 
                 return new ResponseMsg
                 {

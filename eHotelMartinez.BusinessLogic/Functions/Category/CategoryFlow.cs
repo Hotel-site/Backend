@@ -8,25 +8,25 @@ namespace eHotelMartinez.BusinessLogic.Functions.Category
 {
     public class CategoryFlow : CategoryActions, ICategoryActions
     {
-        public List<CategoryDTO> GetAllCategoriesAction()
+        public async Task<List<CategoryDTO>> GetAllCategoriesAction()
         {
-            return ExecuteGetAllCategoriesAction();
+            return await ExecuteGetAllCategoriesAction();
         }
-        public CategoryDTO GetCategoryByIdAction(int id)
+        public async Task<CategoryDTO> GetCategoryByIdAction(int id)
         {
-            return ExecuteGetCategoryByIdAction(id);
+            return await ExecuteGetCategoryByIdAction(id);
         }
-        public ResponseAction ResponseCategoryCreateAction(CreateCategoryDTO category)
+        public async Task<ResponseAction> ResponseCategoryCreateAction(CreateCategoryDTO category)
         {
-            return ExecuteCategoryCreateAction(category);
+            return await ExecuteCategoryCreateAction(category);
         }
-        public ResponseMsg ResponseCategoryUpdateAction(CategoryData category)
+        public async Task<ResponseMsg> ResponseCategoryUpdateAction(CategoryData category)
         {
-            return ExecuteCategoryUpdateAction(category);
+            return await ExecuteCategoryUpdateAction(category);
         }
-        public ResponseMsg ResponseCategoryDeleteAction(int id)
+        public async Task<ResponseMsg> ResponseCategoryDeleteAction(int id)
         {
-            return ExecuteCategoryDeleteAction(id);
+            return await ExecuteCategoryDeleteAction(id);
         }
     }
 }

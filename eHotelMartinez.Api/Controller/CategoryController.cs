@@ -23,17 +23,17 @@ namespace eHotelMartinez.Api.Controller
 
             [HttpGet("all")]
             [AllowAnonymous]
-            public IActionResult GetAllCategories()
+            public async Task<IActionResult> GetAllCategories()
             {
-                var categories = _categoryActions.GetAllCategoriesAction();
+                var categories = await _categoryActions.GetAllCategoriesAction();
                 return Ok(categories);
             }
 
             [HttpGet("{id}")]
             [AllowAnonymous]
-            public IActionResult GetCategoryById(int id)
+            public async Task<IActionResult> GetCategoryById(int id)
             {
-                var category = _categoryActions.GetCategoryByIdAction(id);
+                var category = await _categoryActions.GetCategoryByIdAction(id);
                 if (category == null)
                 {
                     return NotFound(new { Message = "Category not found!" });
@@ -43,9 +43,9 @@ namespace eHotelMartinez.Api.Controller
 
             [HttpPost]
             [Authorize(Roles = "Admin")]
-            public IActionResult CategoryCreate([FromBody] CreateCategoryDTO category)
+            public async Task<IActionResult> CategoryCreate([FromBody] CreateCategoryDTO category)
             {
-                var NewCategory = _categoryActions.ResponseCategoryCreateAction(category);
+                var NewCategory = await _categoryActions.ResponseCategoryCreateAction(category);
                 if (NewCategory.IsSuccess == false)
                 {
                     return BadRequest(NewCategory);
@@ -55,10 +55,10 @@ namespace eHotelMartinez.Api.Controller
 
             [HttpPut("{id}")]
             [Authorize(Roles = "Admin")]
-            public IActionResult CategoryUpdate(int id, [FromBody] CategoryData category)
+            public async Task<IActionResult> CategoryUpdate(int id, [FromBody] CategoryData category)
             {
                 category.Id = id;
-                var UpdateCategory = _categoryActions.ResponseCategoryUpdateAction(category);
+                var UpdateCategory = await _categoryActions.ResponseCategoryUpdateAction(category);
                 if (UpdateCategory.IsSuccess == false)
                 {
                     return BadRequest(UpdateCategory);
@@ -68,9 +68,9 @@ namespace eHotelMartinez.Api.Controller
 
             [HttpDelete("{id}")]
             [Authorize(Roles = "Admin")]
-            public IActionResult CategoryDelete(int id)
+            public async Task<IActionResult> CategoryDelete(int id)
             {
-                var categoryDel = _categoryActions.ResponseCategoryDeleteAction(id);
+                var categoryDel = await _categoryActions.ResponseCategoryDeleteAction(id);
                 if (categoryDel.IsSuccess == false)
                 {
                     return BadRequest(categoryDel);

@@ -6,10 +6,10 @@ namespace eHotelMartinez.BusinessLogic.Interfaces
 {
     public interface ICategoryActions
     {
-        List<CategoryDTO> GetAllCategoriesAction();
-        CategoryDTO GetCategoryByIdAction(int id);
-        ResponseAction ResponseCategoryCreateAction(CreateCategoryDTO category);
-        ResponseMsg ResponseCategoryUpdateAction(CategoryData category);
-        ResponseMsg ResponseCategoryDeleteAction(int id);
+        Task<List<CategoryDTO>> GetAllCategoriesAction();
+        Task<CategoryDTO> GetCategoryByIdAction(int id);
+        Task<ResponseAction> ResponseCategoryCreateAction(CreateCategoryDTO category);
+        Task<ResponseMsg> ResponseCategoryUpdateAction(CategoryData category);
+        Task<ResponseMsg> ResponseCategoryDeleteAction(int id);
     }
 }
