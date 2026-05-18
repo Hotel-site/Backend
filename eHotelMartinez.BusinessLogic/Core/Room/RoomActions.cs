@@ -10,16 +10,15 @@ namespace eHotelMartinez.BusinessLogic.Core.Room
 {
     public class RoomActions
     {
-        protected List<RoomDTO> ExecuteGetAllRooms()
+        protected async Task<List<RoomDTO>> ExecuteGetAllRooms()
         {
-            using var db = new RoomContext();
+            await using var db = new RoomContext();
 
-            var rooms = db.Rooms
+            var rooms = await db.Rooms
                 .AsNoTracking()
                 .Include(r => r.Images)
                 .Where(r => r.Status != RoomStatus.Inactive)
-                .ToList();
-
+                .ToListAsync();
             return rooms.Select(r => new RoomDTO
             {
                 Id = r.Id,
@@ -35,13 +34,13 @@ namespace eHotelMartinez.BusinessLogic.Core.Room
             }).ToList();
         }
 
-        protected RoomDTO ExecuteGetRoomById(int id)
+        protected async Task<RoomDTO> ExecuteGetRoomById(int id)
         {
-            using var db = new RoomContext();
-            var r = db.Rooms
+            await using var db = new RoomContext();
+            var r = await db.Rooms
                 .AsNoTracking()
                 .Include(r => r.Images)
-                .FirstOrDefault(r => r.Id == id && r.Status != RoomStatus.Inactive);
+                .FirstOrDefaultAsync(r => r.Id == id && r.Status != RoomStatus.Inactive);
 
             if (r == null)
                 return null;
@@ -61,7 +60,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Room
             };
         }
 
-        protected ResponseAction ExecuteCreateRoom(CreateRoomDTO newRoom)
+        protected async Task<ResponseAction> ExecuteCreateRoom(CreateRoomDTO newRoom)
         {
             if (string.IsNullOrWhiteSpace(newRoom.Name))
                 return new ResponseAction { IsSuccess = false, Message = "Room name is required." };
@@ -89,9 +88,9 @@ namespace eHotelMartinez.BusinessLogic.Core.Room
                 Status = RoomStatus.Available
             };
 
-            using var db = new RoomContext();
-                db.Rooms.Add(roomData);
-                db.SaveChanges();
+            await using var db = new RoomContext();
+            db.Rooms.Add(roomData);
+            await db.SaveChangesAsync();
 
             return new ResponseAction
             {
@@ -101,12 +100,12 @@ namespace eHotelMartinez.BusinessLogic.Core.Room
             };
         }
 
-        protected ResponseMsg ExecuteUpdateRoom(RoomDTO updatedRoom)
+        protected async Task<ResponseMsg> ExecuteUpdateRoom(RoomDTO updatedRoom)
         {
-            using var db = new RoomContext();
-            var room = db.Rooms
+            await using var db = new RoomContext();
+            var room = await db.Rooms
                 .Include(r => r.Images)
-                .FirstOrDefault(r => r.Id == updatedRoom.Id);
+                .FirstOrDefaultAsync(r => r.Id == updatedRoom.Id);
 
             if (room == null)
                 return new ResponseMsg
@@ -157,7 +156,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Room
             if (updatedRoom.Status != null)
                 room.Status = updatedRoom.Status;
 
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             return new ResponseMsg
             {
                 IsSuccess = true,
@@ -165,30 +164,28 @@ namespace eHotelMartinez.BusinessLogic.Core.Room
             };
         }
 
-        protected ResponseMsg ExecuteDeleteRoom(int id)
+        protected async Task<ResponseMsg> ExecuteDeleteRoom(int id)
         {
-            using (var db = new RoomContext())
-            {
-                var room = db.Rooms
-                    .Include(r => r.Images)
-                    .FirstOrDefault(r => r.Id == id);
+            await using var db = new RoomContext();
+            var room = await db.Rooms
+                .Include(r => r.Images)
+                .FirstOrDefaultAsync(r => r.Id == id);
 
-                if (room == null)
-                    return new ResponseMsg
-                    {
-                        IsSuccess = false,
-                        Message = "Room not found."
-                    };
-
-                room.Status = RoomStatus.Inactive;
-
-                foreach (var image in room.Images)
+            if (room == null)
+                return new ResponseMsg
                 {
-                    image.IsActive = false;
-                }
+                    IsSuccess = false,
+                    Message = "Room not found."
+                };
 
-                db.SaveChanges();
+            room.Status = RoomStatus.Inactive;
+
+            foreach (var image in room.Images)
+            {
+                image.IsActive = false;
             }
+
+            await db.SaveChangesAsync();
 
             return new ResponseMsg
             {

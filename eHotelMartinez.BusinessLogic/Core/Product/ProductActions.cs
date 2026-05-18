@@ -13,7 +13,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
     {
         protected async Task<List<ProductDTO>> ExecuteGetAllProducts()
         {
-            using var db = new CategoryContext();
+            await using var db = new CategoryContext();
 
             var categories = await db.Categories
                 .AsNoTracking()
@@ -45,7 +45,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
 
         protected async Task<ProductDTO> ExecuteGetProductById(int id)
         {
-            using var db = new CategoryContext();
+            await using var db = new CategoryContext();
 
             var categories = await db.Categories
                 .AsNoTracking()

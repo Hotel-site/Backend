@@ -5,11 +5,10 @@ namespace eHotelMartinez.BusinessLogic.Interfaces
 {
     public interface IRoomActions
     {
-        List<RoomDTO> GetAllRoomsAction();
-        RoomDTO GetRoomByIdAction(int id);
-        ResponseAction ResponseRoomCreateAction(CreateRoomDTO room);
-        ResponseMsg ResponseRoomUpdateAction(RoomDTO room);
-        ResponseMsg ResponseRoomDeleteAction(int id);
-
+        Task<List<RoomDTO>> GetAllRoomsAction();
+        Task<RoomDTO> GetRoomByIdAction(int id);
+        Task<ResponseAction> ResponseRoomCreateAction(CreateRoomDTO room);
+        Task<ResponseMsg> ResponseRoomUpdateAction(RoomDTO room);
+        Task<ResponseMsg> ResponseRoomDeleteAction(int id);
     }
 }

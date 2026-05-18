@@ -7,29 +7,29 @@ namespace eHotelMartinez.BusinessLogic.Functions.Room
 {
     public class RoomFlow : RoomActions, IRoomActions
     {
-        public List<RoomDTO> GetAllRoomsAction()
+        public async Task<List<RoomDTO>> GetAllRoomsAction()
         {
-            return ExecuteGetAllRooms();
+            return await ExecuteGetAllRooms();
         }
 
-        public RoomDTO GetRoomByIdAction(int id)
+        public async Task<RoomDTO> GetRoomByIdAction(int id)
         {
-            return ExecuteGetRoomById(id);
+            return await ExecuteGetRoomById(id);
         }
 
-        public ResponseAction ResponseRoomCreateAction(CreateRoomDTO room)
+        public async Task<ResponseAction> ResponseRoomCreateAction(CreateRoomDTO room)
         {
-            return ExecuteCreateRoom(room);
+            return await ExecuteCreateRoom(room);
         }
 
-        public ResponseMsg ResponseRoomUpdateAction(RoomDTO room)
+        public async Task<ResponseMsg> ResponseRoomUpdateAction(RoomDTO room)
         {
-            return ExecuteUpdateRoom(room);
+            return await ExecuteUpdateRoom(room);
         }
 
-        public ResponseMsg ResponseRoomDeleteAction(int id)
+        public async Task<ResponseMsg> ResponseRoomDeleteAction(int id)
         {
-            return ExecuteDeleteRoom(id);
+            return await ExecuteDeleteRoom(id);
         }
     }
 }

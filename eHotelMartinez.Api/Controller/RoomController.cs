@@ -19,17 +19,17 @@ namespace eHotelMartinez.Api.Controller
 
         [HttpGet("all")]
         [AllowAnonymous]
-        public IActionResult GetAllRooms()
+        public async Task<IActionResult> GetAllRooms()
         {
-            var rooms = _roomActions.GetAllRoomsAction();
+            var rooms = await _roomActions.GetAllRoomsAction();
             return Ok(rooms);
         }
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public IActionResult GetRooms(int id)
+        public async Task<IActionResult> GetRooms(int id)
         {
-            var room = _roomActions.GetRoomByIdAction(id);
+            var room = await _roomActions.GetRoomByIdAction(id);
 
             if (room == null)
             {
@@ -43,9 +43,9 @@ namespace eHotelMartinez.Api.Controller
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult CreateRoom([FromBody] CreateRoomDTO room)
+        public async Task<IActionResult> CreateRoom([FromBody] CreateRoomDTO room)
         {
-            var response = _roomActions.ResponseRoomCreateAction(room);
+            var response = await _roomActions.ResponseRoomCreateAction(room);
 
             if (!response.IsSuccess)
             {
@@ -56,10 +56,10 @@ namespace eHotelMartinez.Api.Controller
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public IActionResult UpdateRoom(int id, [FromBody] RoomDTO room)
+        public async Task<IActionResult> UpdateRoom(int id, [FromBody] RoomDTO room)
         {
             room.Id = id;
-            var response = _roomActions.ResponseRoomUpdateAction(room);
+            var response = await _roomActions.ResponseRoomUpdateAction(room);
 
             if (!response.IsSuccess)
             {
@@ -70,9 +70,9 @@ namespace eHotelMartinez.Api.Controller
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public IActionResult DeleteRoom(int id)
+        public async Task<IActionResult> DeleteRoom(int id)
         {
-            var response = _roomActions.ResponseRoomDeleteAction(id);
+            var response = await _roomActions.ResponseRoomDeleteAction(id);
 
             if (!response.IsSuccess)
             {
