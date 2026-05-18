@@ -13,7 +13,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Favorite
     {
             protected async Task<List<FavoriteDTO>> ExecuteGetFavoritesByUserId(int userId)
             {
-                using var userDb = new UserContext();
+                await using var userDb = new UserContext();
 
             var favorites = await userDb.Favorites
                 .Where(f => f.UserId == userId && f.IsActive)
@@ -37,8 +37,8 @@ namespace eHotelMartinez.BusinessLogic.Core.Favorite
 
         protected async Task<ResponseAction> ExecuteAddFavorite(CreateFavoriteDTO favorite)
         {
-            using var userDb = new UserContext();
-            using var categoryDb = new CategoryContext();
+            await using var userDb = new UserContext();
+            await using var categoryDb = new CategoryContext();
 
             if (!await userDb.Users.AnyAsync(u => u.Id == favorite.UserId))
             {
@@ -118,7 +118,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Favorite
 
         protected async Task<ResponseMsg> ExecuteRemoveFavorite(int favoriteId)
         {
-            using var userDb = new UserContext();
+            await using var userDb = new UserContext();
 
             var favorite = await userDb.Favorites.FindAsync(favoriteId);
 

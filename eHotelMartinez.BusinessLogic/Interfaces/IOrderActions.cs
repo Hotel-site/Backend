@@ -5,11 +5,11 @@ namespace eHotelMartinez.BusinessLogic.Interfaces
 {
     public interface IOrderActions
     {
-        ResponseMsg ResponseAddToCartAction(int userId, OrderItemDTO item, decimal price);
-        OrderDTO GetCartAction(int userId);
-        List<OrderDTO> GetOrderHistoryAction (int userId);
-        ResponseMsg ResponseCheckoutAction(int userId);
-        ResponseMsg ResponseRemoveFromCartAction(int orderItemId);
-        ResponseMsg ResponseUpdateCartItemQuantityAction(int orderItemId, int quantity);
+        Task<ResponseMsg> ResponseAddToCartAction(int userId, OrderItemDTO item, decimal price);
+        Task<OrderDTO> GetCartAction(int userId);
+        Task<List<OrderDTO>> GetOrderHistoryAction (int userId);
+        Task<ResponseMsg> ResponseCheckoutAction(int userId);
+        Task<ResponseMsg> ResponseRemoveFromCartAction(int orderItemId);
+        Task<ResponseMsg> ResponseUpdateCartItemQuantityAction(int orderItemId, int quantity);
     }
 }

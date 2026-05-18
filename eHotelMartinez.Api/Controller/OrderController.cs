@@ -19,9 +19,9 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpGet("{userId}")]
-        public IActionResult GetCart(int userId)
+        public async Task<IActionResult> GetCart(int userId)
         {
-            var cart = _orderActions.GetCartAction(userId);
+            var cart = await _orderActions.GetCartAction(userId);
             if (cart == null)
             {
                 return NotFound(new {Message = "Cart is empty!"});
@@ -30,9 +30,9 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpGet("history/{userId}")]
-        public IActionResult GetOrderHistory(int userId)
+        public async Task<IActionResult> GetOrderHistory(int userId)
         {
-            var history = _orderActions.GetOrderHistoryAction(userId);
+            var history = await _orderActions.GetOrderHistoryAction(userId);
             if (history == null)
             {
                 return NotFound(new { Message = "History of Orders is empty"});
@@ -41,9 +41,9 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpPost("cart/add")]
-        public IActionResult AddToCart([FromBody] CartItemReq request)
+        public async Task<IActionResult> AddToCart([FromBody] CartItemReq request)
         {
-            var result = _orderActions.ResponseAddToCartAction(request.UserId, request.Item, request.Price);
+            var result = await _orderActions.ResponseAddToCartAction(request.UserId, request.Item, request.Price);
             if (result.IsSuccess == false)
             {
                 return BadRequest(result);
@@ -52,9 +52,9 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpPost("checkout/{userId}")]
-        public IActionResult Checkout(int userId)
+        public async Task<IActionResult> Checkout(int userId)
         {
-            var result = _orderActions.ResponseCheckoutAction(userId);
+            var result = await _orderActions.ResponseCheckoutAction(userId);
             if (result.IsSuccess == false)
             {
                 return BadRequest(result);
@@ -63,9 +63,9 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpPut("cart/item/{itemId}/quantity")]
-        public IActionResult UpdateCartItemQuantity(int itemId, [FromBody] QuantityReq request)
+        public async Task<IActionResult> UpdateCartItemQuantity(int itemId, [FromBody] QuantityReq request)
         {
-            var result = _orderActions.ResponseUpdateCartItemQuantityAction(itemId, request.Quantity);
+            var result = await _orderActions.ResponseUpdateCartItemQuantityAction(itemId, request.Quantity);
             if (result.IsSuccess == false)
             {
                 return BadRequest(result);
@@ -74,9 +74,9 @@ namespace eHotelMartinez.Api.Controller
         }
 
         [HttpDelete("cart/item/{itemId}")]
-        public IActionResult RemoveFromCart(int itemId)
+        public async Task<IActionResult> RemoveFromCart(int itemId)
         {
-            var result = _orderActions.ResponseRemoveFromCartAction(itemId);
+            var result = await _orderActions.ResponseRemoveFromCartAction(itemId);
             if (result.IsSuccess == false)
             {
                 return BadRequest(result);

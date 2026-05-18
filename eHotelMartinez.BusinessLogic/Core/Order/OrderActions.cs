@@ -9,7 +9,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Order
 {
     public class OrderActions
     {
-        protected ResponseMsg ExecuteAddToCartAction(int userId, OrderItemDTO item, decimal price)
+        protected async Task<ResponseMsg> ExecuteAddToCartAction(int userId, OrderItemDTO item, decimal price)
         {
             if (userId <= 0)
             {
@@ -36,9 +36,9 @@ namespace eHotelMartinez.BusinessLogic.Core.Order
                 };
             }
 
-            using (var db = new UserContext())
+            await using (var db = new UserContext())
             {
-                var cart = db.Orders.FirstOrDefault(o => o.UserId == userId && o.Status == OrderStatus.Pending);
+                var cart = await db.Orders.FirstOrDefaultAsync(o => o.UserId == userId && o.Status == OrderStatus.Pending);
                 
                 if (cart == null)
                 {
@@ -50,7 +50,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Order
                         CreatedAt = DateTime.Now,
                     };
                     db.Orders.Add(cart);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
 
                 var cartItem = new OrderItemData
@@ -63,7 +63,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Order
                     CreatedAt = DateTime.Now
                 };
                 db.OrderItems.Add(cartItem);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
 
                 return new ResponseMsg
                 {
@@ -72,37 +72,37 @@ namespace eHotelMartinez.BusinessLogic.Core.Order
                 };
             }
         }
-        protected OrderDTO ExecuteGetCartAction (int userId)
+        protected async Task<OrderDTO> ExecuteGetCartAction (int userId)
         {
             if (userId <= 0) return null;
             
-            using (var db = new UserContext())
+            await using (var db = new UserContext())
             {
-                var order = db.Orders
+                var order = await db.Orders
                     .Include(o => o.OrderItems)
                     .Where(o => o.UserId == userId && o.Status == OrderStatus.Pending)
-                    .FirstOrDefault();
+                    .FirstOrDefaultAsync();
 
                 if (order == null) return null;
 
                 return MapOrderToDTO(order);
             }
         }
-        protected List<OrderDTO> ExecuteGetOrderHistoryAction(int userId)
+        protected async Task<List<OrderDTO>> ExecuteGetOrderHistoryAction(int userId)
         {
             if (userId <= 0) return null;
 
-            using (var db = new UserContext())
+            await using (var db = new UserContext())
             {
-                var history = db.Orders
+                var history = await db.Orders
                     .Include(o => o.OrderItems)
                     .Where(o => o.UserId == userId && o.Status == OrderStatus.Completed)
-                    .ToList();
+                    .ToListAsync();
 
                 return history.Select(o => MapOrderToDTO(o)).ToList();
             }
         }
-        protected ResponseMsg ExecuteCheckoutAction(int userId)
+        protected async Task<ResponseMsg> ExecuteCheckoutAction(int userId)
         {
             if (userId <= 0)
             {
@@ -112,12 +112,12 @@ namespace eHotelMartinez.BusinessLogic.Core.Order
                     Message = "User ID is invalid"
                 };
             }
-            using (var db = new UserContext())
+            await using (var db = new UserContext())
             {
-                var cart = db.Orders
+                var cart = await db.Orders
                     .Include(o => o.OrderItems)
                     .Where(o => o.UserId == userId && o.Status == OrderStatus.Pending)
-                    .FirstOrDefault();
+                    .FirstOrDefaultAsync();
 
                 if (cart == null)
                 {
@@ -138,7 +138,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Order
 
                 cart.TotalSum = cart.OrderItems.Sum(i => i.PriceAtPurchase * i.Quantity);
                 cart.Status = OrderStatus.Completed;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
 
                 return new ResponseMsg
                 {
@@ -148,7 +148,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Order
                 
             }
         }
-        protected ResponseMsg ExecuteRemoveFromCartAction(int orderItemId)
+        protected async Task<ResponseMsg> ExecuteRemoveFromCartAction(int orderItemId)
         {
             if (orderItemId <= 0)
             {
@@ -158,9 +158,9 @@ namespace eHotelMartinez.BusinessLogic.Core.Order
                     Message = "Item Id is invalid"
                 };
             }
-            using (var db = new UserContext())
+            await using (var db = new UserContext())
             {
-                var item = db.OrderItems.FirstOrDefault(i => i.Id == orderItemId);
+                var item = await db.OrderItems.FirstOrDefaultAsync(i => i.Id == orderItemId);
                 if (item == null)
                 {
                     return new ResponseMsg
@@ -170,7 +170,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Order
                     };
                 }
                 db.OrderItems.Remove(item);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
 
                 return new ResponseMsg
                 {
@@ -179,7 +179,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Order
                 };
             }
         }
-        protected ResponseMsg ExecuteUpdateCartItemQuantityAction(int orderItemId, int quantity)
+        protected async Task<ResponseMsg> ExecuteUpdateCartItemQuantityAction(int orderItemId, int quantity)
         {
             if (orderItemId <= 0)
             {
@@ -198,9 +198,9 @@ namespace eHotelMartinez.BusinessLogic.Core.Order
                 };
             }
 
-            using (var db = new UserContext())
+            await using (var db = new UserContext())
             {
-                var item = db.OrderItems.FirstOrDefault(i => i.Id == orderItemId);
+                var item = await db.OrderItems.FirstOrDefaultAsync(i => i.Id == orderItemId);
                 if (item == null)
                 {
                     return new ResponseMsg
@@ -210,7 +210,7 @@ namespace eHotelMartinez.BusinessLogic.Core.Order
                     };
                 }
                 item.Quantity = quantity;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return new ResponseMsg
                 {
                     IsSuccess = true,

@@ -7,29 +7,29 @@ namespace eHotelMartinez.BusinessLogic.Functions.Order
 {
     public class OrderFlow : OrderActions, IOrderActions
     {
-        public ResponseMsg ResponseAddToCartAction(int userId, OrderItemDTO item, decimal price)
+        public async Task<ResponseMsg> ResponseAddToCartAction(int userId, OrderItemDTO item, decimal price)
         {
-            return ExecuteAddToCartAction(userId, item, price);
+            return await ExecuteAddToCartAction(userId, item, price);
         }
-        public OrderDTO GetCartAction(int userId)
+        public async Task<OrderDTO> GetCartAction(int userId)
         {
-            return ExecuteGetCartAction(userId);
+            return await ExecuteGetCartAction(userId);
         }
-        public List<OrderDTO> GetOrderHistoryAction(int userId)
+        public async Task<List<OrderDTO>> GetOrderHistoryAction(int userId)
         {
-            return ExecuteGetOrderHistoryAction(userId);
+            return await ExecuteGetOrderHistoryAction(userId);
         }
-        public ResponseMsg ResponseCheckoutAction(int userId)
+        public async Task<ResponseMsg> ResponseCheckoutAction(int userId)
         {
-            return ExecuteCheckoutAction(userId);
+            return await ExecuteCheckoutAction(userId);
         }
-        public ResponseMsg ResponseRemoveFromCartAction(int orderItemId)
+        public async Task<ResponseMsg> ResponseRemoveFromCartAction(int orderItemId)
         {
-            return ExecuteRemoveFromCartAction(orderItemId);
+            return await ExecuteRemoveFromCartAction(orderItemId);
         }
-        public ResponseMsg ResponseUpdateCartItemQuantityAction(int orderItemId, int quantity)
+        public async Task<ResponseMsg> ResponseUpdateCartItemQuantityAction(int orderItemId, int quantity)
         {
-            return ExecuteUpdateCartItemQuantityAction(orderItemId, quantity);
+            return await ExecuteUpdateCartItemQuantityAction(orderItemId, quantity);
         }
     }
 }
