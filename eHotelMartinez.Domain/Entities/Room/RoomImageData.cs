@@ -1,5 +1,4 @@
-﻿using eHotelMartinez.Domain.Entities.Product;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace eHotelMartinez.Domain.Entities.Room
@@ -14,7 +13,7 @@ namespace eHotelMartinez.Domain.Entities.Room
         public int RoomId { get; set; }
 
         [ForeignKey("RoomId")]
-        public ProductData Room { get; set; }
+        public RoomData Room { get; set; }
 
         [Required]
         public string Url { get; set; }
