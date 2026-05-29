@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eHotelMartinez.DataAccess.Context;
 
@@ -10,9 +11,11 @@ using eHotelMartinez.DataAccess.Context;
 namespace eHotelMartinez.DataAccess.Migrations.Room
 {
     [DbContext(typeof(RoomContext))]
-    partial class RoomContextModelSnapshot : ModelSnapshot
+    [Migration("20260529131313_FixRoomRelation")]
+    partial class FixRoomRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
