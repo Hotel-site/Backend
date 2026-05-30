@@ -5,6 +5,7 @@ using eHotelMartinez.BusinessLogic.Functions.Order;
 using eHotelMartinez.BusinessLogic.Functions.Product;
 using eHotelMartinez.BusinessLogic.Functions.Room;
 using eHotelMartinez.BusinessLogic.Functions.Users;
+using eHotelMartinez.BusinessLogic.Functions.Restaurant;
 using eHotelMartinez.BusinessLogic.Interfaces;
 
 namespace eHotelMartinez.BusinessLogic
@@ -43,6 +44,11 @@ namespace eHotelMartinez.BusinessLogic
         public IFavoriteActions GetFavoriteActions()
         {
             return new FavoriteFlow();
+        }
+
+        public IDishActions GetDishActions()
+        {
+            return new DishFlow();
         }
     }
 }
