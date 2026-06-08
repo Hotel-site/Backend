@@ -26,10 +26,12 @@ namespace eHotelMartinez.BusinessLogic.Core.Room
                 Description = r.Description,
                 Amenities = r.Amenities?.ToList() ?? new List<string>(),
                 Status = r.Status,
-                Images = r.Images.Select(i => new RoomImageDTO
-                {
-                    Url = i.Url
-                }).ToList(),
+                Images = r.Images
+                    .Where(i => i.IsActive)
+                    .Select(i => new RoomImageDTO 
+                    { 
+                        Url = i.Url 
+                    }).ToList(),
                 Price = r.Price
             }).ToList();
         }
@@ -52,10 +54,12 @@ namespace eHotelMartinez.BusinessLogic.Core.Room
                 Description = r.Description,
                 Amenities = r.Amenities?.ToList() ?? new List<string>(),
                 Status = r.Status,
-                Images = r.Images.Select(i => new RoomImageDTO
-                {
-                    Url = i.Url
-                }).ToList(),
+                Images = r.Images
+                    .Where(i => i.IsActive)
+                    .Select(i => new RoomImageDTO 
+                    {
+                        Url = i.Url 
+                    }).ToList(),
                 Price = r.Price
             };
         }
@@ -140,14 +144,32 @@ namespace eHotelMartinez.BusinessLogic.Core.Room
                 .Select(i => i.Url)
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-            foreach (var dtoImage in updatedRoom.Images ?? new())
+            foreach (var image in room.Images.Where(i => i.IsActive))
             {
-                var url = dtoImage.Url?.Trim();
+                image.IsActive = false;
+            }
+
+            foreach (var img in updatedRoom.Images)
+            {
+                var url = img.Url?.Trim();
                 if (string.IsNullOrWhiteSpace(url))
                     continue;
 
-                if (existingUrls.Add(url))
-                    room.Images.Add(new RoomImageData { Url = url, IsActive = true });
+                var existingImage = room.Images.FirstOrDefault(i => 
+                i.Url.Equals(url, StringComparison.OrdinalIgnoreCase));
+
+               if (existingImage != null)
+                {
+                    existingImage.IsActive = true;
+                }
+                else
+                {
+                    room.Images.Add(new RoomImageData
+                    {
+                        Url = url,
+                        IsActive = true
+                    });
+                }
             }
 
             if (updatedRoom.Price > 0)

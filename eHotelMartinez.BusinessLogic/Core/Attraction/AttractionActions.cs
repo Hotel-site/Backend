@@ -1,6 +1,7 @@
 ﻿using eHotelMartinez.BusinessLogic.Helpers;
 using eHotelMartinez.DataAccess.Context;
 using eHotelMartinez.Domain.Entities.Attraction;
+using eHotelMartinez.Domain.Entities.Room;
 using eHotelMartinez.Domain.Models.Attraction;
 using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.ValueObjects;
@@ -39,7 +40,9 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                     Price = a.Price,
                     Rating = a.Rating,
                     Popularity = a.Popularity,
-                    Images = a.Images.Select(i => new AttractionImageDTO
+                    Images = a.Images
+                    .Where(i => i.IsActive)
+                    .Select(i => new AttractionImageDTO
                     {
                         Url = i.Url
                     }).ToList(),
@@ -88,7 +91,9 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 Price = a.Price,
                 Rating = a.Rating,
                 Popularity = a.Popularity,
-                Images = a.Images.Select(i => new AttractionImageDTO
+                Images = a.Images
+                .Where(i => i.IsActive)
+                .Select(i => new AttractionImageDTO
                 {
                     Url = i.Url
                 }).ToList(),
@@ -255,14 +260,32 @@ namespace eHotelMartinez.BusinessLogic.Core.Attraction
                 .Select(i => i.Url)
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-                foreach (var dtoImage in attraction.Images ?? new())
+                foreach (var image in existingAttraction.Images.Where(i => i.IsActive))
                 {
-                    var url = dtoImage.Url?.Trim();
+                    image.IsActive = false;
+                }
+
+                foreach (var img in attraction.Images)
+                {
+                    var url = img.Url?.Trim();
                     if (string.IsNullOrWhiteSpace(url))
                         continue;
 
-                    if (existingUrls.Add(url))
-                        existingAttraction.Images.Add(new AttractionImageData { Url = url, IsActive = true });
+                    var existingImage = existingAttraction.Images.FirstOrDefault(i =>
+                    i.Url.Equals(url, StringComparison.OrdinalIgnoreCase));
+
+                    if (existingImage != null)
+                    {
+                        existingImage.IsActive = true;
+                    }
+                    else
+                    {
+                        existingAttraction.Images.Add(new AttractionImageData
+                        {
+                            Url = url,
+                            IsActive = true
+                        });
+                    }
                 }
 
                 foreach (var openingHour in existingAttraction.OpeningHours)

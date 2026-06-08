@@ -1,9 +1,11 @@
 ﻿using eHotelMartinez.BusinessLogic.Helpers;
 using eHotelMartinez.DataAccess.Context;
 using eHotelMartinez.Domain.Entities.Product;
+using eHotelMartinez.Domain.Entities.Room;
 using eHotelMartinez.Domain.Enums;
 using eHotelMartinez.Domain.Models.Base;
 using eHotelMartinez.Domain.Models.Product;
+using eHotelMartinez.Domain.Models.Room;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
@@ -32,10 +34,12 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                 Description = p.Description,
                 Category = p.CategoryId.HasValue && categories.TryGetValue(p.CategoryId.Value, out var categoryName) ? categoryName : null,
                 Price = p.Price,
-                Images = p.Images.Select(i => new ProductImageDTO
-                {
-                    Url = i.Url
-                }).ToList(),
+                Images = p.Images
+                    .Where(i => i.IsActive)
+                    .Select(i => new ProductImageDTO
+                    {
+                        Url = i.Url
+                    }).ToList(),
                 Stock = p.Stock,
                 RequireBooking = p.RequireBooking,
                 Status = p.Status
@@ -67,10 +71,12 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                 Description = p.Description,
                 Category = p.CategoryId.HasValue && categories.TryGetValue(p.CategoryId.Value, out var categoryName) ? categoryName : null,
                 Price = p.Price,
-                Images = p.Images.Select(i => new ProductImageDTO
-                {
-                    Url = i.Url
-                }).ToList(),
+                Images = p.Images
+                    .Where(i => i.IsActive)
+                    .Select(i => new ProductImageDTO
+                    {
+                        Url = i.Url
+                    }).ToList(),
                 Stock = p.Stock,
                 RequireBooking = p.RequireBooking,
                 Status = p.Status
@@ -186,14 +192,32 @@ namespace eHotelMartinez.BusinessLogic.Core.Products
                 .Select(i => i.Url)
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-                foreach (var dtoImage in product.Images ?? new())
+                foreach (var image in existingProduct.Images.Where(i => i.IsActive))
                 {
-                    var url = dtoImage.Url?.Trim();
+                    image.IsActive = false;
+                }
+
+                foreach (var img in product.Images)
+                {
+                    var url = img.Url?.Trim();
                     if (string.IsNullOrWhiteSpace(url))
                         continue;
 
-                    if (existingUrls.Add(url))
-                        existingProduct.Images.Add(new ProductImageData { Url = url, IsActive = true });
+                    var existingImage = existingProduct.Images.FirstOrDefault(i =>
+                    i.Url.Equals(url, StringComparison.OrdinalIgnoreCase));
+
+                    if (existingImage != null)
+                    {
+                        existingImage.IsActive = true;
+                    }
+                    else
+                    {
+                        existingProduct.Images.Add(new ProductImageData
+                        {
+                            Url = url,
+                            IsActive = true
+                        });
+                    }
                 }
 
                 if (product.RequireBooking != null) existingProduct.RequireBooking = product.RequireBooking;
