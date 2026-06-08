@@ -30,6 +30,10 @@ namespace eHotelMartinez.BusinessLogic.Functions.Users
         {
             return await ExecuteUserUpdateAction(user);
         }
+        public async Task<ResponseMsg> ResponseUserUpdatePasswordAction(UserChangePasswordDTO user)
+        {
+            return await ExecuteUserUpdatePasswordAction(user);
+        }
         public async Task<ResponseMsg> ResponseUserActivateAction(UserActivateDTO user)
         {
             return await ExecuteUserActivateAction(user);
