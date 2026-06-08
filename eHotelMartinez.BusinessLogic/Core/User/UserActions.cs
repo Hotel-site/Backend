@@ -110,7 +110,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 Username = user.Username,
                 Email = user.Email,
                 PasswordHash = HashPassword(user.Password),
-                RegisteredOn = DateTime.Now,
+                RegisteredOn = DateTime.UtcNow,
                 IsActive = true
             };
             await using (var db = new UserContext())
@@ -175,6 +175,46 @@ namespace eHotelMartinez.BusinessLogic.Core.User
                 {
                     IsSuccess = true,
                     Message = "User data updated successfully!"
+                };
+            }
+        }
+
+        protected async Task<ResponseMsg> ExecuteUserUpdatePasswordAction(UserChangePasswordDTO user)
+        {
+            await using (var db = new UserContext())
+            {
+                if (string.IsNullOrWhiteSpace(user.Email) || !user.Email.Contains("@"))
+                {
+                    return new ResponseMsg
+                    {
+                        IsSuccess = false,
+                        Message = "Invalid Email format!"
+                    };
+                }
+                if (user.Password.Length < 8)
+                {
+                    return new ResponseMsg
+                    {
+                        IsSuccess = false,
+                        Message = "The password must be at least 8 characters long!"
+                    };
+                }
+                var email = user.Email.ToLower();
+                var existUserByEmail = await db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == user.Email);
+                if (existUserByEmail == null)
+                {
+                    return new ResponseMsg
+                    {
+                        IsSuccess = false,
+                        Message = "User with this Email doesn't exist!"
+                    };
+                }
+                existUserByEmail.PasswordHash = HashPassword(user.Password);
+                await db.SaveChangesAsync();
+                return new ResponseMsg
+                {
+                    IsSuccess = true,
+                    Message = "Password changed successfully!"
                 };
             }
         }

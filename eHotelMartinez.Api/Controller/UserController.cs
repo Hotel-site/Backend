@@ -7,7 +7,6 @@ namespace eHotelMartinez.Api.Controller
 {
     [Route("api/user")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
     public class UserController : ControllerBase
     {
         private IUserActions _userActions;
@@ -18,6 +17,7 @@ namespace eHotelMartinez.Api.Controller
             _userActions = bl.GetUserActions();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("all")]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -25,6 +25,7 @@ namespace eHotelMartinez.Api.Controller
             return Ok(users);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
@@ -36,6 +37,7 @@ namespace eHotelMartinez.Api.Controller
             return Ok(user);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] UserRegDTO user)
         {
@@ -47,6 +49,7 @@ namespace eHotelMartinez.Api.Controller
             return Ok(NewUser);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDTO user)
         {
@@ -59,6 +62,19 @@ namespace eHotelMartinez.Api.Controller
             return Ok(UpdateUser);
         }
 
+        [AllowAnonymous]
+        [HttpPut("password/recovery/{id}")]
+        public async Task<IActionResult> ChangePassword([FromBody] UserChangePasswordDTO user)
+        {
+            var UpdateUser = await _userActions.ResponseUserUpdatePasswordAction(user);
+            if (UpdateUser.IsSuccess == false)
+            {
+                return BadRequest(UpdateUser);
+            }
+            return Ok(UpdateUser);
+        }
+
+        [Authorize(Roles = "Admin")]
         [HttpPut("activate/{id}")]
         public async Task<IActionResult> ActivateUser(int id, [FromBody] UserActivateDTO user)
         {
@@ -71,6 +87,7 @@ namespace eHotelMartinez.Api.Controller
             return Ok(UpdateUser);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {

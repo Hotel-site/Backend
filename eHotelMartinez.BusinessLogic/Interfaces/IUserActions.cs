@@ -10,6 +10,7 @@ namespace eHotelMartinez.BusinessLogic.Interfaces
         Task<UserDTO?> GetUserByIdAction(int id);
         Task<ResponseAction> ResponseUserCreateAction(UserRegDTO user);
         Task<ResponseMsg> ResponseUserUpdateAction(UserDTO user);
+        Task<ResponseMsg> ResponseUserUpdatePasswordAction(UserChangePasswordDTO user);
         Task<ResponseMsg> ResponseUserActivateAction(UserActivateDTO user);
         Task<ResponseMsg> ResponseUserDeleteAction(int id);
         Task<ResponseAction> ResponseUserLoginAction(UserAuthDTO userAuth);
