@@ -32,12 +32,12 @@ namespace eHotelMartinez.BusinessLogic.Core.User
             await using (var db = new UserContext())
             {
                 return await db.Users
-                .Where(u => u.IsActive)
                 .Select(u => new UserDTO
                 {
                     Id = u.Id,
                     Username = u.Username,
                     Email = u.Email,
+                    Role = u.Role,
                     IsActive = u.IsActive
                 })
                 .ToListAsync();
@@ -47,7 +47,7 @@ namespace eHotelMartinez.BusinessLogic.Core.User
         {
             await using (var db = new UserContext())
             {
-                var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id && u.IsActive);
+                var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
 
                 if (user == null)
                 {
